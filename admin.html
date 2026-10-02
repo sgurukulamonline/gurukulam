@@ -1,103 +1,274 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin – Sanathana Gurukulam</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard – Sanathana Gurukulam</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;--card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12)}
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+}
 *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
-body{font-family:'Poppins',sans-serif;color:var(--brown);background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh}
-h1,h2,h3{font-family:'Cormorant Garamond',serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
 input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.btn{background:var(--maroon);color:var(--cream);padding:10px 20px;border-radius:12px;font-weight:500}
-.btn.gold{background:var(--gold);color:var(--brown)}.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}.btn.sm{padding:5px 12px;font-size:.8rem}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 22px;background:var(--brown);color:var(--cream)}
-.top b{font-family:'Cormorant Garamond';font-size:1.5rem}.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
-.wrap{max-width:1100px;margin:0 auto;padding:22px 18px 60px}.wrap>h1{font-size:2.3rem;margin-bottom:16px}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:9px 18px;border-radius:12px;
+  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;text-align:center;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.sm{padding:5px 12px;font-size:.8rem}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top a:hover{color:var(--gold)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
+.wrap>h1{font-size:2.4rem;color:var(--maroon);margin-bottom:16px}
+
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}
-.stat{background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);font-size:.85rem;color:var(--muted)}
-.stat b{display:block;font-family:'Cormorant Garamond';font-size:2.3rem;color:var(--maroon)}
-.panel{background:var(--card);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:22px}.panel h2{font-size:1.6rem;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:6px}
-.card img{width:100%;height:110px;object-fit:cover;border-radius:10px}
-.bar{height:8px;background:#efe0bd;border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gold)}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
-.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
-.muted{color:var(--muted);font-size:.85rem}.tag{padding:2px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a}
-.login{max-width:400px;margin:8vh auto;background:var(--card);border-radius:22px;padding:28px;box-shadow:var(--shadow);text-align:center}
-.login h1{font-size:2.2rem}.login .stack{display:grid;gap:12px;margin-top:16px}.login hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-#msg{margin-top:14px;font-size:.85rem;color:var(--maroon)}
-</style></head><body>
-<div class="top"><b>Admin · Sanathana Gurukulam</b><span><a href="dashboard.html">Learner view</a><a href="index.html">Home</a><button class="btn gold sm" id="out">Logout</button></span></div>
-<div class="wrap" id="wrap" hidden>
-  <div class="stats">
-    <div class="stat"><b id="sU">0</b>Users</div><div class="stat"><b id="sC">0</b>Courses</div>
-    <div class="stat"><b id="sL">0</b>Live classes</div><div class="stat"><b id="sE">0</b>Enrollments</div>
-  </div>
-  <div class="panel"><h2>Courses</h2>
-    <form class="form" id="cForm">
-      <input name="title" placeholder="Course title" required><input name="desc" placeholder="Short description">
-      <select name="type"><option value="free">Free</option><option value="paid">Paid</option></select>
-      <input name="lessons" type="number" min="1" placeholder="Lessons" required>
-      <input name="imageUrl" placeholder="Image path, e.g. images/yoga.png"><input name="videoUrl" placeholder="YouTube link (optional)">
-      <select name="published"><option value="1">Published</option><option value="0">Draft</option></select>
-      <button class="btn">Add course</button></form>
-    <div id="cList"></div></div>
-  <div class="panel"><h2>Live Classes</h2>
-    <form class="form" id="lForm">
-      <input name="title" placeholder="Class title" required><input name="teacher" placeholder="Teacher">
-      <input name="startsAt" type="datetime-local" required aria-label="Start time"><input name="link" placeholder="Meeting link (https://…)">
-      <button class="btn">Schedule class</button></form>
-    <div id="lList"></div></div>
-  <div class="panel"><h2>Users</h2><div id="uList"></div></div>
+.stat{background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);font-size:.85rem;color:var(--muted);border:1px solid var(--line)}
+.stat b{display:block;font-family:'Cormorant Garamond';font-size:2.4rem;color:var(--maroon);line-height:1.1;margin-bottom:4px}
+
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
+.panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
+
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
+.row:last-child{border-bottom:0}
+
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:16px;border-radius:14px;border:1px solid var(--line)}
+.muted{color:var(--muted);font-size:.85rem}
+.tag{padding:2px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.tag.published{background:#dcfce7;color:#166534}
+.tag.draft{background:#fee2e2;color:#991b1b}
+.tag.admin{background:var(--maroon);color:var(--cream)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="index.html">Sanathana Gurukulam · Admin</a></b>
+  <span>
+    <a href="dashboard.html">Learner Dashboard</a>
+    <a href="courses.html">Courses</a>
+    <a href="live.html">Live</a>
+    <a href="community.html">Community</a>
+    <a href="index.html">Home</a>
+    <button class="btn gold sm" id="out">Logout</button>
+  </span>
 </div>
+
+<div class="wrap" id="wrap" hidden>
+  <h1>Admin Peetham</h1>
+  <div class="stats">
+    <div class="stat"><b id="sU">0</b>Total Users</div>
+    <div class="stat"><b id="sC">0</b>Active Courses</div>
+    <div class="stat"><b id="sL">0</b>Live Sessions</div>
+    <div class="stat"><b id="sE">0</b>Total Enrollments</div>
+  </div>
+
+  <div class="panel">
+    <h2>Manage Courses</h2>
+    <form class="form" id="cForm">
+      <input name="title" placeholder="Course Title (e.g. Upanishads Intro)" required>
+      <input name="desc" placeholder="Brief Course Description">
+      <select name="type">
+        <option value="free">Free Course</option>
+        <option value="paid">Paid Course</option>
+      </select>
+      <input name="lessons" type="number" min="1" placeholder="Number of Lessons" required value="10">
+      <input name="imageUrl" placeholder="Image Path (e.g. images/yoga.png)">
+      <input name="videoUrl" placeholder="YouTube Video URL (optional)">
+      <select name="published">
+        <option value="1">Published</option>
+        <option value="0">Draft</option>
+      </select>
+      <button class="btn" style="grid-column:1/-1">Add New Course</button>
+    </form>
+    <div id="cList"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Schedule Live Classes</h2>
+    <form class="form" id="lForm">
+      <input name="title" placeholder="Class Title (e.g. Gita Ch 3 Recitation)" required>
+      <input name="teacher" placeholder="Teacher / Acharya Name" required>
+      <input name="startsAt" type="datetime-local" required aria-label="Start time">
+      <input name="link" placeholder="Meeting Link (https://meet.google.com/...)">
+      <button class="btn" style="grid-column:1/-1">Schedule Live Class</button>
+    </form>
+    <div id="lList"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Registered Users & Roles</h2>
+    <div id="uList"></div>
+  </div>
+</div>
+
+<div id="denied" style="display:none;text-align:center;padding:80px 20px">
+  <div style="font-size:3.5rem;margin-bottom:10px">🛡️</div>
+  <h2>Acharya Access Only</h2>
+  <p style="color:var(--muted);margin:10px auto 20px;max-width:400px">Your current account does not have Admin privileges. Log in with an admin account or switch your role.</p>
+  <div style="display:flex;justify-content:center;gap:12px">
+    <a class="btn gold" href="login.html">Login as Admin</a>
+    <a class="btn ghost" href="dashboard.html">Return to Learner Dashboard</a>
+  </div>
+</div>
+
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, set, push, update, remove, list } from "./firebase-init.js";
+import { db, requireUser, logout, esc, ref, get, push, update, remove, list } from "./firebase-init.js";
+
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+
 let me;
 $("out").onclick = logout;
+
 requireUser((u, p) => {
-  if (p.role !== "admin") { location.href = "dashboard.html"; return; }
-  me = u; $("wrap").hidden = false; load();
+  if (p.role !== "admin") {
+    $("denied").style.display = "block";
+    return;
+  }
+  me = u;
+  $("wrap").hidden = false;
+  load();
 });
 
 async function load() {
-  const [us, cs, ls, es] = await Promise.all([list("users"), list("courses"), list("liveClasses"), get(ref(db, "enrollments"))]);
-  let n = 0; Object.values(es.val() || {}).forEach(o => (n += Object.keys(o).length));
-  $("sU").textContent = us.length; $("sC").textContent = cs.length; $("sL").textContent = ls.length; $("sE").textContent = n;
+  try {
+    const [us, cs, ls, es] = await Promise.all([
+      list("users"),
+      list("courses"),
+      list("liveClasses"),
+      get(ref(db, "enrollments"))
+    ]);
 
-  $("cList").innerHTML = cs.map(c => `<div class="row"><span><b>${esc(c.title)}</b> <span class="tag">${esc(c.type)}</span>
-    <span class="muted">${c.lessons} lessons · ${c.published ? "Published" : "Draft"}</span></span>
-    <span><button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published}">${c.published ? "Unpublish" : "Publish"}</button>
-    <button class="btn sm" data-del="courses/${c.id}">Delete</button></span></div>`).join("") || '<p class="muted">No courses yet.</p>';
+    let totalEnr = 0;
+    const enrollmentsObj = es.val() || {};
+    Object.values(enrollmentsObj).forEach(userEnrs => {
+      if (userEnrs && typeof userEnrs === "object") {
+        totalEnr += Object.keys(userEnrs).length;
+      }
+    });
 
-  $("lList").innerHTML = ls.sort((a, b) => b.startsAt - a.startsAt).map(c => `<div class="row"><span><b>${esc(c.title)}</b>
-    <span class="muted">${esc(c.teacher || "")} · ${when(c.startsAt)}</span></span>
-    <button class="btn sm" data-del="liveClasses/${c.id}">Delete</button></div>`).join("") || '<p class="muted">No live classes scheduled.</p>';
+    $("sU").textContent = us.length;
+    $("sC").textContent = cs.length;
+    $("sL").textContent = ls.length;
+    $("sE").textContent = totalEnr;
 
-  $("uList").innerHTML = us.map(u => `<div class="row"><span><b>${esc(u.name)}</b> <span class="muted">${esc(u.email || u.phone)}</span> <span class="tag">${esc(u.role)}</span></span>
-    ${u.id === me.uid ? "" : `<button class="btn ghost sm" data-role="${u.id}" data-v="${u.role}">${u.role === "admin" ? "Remove admin" : "Make admin"}</button>`}</div>`).join("");
+    $("cList").innerHTML = cs.map(c => `
+      <div class="row">
+        <span>
+          <b>${esc(c.title)}</b> 
+          <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
+          <span class="tag">${esc(c.type)}</span>
+          <br><span class="muted">${c.lessons || 0} lessons · Created: ${c.createdAt ? when(c.createdAt) : 'Initial'}</span>
+        </span>
+        <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
+            ${c.published !== false ? "Unpublish" : "Publish"}
+          </button>
+          <button class="btn sm" data-del="courses/${c.id}">Delete</button>
+        </span>
+      </div>
+    `).join("") || '<p class="muted">No courses yet. Add one above!</p>';
+
+    $("lList").innerHTML = (ls || []).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
+      <div class="row">
+        <span>
+          <b>${esc(c.title)}</b>
+          <br><span class="muted">${esc(c.teacher || "Acharya")} · ${when(c.startsAt)}</span>
+        </span>
+        <button class="btn sm" data-del="liveClasses/${c.id}">Cancel / Delete</button>
+      </div>
+    `).join("") || '<p class="muted">No live classes scheduled.</p>';
+
+    $("uList").innerHTML = us.map(u => `
+      <div class="row">
+        <span>
+          <b>${esc(u.name || "Learner")}</b> 
+          <span class="muted">${esc(u.email || u.phone || "No contact")}</span> 
+          <span class="tag ${u.role === 'admin' ? 'admin' : ''}">${esc(u.role || "learner")}</span>
+        </span>
+        ${u.id === me.uid ? '<span class="muted">(Current user)</span>' : `
+          <button class="btn ghost sm" data-role="${u.id}" data-v="${u.role || 'learner'}">
+            ${u.role === "admin" ? "Demote to Learner" : "Make Admin"}
+          </button>
+        `}
+      </div>
+    `).join("") || '<p class="muted">No registered users yet.</p>';
+
+  } catch (err) {
+    console.error("Admin load error:", err);
+  }
 }
 
 $("cForm").onsubmit = async e => {
-  e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
-  await push(ref(db, "courses"), { title: f.title, desc: f.desc, type: f.type, lessons: +f.lessons, imageUrl: f.imageUrl, videoUrl: f.videoUrl, published: f.published === "1", createdAt: Date.now() });
-  e.target.reset(); load();
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  await push(ref(db, "courses"), {
+    title: f.title,
+    desc: f.desc || "",
+    type: f.type,
+    lessons: parseInt(f.lessons, 10) || 10,
+    imageUrl: f.imageUrl || "",
+    videoUrl: f.videoUrl || "",
+    published: f.published === "1",
+    createdAt: Date.now()
+  });
+  e.target.reset();
+  await load();
 };
+
 $("lForm").onsubmit = async e => {
-  e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
-  await push(ref(db, "liveClasses"), { title: f.title, teacher: f.teacher, link: f.link, startsAt: new Date(f.startsAt).getTime(), createdAt: Date.now() });
-  e.target.reset(); load();
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  await push(ref(db, "liveClasses"), {
+    title: f.title,
+    teacher: f.teacher,
+    link: f.link || "",
+    startsAt: new Date(f.startsAt).getTime(),
+    createdAt: Date.now()
+  });
+  e.target.reset();
+  await load();
 };
+
 document.addEventListener("click", async e => {
-  const b = e.target.closest("button"), d = b?.dataset; if (!d) return;
-  if (d.pub) await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });
-  else if (d.role) await update(ref(db, "users/" + d.role), { role: d.v === "admin" ? "learner" : "admin" });
-  else if (d.del) { if (!confirm("Delete this permanently?")) return; await remove(ref(db, d.del)); }
-  else return;
-  load();
+  const b = e.target.closest("button");
+  const d = b?.dataset;
+  if (!d) return;
+
+  if (d.pub) {
+    await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });
+  } else if (d.role) {
+    await update(ref(db, "users/" + d.role), { role: d.v === "admin" ? "learner" : "admin" });
+  } else if (d.del) {
+    if (!confirm("Are you sure you want to permanently delete this item?")) return;
+    await remove(ref(db, d.del));
+  } else {
+    return;
+  }
+  await load();
 });
 </script>
-</body></html>
+</body>
+</html>

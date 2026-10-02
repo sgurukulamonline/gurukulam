@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+  display:flex;flex-direction:column;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+input,textarea{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:12px 20px;border-radius:12px;
+  font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--brown)}
+.btn.ghost{background:none;border:1.5px solid var(--maroon);color:var(--maroon)}
+.btn.full{width:100%}
+.btn.sm{padding:6px 14px;font-size:.85rem}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top a:hover{color:var(--gold)}
+
+.container{
+  max-width:440px;width:92%;margin:40px auto 60px;
+  background:var(--card);border-radius:24px;padding:32px 26px;box-shadow:var(--shadow);
+  border:1px solid var(--line);text-align:center;
+}
+.container .logo-symbol{font-size:2.8rem;margin-bottom:8px}
+.container h1{font-size:2.4rem;color:var(--maroon);line-height:1.1}
+.container p.sub{color:var(--muted);font-size:.9rem;margin:8px 0 22px}
+
+.stack{display:grid;gap:12px}
+.or-divider{display:flex;align-items:center;color:var(--muted);font-size:.8rem;margin:12px 0}
+.or-divider::before,.or-divider::after{content:"";flex:1;border-top:1px solid var(--line);margin:0 10px}
+
+.tag{padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.card-active{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--line);margin-bottom:16px}
+#msg{font-size:.85rem;margin-top:12px;padding:8px 12px;border-radius:8px;display:none}
+#msg.err{background:#fee2e2;color:#991b1b;display:block}
+#msg.succ{background:#dcfce7;color:#166534;display:block}
+
+details{text-align:left;font-size:.85rem;margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
+details summary{cursor:pointer;color:var(--muted);font-weight:500}
+details .cfg-box{margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="index.html">Sanathana Gurukulam</a></b>
+  <span>
+    <a href="index.html">Home</a>
+    <a href="courses.html">Courses</a>
+    <a href="live.html">Live</a>
+    <a href="community.html">Community</a>
+    <a href="dashboard.html">Dashboard</a>
+  </span>
+</div>
+
+<div class="container">
+  <div class="logo-symbol">🕉️</div>
+  <h1>Namaste</h1>
+  <p class="sub">Sign in to your learning dashboard</p>
+
+  <div id="alreadyIn" style="display:none" class="card-active">
+    <p style="font-weight:600;margin-bottom:4px" id="loggedName">Logged in</p>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px" id="loggedRole">Role: Learner</p>
+    <div class="stack">
+      <a class="btn gold full" id="goDash" href="dashboard.html">Proceed to Dashboard →</a>
+      <button class="btn ghost full" id="btnSwitch">Sign Out / Switch Account</button>
+    </div>
+  </div>
+
+  <div id="loginForms">
+    <div class="stack">
+      <!-- 1-Click Learner Login -->
+      <button class="btn gold full" id="btnQuickLearner">
+        <span>🚀</span> Continue as Learner (1-Click)
+      </button>
+
+      <!-- Custom Name Form -->
+      <form id="customNameForm" style="display:grid;gap:8px;margin-top:4px">
+        <input type="text" id="custName" placeholder="Or enter your full name..." required>
+        <button class="btn full">Enter Gurukulam</button>
+      </form>
+
+      <div class="or-divider">OR</div>
+
+      <!-- Admin Login -->
+      <button class="btn ghost full" id="btnQuickAdmin">
+        <span>👑</span> Login as Admin (Acharya)
+      </button>
+
+      <!-- Google Sign In -->
+      <button class="btn ghost full" id="btnGoogle">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.86c2.26-2.09 3.685-5.17 3.685-9.09z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.28v3.09C3.26 21.3 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.28C.46 8.24 0 10.06 0 12s.46 3.76 1.28 5.38l3.99-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.7 1.28 6.62l3.99 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+        Sign in with Google
+      </button>
+    </div>
+
+    <!-- Optional Firebase Config Drawer -->
+    <details>
+      <summary>⚙️ Firebase Project Setup (Optional)</summary>
+      <div class="cfg-box">
+        <p style="margin-bottom:6px;color:var(--muted)">Paste your Firebase Web Config JSON below to enable live cloud database sync:</p>
+        <textarea id="cfgInput" rows="4" placeholder='{"apiKey":"AIzaSy...","projectId":"your-project",...}'></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn sm" id="btnSaveCfg">Save Config</button>
+          <button class="btn ghost sm" id="btnClearCfg">Clear</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div id="msg"></div>
+</div>
+
+<script type="module">
+import { auth, onAuthStateChanged, logout, setMockUser, signInWithPopup, GoogleAuthProvider, ensureProfile } from "./firebase-init.js";
+
+const params = new URLSearchParams(location.search);
+const redirect = params.get("redirect") ? decodeURIComponent(params.get("redirect")) : "dashboard.html";
+
+const $ = id => document.getElementById(id);
+const showMsg = (txt, isErr) => {
+  const m = $("msg");
+  m.textContent = txt;
+  m.className = isErr ? "err" : "succ";
+};
+
+// Check if already signed in
+onAuthStateChanged(auth, async u => {
+  if (u) {
+    const prof = await ensureProfile(u);
+    $("alreadyIn").style.display = "block";
+    $("loginForms").style.display = "none";
+    $("loggedName").textContent = "Signed in as: " + (prof.name || u.displayName || "Learner");
+    $("loggedRole").textContent = "Role: " + (prof.role === "admin" ? "Acharya (Admin)" : "Learner");
+    $("goDash").href = redirect;
+  } else {
+    $("alreadyIn").style.display = "none";
+    $("loginForms").style.display = "block";
+  }
+});
+
+// Quick Learner Login
+$("btnQuickLearner").onclick = () => {
+  setMockUser({
+    uid: "learner-1",
+    displayName: "Sadhaka Arjun",
+    email: "arjun@gurukulam.org",
+    role: "learner"
+  });
+  showMsg("Namaste! Redirecting...", false);
+  setTimeout(() => location.href = redirect, 500);
+};
+
+// Quick Custom Name
+$("customNameForm").onsubmit = e => {
+  e.preventDefault();
+  const name = $("custName").value.trim();
+  if (!name) return;
+  const uid = "u_" + Date.now().toString(36);
+  setMockUser({
+    uid,
+    displayName: name,
+    email: name.toLowerCase().replace(/\s+/g, ".") + "@gurukulam.org",
+    role: "learner"
+  });
+  showMsg("Namaste " + name + "! Redirecting...", false);
+  setTimeout(() => location.href = redirect, 500);
+};
+
+// Quick Admin Login
+$("btnQuickAdmin").onclick = () => {
+  setMockUser({
+    uid: "admin-1",
+    displayName: "Acharya Dr. Sharma",
+    email: "acharya@gurukulam.org",
+    role: "admin"
+  });
+  showMsg("Welcome Acharya! Redirecting...", false);
+  setTimeout(() => location.href = redirect, 500);
+};
+
+// Google Sign-In
+$("btnGoogle").onclick = async () => {
+  try {
+    const res = await signInWithPopup(auth, new GoogleAuthProvider());
+    showMsg("Welcome! Redirecting...", false);
+    setTimeout(() => location.href = redirect, 600);
+  } catch (err) {
+    console.warn("Google sign-in fallback:", err);
+    // Demo Google profile if Firebase auth is not wired with live OAuth
+    setMockUser({
+      uid: "google_demo_101",
+      displayName: "Google Learner",
+      email: "learner@gmail.com",
+      role: "learner"
+    });
+    showMsg("Signed in with Google (Demo). Redirecting...", false);
+    setTimeout(() => location.href = redirect, 600);
+  }
+};
+
+// Switch account
+$("btnSwitch").onclick = async () => {
+  await logout();
+  location.reload();
+};
+
+// Config helpers
+const cur = localStorage.getItem("sg_firebase_config");
+if (cur) $("cfgInput").value = cur;
+$("btnSaveCfg").onclick = () => {
+  const v = $("cfgInput").value.trim();
+  if (!v) return;
+  try {
+    JSON.parse(v);
+    localStorage.setItem("sg_firebase_config", v);
+    showMsg("Firebase config saved! Reloading...", false);
+    setTimeout(() => location.reload(), 800);
+  } catch (e) {
+    showMsg("Invalid JSON format. Please paste a valid JSON object.", true);
+  }
+};
+$("btnClearCfg").onclick = () => {
+  localStorage.removeItem("sg_firebase_config");
+  $("cfgInput").value = "";
+  showMsg("Config cleared. Reverting to local mode.", false);
+  setTimeout(() => location.reload(), 600);
+};
+</script>
+</body>
+</html>
