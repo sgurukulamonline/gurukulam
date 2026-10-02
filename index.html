@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sanathana Gurukulam – Learn • Practice • Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@400;500;600&family=Noto+Sans+Telugu:wght@400;600&family=Noto+Serif+Devanagari:wght@600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --cream:#F7E8C8; --ivory:#FCF4E2; --sand:#E8C98F; --maroon:#7A2E16;
+  --brown:#4A1F0E; --gold:#D99A27; --text:#4A1F0E; --muted:#7d5a45;
+  --card:#FFF8EA; --line:rgba(122,46,22,.15); --live:#D62A2A;
+  --shadow:0 6px 18px rgba(74,31,14,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
+  background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:84px}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.te{font-family:'Noto Sans Telugu',sans-serif}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:rgba(252,244,226,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:68px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{width:44px;height:44px}
+.logo b{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--maroon);line-height:1;display:block}
+.logo small{font-size:.58rem;letter-spacing:.18em;color:var(--muted)}
+.search{flex:1;max-width:380px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#ecd9b0;border-radius:30px;padding:9px 16px;font-size:.85rem;color:var(--muted)}
+.search input{border:0;background:none;width:100%;font:inherit;color:var(--text);outline:none}
+nav.top{display:none;gap:22px;font-size:.88rem;font-weight:500}
+nav.top a:hover{color:var(--gold)}
+.lang{display:flex;border:1px solid var(--maroon);border-radius:20px;overflow:hidden;font-size:.78rem}
+.lang button{padding:5px 12px}
+.lang .on{background:var(--maroon);color:var(--cream)}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
+@media(min-width:900px){nav.top{display:flex}}
+@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
+
+/* Hero */
+.hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,10,3,.88) 0%,rgba(40,15,5,.6) 38%,rgba(0,0,0,.05) 75%)}
+.hero .in{position:relative;z-index:2;width:100%;max-width:none;margin:0;padding:56px clamp(18px,4vw,56px)}
+.hero h1{font-size:clamp(2.3rem,6vw,3.8rem);font-weight:600;max-width:520px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.hero p.te{color:var(--gold);font-weight:600;font-size:1.25rem;margin:14px 0 4px}
+.hero .rule{width:150px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:6px 0 22px}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#e6a935,var(--gold));color:var(--brown);
+  font-weight:600;padding:13px 26px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,.3);transition:transform .2s}
+.cta:hover{transform:translateY(-2px)}
+.story{margin-left:16px;display:inline-flex;align-items:center;gap:10px;font-size:.9rem;font-weight:500}
+.story i{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--maroon);display:grid;place-items:center;font-style:normal;font-size:.8rem}
+
+/* Sections */
+section{padding:34px 0 8px}
+.sec-h{display:flex;justify-content:space-between;align-items:end;margin-bottom:16px}
+.sec-h h2{font-size:1.9rem;color:var(--brown)}
+.sec-h p{font-size:.88rem;color:var(--muted)}
+.sec-h a{font-size:.88rem;font-weight:500;color:var(--maroon)}
+
+/* Paths */
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.path{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s;position:relative}
+.path:hover{transform:translateY(-4px)}
+.path .pic{height:190px;overflow:hidden;display:grid;place-items:center;font-size:4.2rem}
+.path .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.path:hover .pic img{transform:scale(1.05)}
+.p1 .pic{background:linear-gradient(135deg,#f6c26b,#e98f3f)}
+.p2 .pic{background:linear-gradient(135deg,#e7a15a,#9a4a1f)}
+.p3 .pic{background:linear-gradient(135deg,#c9803f,#6b2d12)}
+.p4 .pic{background:linear-gradient(135deg,#e0b27a,#a8683a)}
+.path .body{padding:14px 16px 16px}
+.path h3{font-size:1.3rem;color:var(--maroon)}
+.path .age{color:var(--muted);font-size:.88rem}
+.path .te{font-size:.78rem;margin-top:6px;max-width:150px;color:var(--text)}
+.path .go{position:absolute;right:14px;bottom:14px;width:38px;height:38px;border-radius:50%;background:var(--maroon);color:var(--cream);display:grid;place-items:center}
+
+/* Topics */
+.topics{display:flex;gap:10px;overflow-x:auto;padding:16px;background:rgba(255,248,234,.7);border-radius:20px;box-shadow:var(--shadow);scrollbar-width:none}
+.topic{flex:1 0 74px;text-align:center;font-size:.76rem}
+.topic span{width:56px;height:56px;margin:0 auto 6px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:1.6rem;border:1px solid var(--line);transition:background .2s}
+.topic:hover span{background:var(--gold)}
+
+/* Live + wisdom */
+.live-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.live-grid{grid-template-columns:1.3fr 1fr}}
+.live-wrap{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:560px){.live-wrap{grid-template-columns:1fr 1.1fr}}
+.live-now{border-radius:18px;padding:18px;color:#fff;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(30,10,3,.92)),radial-gradient(circle at 70% 25%,#d99a27,#5a2410 70%);box-shadow:var(--shadow)}
+.badge{align-self:flex-start;background:var(--live);font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:auto}
+.live-now h3{font-size:1.7rem}
+.live-now small{opacity:.85}
+.live-now .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+.join{background:var(--live);color:#fff;padding:10px 22px;border-radius:12px;font-weight:600}
+.list{background:var(--card);border-radius:18px;padding:8px;box-shadow:var(--shadow)}
+.item{display:flex;gap:12px;align-items:center;padding:10px;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.item .av{width:46px;height:46px;border-radius:12px;background:var(--sand);display:grid;place-items:center;font-size:1.4rem;flex:none}
+.item b{font-size:.9rem;display:block}
+.item small{color:var(--muted);font-size:.76rem;display:block}
+.wisdom{border-radius:18px;padding:22px;box-shadow:var(--shadow);position:relative;
+  background:linear-gradient(135deg,#f3dfb2,#e7c98d);border:1px solid rgba(122,46,22,.2)}
+.wisdom h3{font-size:1.4rem;display:flex;justify-content:space-between;align-items:center}
+.wisdom .date{font-family:'Poppins';font-size:.75rem;border:1px solid var(--maroon);border-radius:8px;padding:2px 10px}
+.sloka{font-family:'Noto Serif Devanagari',serif;font-size:1.55rem;color:var(--maroon);margin:16px 0 8px;line-height:1.5}
+.wisdom .te{font-size:.92rem}
+.wisdom .acts{display:flex;justify-content:space-between;margin-top:18px;align-items:center}
+.listen{display:flex;align-items:center;gap:10px;font-weight:600;font-family:'Cormorant Garamond';font-size:1.25rem}
+.listen i{width:42px;height:42px;border-radius:50%;background:var(--maroon);color:var(--cream);display:grid;place-items:center;font-style:normal;font-size:.9rem}
+.share{background:rgba(255,255,255,.6);padding:8px 16px;border-radius:12px;font-size:.85rem}
+
+/* Courses */
+.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.course{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s}
+.course:hover{transform:translateY(-4px)}
+.course .pic{height:150px;overflow:hidden;background:#e8c98f}
+.course .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.course:hover .pic img{transform:scale(1.05)}
+.course .body{padding:12px 14px 14px}
+.course h3{font-size:1.15rem}
+.tags{display:flex;gap:8px;margin:8px 0;font-size:.72rem;align-items:center}
+.tag{padding:2px 12px;border-radius:6px;font-weight:600}
+.free{background:#7cc062;color:#143d08}.paid{background:#f1b36a;color:#6a2f08}
+.lessons{background:#efe0bd;padding:2px 10px;border-radius:6px}
+.rate{font-size:.82rem;color:var(--muted)}.rate b{color:var(--gold)}
+
+/* Quick access */
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 8px;text-align:center;font-size:.82rem;transition:background .2s}
+.q:hover{background:var(--sand)}
+.q span{display:block;font-size:1.7rem;margin-bottom:4px}
+
+/* Community */
+.community{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.community{grid-template-columns:260px 1fr}}
+.rooms{background:var(--brown);color:var(--cream);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.rooms h3{font-size:1.3rem;margin-bottom:10px;color:var(--sand)}
+.room{display:flex;justify-content:space-between;padding:10px 12px;border-radius:12px;font-size:.88rem;cursor:pointer}
+.room.on,.room:hover{background:rgba(232,201,143,.18)}
+.room em{font-style:normal;background:var(--gold);color:var(--brown);border-radius:10px;padding:0 8px;font-size:.72rem;font-weight:600}
+.chat{background:var(--card);border-radius:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
+.chat-h{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(90deg,#f3dfb2,var(--card))}
+.chat-h b{font-family:'Cormorant Garamond';font-size:1.25rem;color:var(--maroon)}
+.chat-h small{color:var(--muted);font-size:.75rem}
+.msgs{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:250px;max-height:340px;overflow-y:auto;
+  background:repeating-linear-gradient(45deg,transparent 0 22px,rgba(217,154,39,.05) 22px 23px)}
+.m{max-width:78%;padding:10px 14px;border-radius:16px 16px 16px 4px;background:#fff;font-size:.88rem;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.m small{display:block;font-weight:600;color:var(--maroon);font-size:.72rem}
+.m.me{align-self:flex-end;background:var(--maroon);color:var(--cream);border-radius:16px 16px 4px 16px}
+.m.me small{color:var(--sand)}
+.compose{display:flex;gap:10px;padding:12px;border-top:1px solid var(--line)}
+.compose input{flex:1;padding:11px 16px;border-radius:24px;border:1px solid var(--line);background:#fff;font:inherit;font-size:.9rem;outline:none}
+.compose button{background:var(--maroon);color:var(--cream);padding:0 22px;border-radius:24px;font-weight:500}
+
+footer{margin-top:44px;background:var(--brown);color:var(--sand);padding:34px 0 110px;text-align:center}
+footer h3{font-size:1.6rem;color:var(--cream)}
+footer p{font-size:.82rem;opacity:.8;margin-top:6px}
+
+/* Bottom nav */
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
+.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0;position:relative}
+.bottom a span{display:block;font-size:1.3rem}
+.bottom a.on{color:var(--gold);font-weight:600}
+.bottom a.on::after{content:"";position:absolute;left:25%;right:25%;bottom:-2px;height:2px;background:var(--gold)}
+@media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Quick Access (merged with topics) */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:rgba(255,248,234,.75);border-radius:20px;padding:16px 8px;box-shadow:var(--shadow)}
+@media(min-width:900px){.quick{grid-template-columns:repeat(6,1fr)}}
+.q{background:none;border:0;border-radius:14px;padding:8px 4px;text-align:center;font-size:.78rem}
+.q:hover{background:none}
+.q span{width:56px;height:56px;margin:0 auto 6px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:1.6rem;border:1px solid var(--line);transition:background .2s}
+.q:hover span{background:var(--gold)}
+/* Inner pages */
+.page-h{padding:34px 0 0}
+.page-h h1{font-size:2.4rem;color:var(--brown)}
+.page-h p{color:var(--muted);font-size:.92rem}
+.chips{display:flex;gap:10px;margin:16px 0 4px}
+.chip{padding:6px 18px;border-radius:20px;border:1px solid var(--maroon);font-size:.85rem}
+.chip.on{background:var(--maroon);color:var(--cream)}
+.course .pic.ph{display:grid;place-items:center;font-size:3.4rem}
+.group{margin-top:26px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#home" aria-label="Sanathana Gurukulam home">
+      <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="14" r="9" fill="#D99A27"/><path d="M24 4c3 4 3 8 0 12-3-4-3-8 0-12z" fill="#7A2E16"/><path d="M4 22c8-3 14-1 20 4 6-5 12-7 20-4v18c-8-3-14-1-20 4-6-5-12-7-20-4z" fill="#7A2E16"/><path d="M24 26v18" stroke="#F7E8C8" stroke-width="2"/></svg>
+      <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
+    </a>
+    <nav class="top" aria-label="Main">
+      <a href="#paths">Learn</a><a href="#live">Live Classes</a><a href="courses.html">Courses</a><a href="#community">Community</a>
+    </nav>
+    <label class="search"><span aria-hidden="true">🔍</span><input type="search" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
+    <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
+    <div class="avatar" aria-label="Profile">👤</div>
+  </div>
+</header>
+
+<main id="home">
+  <div class="hero">
+    <div class="wrap in">
+      <h1>Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
+      <p class="te">భారతీయ జీవిత విధానం తరతరాలకు…</p>
+      <div class="rule"></div>
+      <a class="cta" href="#courses">Explore Courses <span aria-hidden="true">→</span></a>
+      <a class="story" href="#"><i>▶</i>Watch Our Story</a>
+    </div>
+  </div>
+
+  <section id="paths"><div class="wrap">
+    <div class="sec-h"><div><h2>Choose Your Learning Path</h2><p>Select your age group to get a personalized experience</p></div></div>
+    <div class="paths">
+      <a class="path p1" href="#"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Bala Gurukulam" loading="lazy"></div><div class="body"><h3>Bala Gurukulam</h3><div class="age">Ages 5 – 12</div><p class="te">సంస్కారం • సంప్రదాయం<br>సంతోషంగా</p></div><span class="go">→</span></a>
+      <a class="path p2" href="#"><div class="pic"><img src="images/Yuva%20Gurukulam.png" alt="Yuva Gurukulam" loading="lazy"></div><div class="body"><h3>Yuva Gurukulam</h3><div class="age">Ages 13 – 25</div><p class="te">జ్ఞానం • నాయకత్వం<br>జీవిత నైపుణ్యాలు</p></div><span class="go">→</span></a>
+      <a class="path p3" href="#"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka Gurukulam" loading="lazy"></div><div class="body"><h3>Sadhaka Gurukulam</h3><div class="age">Ages 26 – 55</div><p class="te">ఆధ్యాత్మికం • కుటుంబం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
+      <a class="path p4" href="#"><div class="pic"><img src="images/Jnana%20Gurukulam.png" alt="Jnana Gurukulam" loading="lazy"></div><div class="body"><h3>Jnana Gurukulam</h3><div class="age">Ages 56+</div><p class="te">భక్తి • ఆధ్యాత్మిక జ్ఞానం<br>సహజమైన జీవితం</p></div><span class="go">→</span></a>
+    </div>
+  </div></section>
+
+  <section id="live"><div class="wrap">
+    <div class="sec-h"><h2>Live Classes</h2><a href="#">View All →</a></div>
+    <div class="live-grid">
+      <div class="live-wrap">
+        <div class="live-now">
+          <span class="badge">● LIVE NOW</span>
+          <h3>Bhagavad Gita<br>Chapter 2</h3>
+          <small>Acharya Dr. Srinivas Sharma</small>
+          <div class="row"><small>👥 1.2K watching</small><button class="join">Join Class</button></div>
+        </div>
+        <div class="list">
+          <div class="item"><div class="av">🧑‍🏫</div><div><b>Sanskrit Basics</b><small>Today, 6:00 PM</small><small>Acharya Veda Prakash</small></div></div>
+          <div class="item"><div class="av">🧘‍♀️</div><div><b>Yoga for Daily Life</b><small>Today, 7:30 PM</small><small>Smt. Anasuya Devi</small></div></div>
+          <div class="item"><div class="av">🙏</div><div><b>Vishnu Sahasranamam</b><small>Tomorrow, 6:00 AM</small><small>Sri Parthasarathy garu</small></div></div>
+        </div>
+      </div>
+      <div class="wisdom">
+        <h3>🎁 Today's Wisdom <span class="date" id="today">29 Sep</span></h3>
+        <p class="sloka">कर्मण्येवाधिकारस्ते<br>मा फलेषु कदाचन ।</p>
+        <p class="te">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
+        <div class="acts"><button class="listen"><i>▶</i>Listen</button><button class="share">↗ Share</button></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="courses"><div class="wrap">
+    <div class="sec-h"><h2>Popular Courses</h2><a href="courses.html">View All →</a></div>
+    <div class="courses">
+      <a class="course" href="#"><div class="pic"><img src="images/bhagavth%20gita.png" alt="Bhagavad Gita for Beginners" loading="lazy"></div><div class="body"><h3>Bhagavad Gita for Beginners</h3><div class="tags"><span class="tag free">Free</span><span class="lessons">12 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.2K)</div></div></a>
+      <a class="course" href="#"><div class="pic"><img src="images/sanskrit%20basics.png" alt="Sanskrit Basics" loading="lazy"></div><div class="body"><h3>Sanskrit Basics</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">24 Lessons</span></div><div class="rate"><b>★</b> 4.7 (980)</div></div></a>
+      <a class="course" href="#"><div class="pic"><img src="images/india%20history.png" alt="Indian History True Perspective" loading="lazy"></div><div class="body"><h3>Indian History True Perspective</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">28 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.5K)</div></div></a>
+      <a class="course" href="#"><div class="pic"><img src="images/ramayanam.png" alt="Ramayana Deep Study" loading="lazy"></div><div class="body"><h3>Ramayana Deep Study</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">32 Lessons</span></div><div class="rate"><b>★</b> 4.9 (2.1K)</div></div></a>
+    </div>
+  </div></section>
+
+    <section id="quick"><div class="wrap">
+    <div class="sec-h"><h2>Quick Access</h2></div>
+    <div class="quick"><a class="q" href="#"><span>🕉️</span>Vedas</a><a class="q" href="#"><span>📖</span>Bhagavad Gita</a><a class="q" href="#"><span>🪷</span>Sanskrit</a><a class="q" href="#"><span>🧘</span>Yoga</a><a class="q" href="#"><span>☸️</span>Dharma</a><a class="q" href="#"><span>📜</span>Itihasas</a><a class="q" href="#"><span>🎁</span>Free Content</a><a class="q" href="#"><span>📚</span>Books Library</a><a class="q" href="#"><span>🎧</span>Audio Library</a><a class="q" href="#"><span>📅</span>Events</a><a class="q" href="#"><span>🏅</span>Certificates</a><a class="q" href="more.html"><span>⠿</span>More</a></div>
+  </div></section>
+
+  <section id="community"><div class="wrap">
+    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in your Gurukulam circle</p></div><a href="#">Browse Circles →</a></div>
+    <div class="community">
+      <aside class="rooms" aria-label="Circles">
+        <h3>Your Circles</h3>
+        <div class="room on"><span>🪔 Gita Study Circle</span><em>3</em></div>
+        <div class="room"><span>🪷 Sanskrit Learners</span><em>1</em></div>
+        <div class="room"><span>🧘 Daily Yoga</span></div>
+        <div class="room"><span>🛕 Temple Heritage</span></div>
+        <div class="room"><span>👨‍👩‍👧 Parents of Bala</span></div>
+      </aside>
+      <div class="chat">
+        <div class="chat-h"><div><b>Gita Study Circle</b><br><small>248 members • 32 online</small></div><span aria-hidden="true">🕉️</span></div>
+        <div class="msgs" id="msgs">
+          <div class="m"><small>Lakshmi Devi</small>Can someone explain Karma Yoga in simple words for my son?</div>
+          <div class="m"><small>Acharya Srinivas</small>Do your duty with full effort, and offer the result to the Divine. Join today's live class for examples. 🙏</div>
+          <div class="m me"><small>You</small>Thank you! I'll join at 6 PM.</div>
+        </div>
+        <form class="compose" id="chatForm"><input id="chatIn" placeholder="Write a message…" aria-label="Message"><button>Send</button></form>
+      </div>
+    </div>
+  </div></section>
+</main>
+
+<footer>
+  <h3>Sanathana Gurukulam</h3>
+  <p>Ancient wisdom • Modern learning • Timeless values</p>
+  <p>© 2026 Sanathana Gurukulam. All rights reserved.</p>
+</footer>
+
+<nav class="bottom" aria-label="App">
+  <a class="on" href="#home"><span>🏠</span>Home</a><a href="#paths"><span>📖</span>Learn</a>
+  <a href="#live"><span>🎥</span>Live</a><a href="#courses"><span>🎧</span>Library</a>
+  <a href="#"><span>📅</span>Events</a><a href="#community"><span>👥</span>Community</a>
+  <a href="#"><span>👤</span>Profile</a>
+</nav>
+
+<script>
+  // Today's date in the wisdom card
+  document.getElementById('today').textContent =
+    new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+
+  // Language toggle (UI state only for now)
+  document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+
+  // Highlight bottom nav on tap
+  document.querySelectorAll('.bottom a').forEach(a=>a.addEventListener('click',()=>{
+    document.querySelectorAll('.bottom a').forEach(x=>x.classList.remove('on'));
+    a.classList.add('on');
+  }));
+
+  // Demo chat
+  document.getElementById('chatForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const i=document.getElementById('chatIn'), t=i.value.trim();
+    if(!t) return;
+    const d=document.createElement('div');
+    d.className='m me';
+    d.innerHTML='<small>You</small>';
+    d.append(document.createTextNode(t));
+    const box=document.getElementById('msgs');
+    box.appendChild(d); box.scrollTop=box.scrollHeight; i.value='';
+  });
+</script>
+</body>
+</html>
