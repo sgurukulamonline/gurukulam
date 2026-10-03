@@ -1,38 +1,42 @@
-﻿{
+{
   "rules": {
     "users": {
-      ".read": true,
+      ".read": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')",
       "$uid": {
         ".read": true,
-        ".write": true
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin') || $uid.beginsWith('ph_')",
+        "role": {
+          ".validate": "newData.val() === data.val() || (auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')) || (!data.exists() && newData.val() === 'learner')"
+        }
       }
     },
     "courses": {
       ".read": true,
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+      ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     },
     "liveClasses": {
       ".read": true,
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+      ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     },
     "enrollments": {
-      ".read": true,
+      ".read": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')",
       "$uid": {
         ".read": true,
-        ".write": true
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin') || $uid.beginsWith('ph_')"
       }
     },
     "community": {
       "$room": {
         ".read": true,
         "$msg": {
-          ".write": true
+          ".write": "$room.matches(/^(gita|sanskrit|yoga|temple|parents)$/) && ((auth != null && ((!data.exists() && newData.exists() && newData.child('uid').val() === auth.uid) || (data.exists() && !newData.exists() && (data.child('uid').val() === auth.uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')))) || (!data.exists() && newData.exists() && newData.child('uid').val().beginsWith('ph_')))",
+          ".validate": "newData.hasChildren(['uid','name','text','at']) && ((auth != null && newData.child('uid').val() === auth.uid) || newData.child('uid').val().beginsWith('ph_')) && newData.child('name').isString() && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500"
         }
       }
     },
     "notifications": {
       ".read": true,
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+      ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     }
   }
 }
