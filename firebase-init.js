@@ -12,13 +12,14 @@ if (savedConfigStr) {
 }
 
 const firebaseConfig = activeConfig || {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBh4VXCWKAxLTxB0_MBmCMOt03EHfrZtT0",
+  authDomain: "sanathana-gurukulam.firebaseapp.com",
+  databaseURL: "https://sanathana-gurukulam-default-rtdb.firebaseio.com",
+  projectId: "sanathana-gurukulam",
+  storageBucket: "sanathana-gurukulam.firebasestorage.app",
+  messagingSenderId: "996616533154",
+  appId: "1:996616533154:web:33eb3a93c66ff048c053fb",
+  measurementId: "G-QZLR4255P0"
 };
 
 // Check if real config is present
@@ -362,8 +363,34 @@ if (hasRealFirebase) {
     realApp = initializeApp(firebaseConfig);
     realAuth = getAuth(realApp);
     realDb = getDatabase(realApp);
+    seedDefaultDataIfEmpty().catch(() => {});
   } catch (err) {
     console.warn("Could not initialize real Firebase, falling back to local mode:", err);
+  }
+}
+
+export async function seedDefaultDataIfEmpty() {
+  if (!realDb) return;
+  try {
+    const snap = await fbGet(fbRef(realDb, "courses"));
+    if (!snap.exists() || !snap.val() || Object.keys(snap.val()).length === 0) {
+      console.log("Seeding initial Gurukulam catalog to Firebase Realtime Database...");
+      const initialCourses = {};
+      DEFAULT_COURSES.forEach(c => { initialCourses[c.id] = c; });
+      await fbSet(fbRef(realDb, "courses"), initialCourses);
+
+      const initialLive = {};
+      DEFAULT_LIVE.forEach(l => { initialLive[l.id] = l; });
+      await fbSet(fbRef(realDb, "liveClasses"), initialLive);
+
+      const initialNotifs = {};
+      DEFAULT_NOTIFICATIONS.forEach(n => { initialNotifs[n.id] = n; });
+      await fbSet(fbRef(realDb, "notifications"), initialNotifs);
+
+      await fbSet(fbRef(realDb, "community"), DEFAULT_COMMUNITY);
+    }
+  } catch (err) {
+    console.warn("Auto-seeding check (please ensure database rules are published):", err);
   }
 }
 
@@ -374,8 +401,10 @@ export const db = realDb;
 export function onAuthStateChanged(authInstance, cb) {
   if (realAuth) {
     return fbOnAuthStateChanged(realAuth, async u => {
-      if (u) cb(u);
-      else {
+      if (u) {
+        syncLocalProgressToCloud(u).catch(() => {});
+        cb(u);
+      } else {
         // If not in Firebase Auth, check if mock user is logged in
         const mu = getMockUser();
         cb(mu);
@@ -498,21 +527,114 @@ export async function list(path) {
   }
 }
 
+// Sync and merge any prior guest/offline work to the user's cloud account across all devices
+export async function syncLocalProgressToCloud(user) {
+  if (!user || !user.uid) return;
+  try {
+    // 1. Gather all local guest enrollments from localStorage
+    const guestStr = localStorage.getItem("sg_guest_enrollments");
+    let guestEnrs = {};
+    if (guestStr) {
+      try { guestEnrs = JSON.parse(guestStr) || {}; } catch(e) {}
+    }
+
+    // 2. Also merge any demo mock enrollments
+    if (mockDB && mockDB.enrollments) {
+      const demoEnrs = mockDB.enrollments["guest"] || mockDB.enrollments["learner-1"] || {};
+      Object.entries(demoEnrs).forEach(([cid, d]) => {
+        if (!guestEnrs[cid]) {
+          guestEnrs[cid] = d;
+        } else {
+          guestEnrs[cid].done = { ...(d.done || {}), ...(guestEnrs[cid].done || {}) };
+        }
+      });
+    }
+
+    const courseIds = Object.keys(guestEnrs);
+
+    // 3. For each course, fetch any existing cloud data and merge
+    for (const cid of courseIds) {
+      const localData = guestEnrs[cid];
+      if (!localData) continue;
+
+      const cloudRef = ref(db, `enrollments/${user.uid}/${cid}`);
+      let cloudData = {};
+      try {
+        const cloudSnap = await get(cloudRef);
+        if (cloudSnap.exists()) cloudData = cloudSnap.val() || {};
+      } catch(e) {}
+
+      // Union of completed lessons
+      const mergedDone = { ...(localData.done || {}), ...(cloudData.done || {}) };
+      const courseObj = DEFAULT_COURSES.find(c => c.id === cid) || {};
+      const totalLessons = courseObj.lessons || 10;
+      const count = Object.keys(mergedDone).length;
+      const mergedProgress = Math.max(localData.progress || 0, cloudData.progress || 0, Math.min(100, Math.round(count / totalLessons * 100)));
+
+      const mergedEnrollment = {
+        progress: mergedProgress,
+        enrolledAt: cloudData.enrolledAt || localData.enrolledAt || Date.now(),
+        done: mergedDone,
+        lastSyncedAt: Date.now(),
+        ...(mergedProgress >= 100 ? { completedAt: cloudData.completedAt || localData.completedAt || Date.now() } : {})
+      };
+
+      await set(cloudRef, mergedEnrollment);
+    }
+
+    // 4. Sync profile metadata (sankalpa, avatar emblem)
+    const localSankalpa = localStorage.getItem("sg_sankalpa");
+    const localEmblem = localStorage.getItem("sg_selected_emblem");
+    if (localSankalpa || localEmblem) {
+      const profRef = ref(db, `users/${user.uid}`);
+      const profUpdates = {};
+      if (localSankalpa) profUpdates.sankalpa = localSankalpa;
+      if (localEmblem) profUpdates.emblem = localEmblem;
+      try { await update(profRef, profUpdates); } catch(e) {}
+    }
+
+    // Remove temporary guest enrollments after successful cloud sync
+    if (courseIds.length) {
+      localStorage.removeItem("sg_guest_enrollments");
+    }
+  } catch (err) {
+    console.warn("Could not sync local progress to cloud:", err);
+  }
+}
+
 // Create or get the user's profile
 export async function ensureProfile(user) {
   if (!user) return { name: "Guest", role: "learner" };
   const r = ref(db, "users/" + user.uid);
-  const snap = await get(r);
-  if (snap.exists() && snap.val()) return snap.val();
-  const p = {
-    name: user.displayName || "Learner",
-    email: user.email || "",
-    phone: user.phoneNumber || "",
-    photo: user.photoURL || "",
-    role: user.role || "learner",
-    createdAt: Date.now()
-  };
-  await set(r, p);
+  let p = null;
+  try {
+    const snap = await get(r);
+    if (snap.exists() && snap.val()) p = snap.val();
+  } catch(e) {}
+
+  const isOwner = Boolean(
+    (user.email && (user.email.toLowerCase() === "reshwanthreddy.gangula@gmail.com" || user.email.toLowerCase() === "admin@gurukulam.org")) ||
+    user.role === "admin"
+  );
+
+  if (!p) {
+    p = {
+      name: user.displayName || (user.email ? user.email.split("@")[0].replace(/\./g, " ") : "Learner"),
+      email: user.email || "",
+      phone: user.phoneNumber || "",
+      photo: user.photoURL || "",
+      role: isOwner ? "admin" : "learner",
+      createdAt: Date.now()
+    };
+    try { await set(r, p); } catch(e) {}
+  } else if (isOwner && p.role !== "admin") {
+    p.role = "admin";
+    try { await update(r, { role: "admin" }); } catch(e) {}
+  }
+
+  // Merge and sync any prior guest or offline work into the cloud
+  syncLocalProgressToCloud(user).catch(e => console.warn("Background progress sync error:", e));
+
   return p;
 }
 

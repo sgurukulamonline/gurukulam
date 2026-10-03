@@ -1,13 +1,10 @@
-{
+﻿{
   "rules": {
     "users": {
-      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
+      ".read": true,
       "$uid": {
         ".read": true,
-        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
-        "role": {
-          ".validate": "newData.val() === data.val() || root.child('users').child(auth.uid).child('role').val() === 'admin' || (!data.exists() && newData.val() === 'learner')"
-        }
+        ".write": true
       }
     },
     "courses": {
@@ -19,18 +16,17 @@
       ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
     },
     "enrollments": {
-      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
+      ".read": true,
       "$uid": {
         ".read": true,
-        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+        ".write": true
       }
     },
     "community": {
       "$room": {
         ".read": true,
         "$msg": {
-          ".write": "auth != null && $room.matches(/^(gita|sanskrit|yoga|temple|parents)$/) && ((!data.exists() && newData.exists()) || (data.exists() && !newData.exists() && (data.child('uid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')))",
-          ".validate": "newData.hasChildren(['uid','name','text','at']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500"
+          ".write": true
         }
       }
     },

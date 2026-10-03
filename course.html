@@ -142,8 +142,24 @@ async function load() {
     return;
   }
 
-  enr = user ? (await get(ref(db, path()))).val() : null;
+  enr = user ? (await get(ref(db, path()))).val() : getGuestEnrollment(id);
   render();
+}
+
+function getGuestEnrollment(cid) {
+  try {
+    const raw = localStorage.getItem("sg_guest_enrollments");
+    return raw ? (JSON.parse(raw)[cid] || null) : null;
+  } catch(e) { return null; }
+}
+
+function saveGuestEnrollment(cid, data) {
+  try {
+    const raw = localStorage.getItem("sg_guest_enrollments");
+    const all = raw ? (JSON.parse(raw) || {}) : {};
+    all[cid] = data;
+    localStorage.setItem("sg_guest_enrollments", JSON.stringify(all));
+  } catch(e) {}
 }
 
 function render() {
@@ -154,15 +170,13 @@ function render() {
   const embed = ytEmbed(course.videoUrl);
 
   const loginRedirect = "login.html?redirect=" + encodeURIComponent("course.html?id=" + id);
-  const act = !user 
-    ? `<a class="btn gold" href="${loginRedirect}">Sign in to Enroll</a>`
-    : !enr 
-    ? `<button class="btn gold" id="enroll">Enroll in Course</button>`
+  const act = !enr
+    ? `<button class="btn gold" id="enroll">Enroll &amp; Start Learning</button>`
     : `
       <div class="bar"><i style="width:${pr}%"></i></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 14px">
         <span class="muted">${pr}% complete (${completedCount}/${n} lessons)</span>
-        ${pr >= 100 ? '<a class="btn sm gold" href="certificate.html?id=' + encodeURIComponent(id) + '">🏅 View Certificate</a>' : ''}
+        ${pr >= 100 ? (user ? `<a class="btn sm gold" href="certificate.html?id=${encodeURIComponent(id)}&uid=${encodeURIComponent(user.uid)}">🏅 View Certificate</a>` : `<a class="btn sm gold" href="${loginRedirect}">🏅 Sign In to Claim Certificate</a>`) : ''}
       </div>
     `;
 
@@ -179,6 +193,13 @@ function render() {
       </label>
     `;
   }
+
+  const guestSyncBanner = (!user && enr) ? `
+    <div style="margin-top:18px;padding:12px 16px;background:rgba(232,201,143,.25);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <span style="font-size:.86rem;color:var(--brown)">✨ <b>Progress active:</b> Your work is saved on this device. Sign in anytime to sync to the cloud!</span>
+      <a class="btn sm gold" href="${loginRedirect}">Sign in to Sync →</a>
+    </div>
+  ` : "";
 
   box.innerHTML = `
     <div class="hero2">
@@ -201,7 +222,8 @@ function render() {
     <div class="panel">
       <h2>Course Modules & Lessons</h2>
       ${lessonsHtml}
-      ${enr ? '' : '<p class="muted" style="margin-top:16px">Enroll now to track your daily progress and unlock lesson checkboxes.</p>'}
+      ${guestSyncBanner}
+      ${enr ? '' : '<p class="muted" style="margin-top:16px">Click Enroll &amp; Start Learning to track your daily progress and unlock lesson checkboxes.</p>'}
     </div>
   `;
 }
@@ -218,27 +240,47 @@ function getLessonTitle(courseId, num) {
 box.addEventListener("click", async e => {
   if (e.target.id !== "enroll") return;
   e.target.disabled = true;
-  e.target.textContent = "Enrolling...";
-  await set(ref(db, path()), { progress: 0, enrolledAt: Date.now(), done: {} });
+  e.target.textContent = "Starting Course...";
+
+  if (user) {
+    await set(ref(db, path()), { progress: 0, enrolledAt: Date.now(), done: {} });
+  } else {
+    saveGuestEnrollment(id, { progress: 0, enrolledAt: Date.now(), done: {} });
+  }
   await load();
 });
 
 box.addEventListener("change", async e => {
   const i = e.target.dataset.l;
   if (!i) return;
-  const r = ref(db, `${path()}/done/L${i}`);
-  if (e.target.checked) await set(r, true);
-  else await remove(r);
 
-  enr = (await get(ref(db, path()))).val() || {};
-  const total = course.lessons || 10;
-  const count = Object.keys(enr.done || {}).length;
-  const pr = Math.min(100, Math.round(count / total * 100));
+  if (user) {
+    const r = ref(db, `${path()}/done/L${i}`);
+    if (e.target.checked) await set(r, true);
+    else await remove(r);
 
-  await update(ref(db, path()), {
-    progress: pr,
-    ...(pr >= 100 && !enr.completedAt ? { completedAt: Date.now() } : {})
-  });
+    enr = (await get(ref(db, path()))).val() || {};
+    const total = course.lessons || 10;
+    const count = Object.keys(enr.done || {}).length;
+    const pr = Math.min(100, Math.round(count / total * 100));
+
+    await update(ref(db, path()), {
+      progress: pr,
+      ...(pr >= 100 && !enr.completedAt ? { completedAt: Date.now() } : {})
+    });
+  } else {
+    // Offline/guest progress on this device
+    if (!enr) enr = { progress: 0, enrolledAt: Date.now(), done: {} };
+    if (!enr.done) enr.done = {};
+    if (e.target.checked) enr.done["L" + i] = true;
+    else delete enr.done["L" + i];
+
+    const total = course.lessons || 10;
+    const count = Object.keys(enr.done).length;
+    enr.progress = Math.min(100, Math.round(count / total * 100));
+    if (enr.progress >= 100 && !enr.completedAt) enr.completedAt = Date.now();
+    saveGuestEnrollment(id, enr);
+  }
   await load();
 });
 </script>
