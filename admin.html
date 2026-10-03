@@ -167,10 +167,10 @@ button{font:inherit;cursor:pointer;border:0}
       <div class="admin-card-icon">🎯</div>
       <div>
         <h2>1. Age Groups Section</h2>
-        <p>Manage Bala, Yuva, Sadhaka &amp; Jnana learning paths, age brackets, custom artwork, and Telugu descriptions shown on the homepage.</p>
+        <p>Assign and manage content across the 4 fixed age groups (Bala, Yuva, Sadhaka &amp; Jnana) using multi-select checklists.</p>
       </div>
       <div class="admin-card-footer">
-        <span class="admin-badge" id="bPaths">4 Learning Paths</span>
+        <span class="admin-badge" id="bPaths">4 Fixed Sections</span>
         <span class="admin-go">Open Section →</span>
       </div>
     </a>
@@ -279,7 +279,7 @@ async function load() {
     $("sN").textContent = (ns || []).length;
 
     // Update modular box badges
-    $("bPaths").textContent = `${pathCount} Learning Paths`;
+    $("bPaths").textContent = "4 Fixed Sections";
     $("bCourses").textContent = `${cs.length} Active Courses`;
     $("bLive").textContent = `${ls.length} Scheduled Sessions`;
     $("bNotifs").textContent = `${(ns || []).length} Broadcast Alerts`;

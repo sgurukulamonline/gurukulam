@@ -48,9 +48,23 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
 .muted{color:var(--muted);font-size:.85rem}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
-.tag.active{background:var(--maroon);color:#fff}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
+
+/* Fixed 4 Age Group Cards Overview */
+.fixed-paths-preview{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px;
+}
+.path-preview-card{
+  background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;
+  display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(122,46,22,.06);
+}
+.path-preview-card img{
+  width:50px;height:50px;border-radius:10px;object-fit:cover;border:1px solid var(--line);flex-shrink:0;
+}
+.path-preview-title{font-size:1rem;font-weight:700;color:var(--maroon)}
+.path-preview-age{font-size:.78rem;font-weight:600;color:var(--gold)}
+.path-preview-sub{font-size:.72rem;color:var(--muted)}
 
 /* Age Checklist UI */
 .age-check-wrapper{
@@ -81,19 +95,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .age-box-range{font-size:.78rem;font-weight:600;color:var(--gold);margin-top:2px}
 .age-box-sub{font-size:.74rem;color:var(--muted);margin-top:3px;font-style:italic}
 
-/* Telemetry Pills */
-.telemetry{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:22px;
-}
-.tele-card{
-  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;
-  display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);
-}
-.tele-icon{font-size:2rem}
-.tele-val{font-size:1.6rem;font-weight:700;color:var(--maroon);line-height:1}
-.tele-lbl{font-size:.78rem;color:var(--muted);font-weight:500}
-
-/* Filter Chips */
+/* Filter Tabs */
 .filter-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .filter-btn{
   background:#fff;border:1px solid var(--line);padding:7px 16px;border-radius:20px;
@@ -129,39 +131,43 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
-      <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Section Management</h1>
-      <p class="muted">Check 1, 2, or any age groups below to publish and synchronize the same content across multiple sections instantly.</p>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Content Manager</h1>
+      <p class="muted">The 4 age group sections below are fixed permanently as on the homepage. Use the checklist to select 1, 2, or any sections and publish content simultaneously.</p>
     </div>
   </div>
 
-  <!-- Telemetry Bar -->
-  <div class="telemetry">
-    <div class="tele-card">
-      <div class="tele-icon">👶</div>
+  <!-- The 4 Fixed Age Group Sections Overview -->
+  <div class="fixed-paths-preview">
+    <div class="path-preview-card">
+      <img src="images/Bala%20Gurukulam.png" alt="Bala">
       <div>
-        <div class="tele-val" id="cntBala">0</div>
-        <div class="tele-lbl">Bala Gurukulam (5–12)</div>
+        <div class="path-preview-title">Bala Gurukulam</div>
+        <div class="path-preview-age">Ages 5 – 12</div>
+        <div class="path-preview-sub">సంస్కారం • సంప్రదాయం</div>
       </div>
     </div>
-    <div class="tele-card">
-      <div class="tele-icon">🏹</div>
+    <div class="path-preview-card">
+      <img src="images/Yuva%20Gurukulam.png" alt="Yuva">
       <div>
-        <div class="tele-val" id="cntYuva">0</div>
-        <div class="tele-lbl">Yuva Gurukulam (13–25)</div>
+        <div class="path-preview-title">Yuva Gurukulam</div>
+        <div class="path-preview-age">Ages 13 – 25</div>
+        <div class="path-preview-sub">జ్ఞానం • నాయకత్వం</div>
       </div>
     </div>
-    <div class="tele-card">
-      <div class="tele-icon">🕉️</div>
+    <div class="path-preview-card">
+      <img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka">
       <div>
-        <div class="tele-val" id="cntSadhaka">0</div>
-        <div class="tele-lbl">Sadhaka Gurukulam (26–55)</div>
+        <div class="path-preview-title">Sadhaka Gurukulam</div>
+        <div class="path-preview-age">Ages 26 – 55</div>
+        <div class="path-preview-sub">ఆధ్యాత్మికం • కుటుంబం</div>
       </div>
     </div>
-    <div class="tele-card">
-      <div class="tele-icon">🪷</div>
+    <div class="path-preview-card">
+      <img src="images/Jnana%20Gurukulam.png" alt="Jnana">
       <div>
-        <div class="tele-val" id="cntJnana">0</div>
-        <div class="tele-lbl">Jnana Gurukulam (56+)</div>
+        <div class="path-preview-title">Jnana Gurukulam</div>
+        <div class="path-preview-age">Ages 56+</div>
+        <div class="path-preview-sub">భక్తి • ఆత్మజ్ఞానం</div>
       </div>
     </div>
   </div>
@@ -180,16 +186,16 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
             ☑️ Target Age Groups Checklist (Select 1, 2, or Any):
           </span>
           <div style="display:flex;gap:6px">
-            <button type="button" class="btn ghost sm" id="btnSelectAll">✓ Select All (All Ages)</button>
+            <button type="button" class="btn ghost sm" id="btnSelectAll">✓ Select All</button>
             <button type="button" class="btn ghost sm" id="btnClearAll">✕ Clear All</button>
           </div>
         </div>
         <p class="muted" style="font-size:.82rem;margin-bottom:8px">
-          💡 <b>Select 1 or 2 or any:</b> Whatever boxes you check, this same lesson/course will automatically appear in all of those selected age group sections!
+          💡 Check 1, 2, or any: Whatever boxes you check, this same lesson/course will automatically appear in all of those selected age group sections!
         </p>
 
         <div class="age-check-grid">
-          <label class="age-box" id="card-bala">
+          <label class="age-box checked" id="card-bala">
             <input type="checkbox" name="targetAges" value="bala" class="age-cb" checked>
             <div class="age-box-body">
               <div class="age-box-title">👶 Bala Gurukulam</div>
@@ -290,68 +296,18 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     </div>
   </div>
 
-  <!-- Collapsible Panel: Homepage Learning Paths Customizer -->
-  <div class="panel" style="background:#faf5ea">
-    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" id="togglePathsPanel">
-      <div>
-        <h2 style="margin-bottom:2px">🎨 Homepage Learning Path Cards Setup</h2>
-        <p class="muted">Customize the 4 prominent gateway cards shown on the homepage (Title, Age Bracket, Telugu Tagline, and Artwork).</p>
-      </div>
-      <button class="btn ghost sm" type="button" id="btnTogglePaths">Expand / Collapse ▾</button>
-    </div>
-
-    <div id="pathsPanelBody" style="display:none;margin-top:18px;border-top:1px solid var(--line);padding-top:18px">
-      <form class="form" id="pathForm">
-        <input type="hidden" name="pathEditId" id="pathEditId">
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Path Title</label>
-          <input name="title" id="pTitle" placeholder="e.g. Bala Gurukulam" required>
-        </div>
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Age Range</label>
-          <input name="ageRange" id="pAge" placeholder="e.g. Ages 5 – 12" required>
-        </div>
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Display Order (1 - 4)</label>
-          <input name="order" id="pOrder" type="number" min="1" max="10" placeholder="1" value="1">
-        </div>
-        <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Telugu Tagline / Subtitle (Use newlines for breaks)</label>
-          <textarea name="subTe" id="pSubTe" rows="2" placeholder="e.g. సంస్కారం • సంప్రదాయం&#10;సంతోషంగా"></textarea>
-        </div>
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Artwork / Image Path</label>
-          <input name="imageUrl" id="pImg" placeholder="e.g. images/Bala%20Gurukulam.png" required>
-        </div>
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Link</label>
-          <input name="link" id="pLink" placeholder="e.g. courses.html?path=bala">
-        </div>
-        <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px">
-          <button class="btn" id="pSubmitBtn" style="flex:1">Save Homepage Path</button>
-          <button type="button" class="btn ghost" id="pCancelBtn" style="display:none">Cancel Edit</button>
-        </div>
-      </form>
-
-      <h3 style="font-size:1.3rem;color:var(--maroon);margin:20px 0 10px">Current Homepage Gateway Paths</h3>
-      <div id="pathList"><p class="muted">Loading paths…</p></div>
-    </div>
-  </div>
-
 </div>
 
 <!-- Floating Toast -->
 <div id="toast">✅ Action completed</div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_PATHS, DEFAULT_COURSES } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
-const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 $("out").onclick = adminLogout;
 
 let windowCourses = [];
-let windowPaths = [];
 let activeFilter = "all";
 
 const showToast = msg => {
@@ -365,8 +321,16 @@ const showToast = msg => {
 requireAdmin((u, p) => {
   $("wrap").hidden = false;
   setupCheckboxes();
+  cleanStalePaths();
   loadAll();
 });
+
+// Remove any stale dynamic learningPaths from Firebase so homepage remains fixed as before
+async function cleanStalePaths() {
+  try {
+    await remove(ref(db, "learningPaths"));
+  } catch(e) {}
+}
 
 // Setup visual checkbox click feedback
 function setupCheckboxes() {
@@ -413,17 +377,6 @@ $("cVideo").addEventListener("input", e => {
   }
 });
 
-// Toggle paths collapsible
-$("togglePathsPanel").onclick = (e) => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
-  const b = $("pathsPanelBody");
-  b.style.display = b.style.display === "none" ? "block" : "none";
-};
-$("btnTogglePaths").onclick = () => {
-  const b = $("pathsPanelBody");
-  b.style.display = b.style.display === "none" ? "block" : "none";
-};
-
 // Filter tabs
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.onclick = () => {
@@ -437,23 +390,17 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 // Load everything from Firebase
 async function loadAll() {
   try {
-    const [cs, ps] = await Promise.all([
-      list("courses"),
-      list("learningPaths")
-    ]);
+    const cs = await list("courses");
     windowCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
-    windowPaths = (ps && ps.length) ? ps : [...DEFAULT_PATHS];
-    windowPaths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
 
-    updateTelemetry();
+    updateCounts();
     renderContentList();
-    renderPathsList();
   } catch (err) {
     console.error("Age groups load error:", err);
   }
 }
 
-// Compute counts for telemetry and filter pills
+// Compute counts for filter pills
 function getAgesArray(course) {
   if (Array.isArray(course.ageGroups) && course.ageGroups.length) {
     return course.ageGroups;
@@ -465,7 +412,7 @@ function getAgesArray(course) {
   return ["bala", "yuva", "sadhaka", "jnana"];
 }
 
-function updateTelemetry() {
+function updateCounts() {
   let cBala = 0, cYuva = 0, cSadhaka = 0, cJnana = 0;
   windowCourses.forEach(c => {
     const ages = getAgesArray(c);
@@ -474,11 +421,6 @@ function updateTelemetry() {
     if (ages.includes("sadhaka")) cSadhaka++;
     if (ages.includes("jnana")) cJnana++;
   });
-
-  $("cntBala").textContent = cBala;
-  $("cntYuva").textContent = cYuva;
-  $("cntSadhaka").textContent = cSadhaka;
-  $("cntJnana").textContent = cJnana;
 
   $("fAll").textContent = windowCourses.length;
   $("fBala").textContent = cBala;
@@ -577,34 +519,13 @@ function renderContentList() {
           item.ageGroup = newAges.join(",");
         }
         
-        updateTelemetry();
+        updateCounts();
         showToast("✓ Updated sections for: " + (item?.title || "course"));
       } catch (err) {
         console.error("In-card checklist update failed:", err);
       }
     };
   });
-}
-
-// Render homepage gateway paths (Bala, Yuva, Sadhaka, Jnana)
-function renderPathsList() {
-  $("pathList").innerHTML = windowPaths.map(p => `
-    <div class="row">
-      <span style="display:flex;align-items:center;gap:14px">
-        ${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line)" alt="Pic" onerror="this.style.display='none'">` : ''}
-        <span>
-          <b>${esc(p.title)}</b> 
-          <span class="tag">${esc(p.ageRange || "")}</span>
-          <span class="tag">Order Slot #${p.order || 1}</span>
-          <br><span class="muted">${esc((p.subTe || "").replace(/\n/g, " • "))} · Target: ${esc(p.link || "")}</span>
-        </span>
-      </span>
-      <span style="display:flex;gap:8px">
-        <button class="btn ghost sm" data-editpath="${p.id}">Edit Path</button>
-        <button class="btn sm" data-delpath="${p.id}">Delete</button>
-      </span>
-    </div>
-  `).join("") || '<p class="muted">No homepage paths configured.</p>';
 }
 
 // Age Content Form Submission
@@ -718,63 +639,7 @@ document.addEventListener("click", async e => {
     showToast("Content removed.");
     await loadAll();
   }
-
-  // Edit Homepage Path
-  if (d.editpath) {
-    const p = windowPaths.find(x => x.id === d.editpath);
-    if (p) {
-      $("pathsPanelBody").style.display = "block";
-      $("pathEditId").value = p.id;
-      $("pTitle").value = p.title || "";
-      $("pAge").value = p.ageRange || "";
-      $("pSubTe").value = p.subTe || "";
-      $("pImg").value = p.imageUrl || "";
-      $("pOrder").value = p.order || 1;
-      $("pLink").value = p.link || "";
-      $("pSubmitBtn").textContent = "Update Homepage Path";
-      $("pCancelBtn").style.display = "inline-flex";
-      $("pathForm").scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  // Delete Homepage Path
-  if (d.delpath) {
-    if (!confirm("Are you sure you want to permanently delete this gateway path?")) return;
-    await remove(ref(db, "learningPaths/" + d.delpath));
-    showToast("Homepage path removed.");
-    await loadAll();
-  }
 });
-
-// Homepage Path Form Submission
-$("pathForm").onsubmit = async e => {
-  e.preventDefault();
-  const f = Object.fromEntries(new FormData(e.target));
-  const editId = f.pathEditId || f.title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const pathData = {
-    id: editId,
-    title: f.title.trim(),
-    ageRange: f.ageRange.trim(),
-    subTe: f.subTe || "",
-    imageUrl: f.imageUrl.trim(),
-    order: parseInt(f.order, 10) || 1,
-    link: f.link || (`courses.html?path=${editId}`)
-  };
-  await set(ref(db, "learningPaths/" + editId), pathData);
-  $("pathForm").reset();
-  $("pathEditId").value = "";
-  $("pSubmitBtn").textContent = "Save Homepage Path";
-  $("pCancelBtn").style.display = "none";
-  showToast("✓ Homepage path saved!");
-  await loadAll();
-};
-
-$("pCancelBtn").onclick = () => {
-  $("pathForm").reset();
-  $("pathEditId").value = "";
-  $("pSubmitBtn").textContent = "Save Homepage Path";
-  $("pCancelBtn").style.display = "none";
-};
 </script>
 </body>
 </html>

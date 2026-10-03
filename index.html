@@ -346,7 +346,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 </nav>
 
 <script type="module">
-import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list, DEFAULT_PATHS } from "./firebase-init.js";
+import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list } from "./firebase-init.js";
 
 // Today date
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -354,37 +354,6 @@ document.getElementById('today').textContent = new Date().toLocaleDateString('en
 // Load dynamic courses: 3 pinned courses + 1 "More Courses" card (total 4 cards)
 const popularEl = document.getElementById("popularCourses");
 if (popularEl) loadCourses(popularEl, 3, true, true);
-
-// Dynamically render Learning Paths
-const pathsGrid = document.getElementById("pathsGrid");
-if (pathsGrid) {
-  (async () => {
-    try {
-      let paths = await list("learningPaths");
-      if (!paths || !paths.length) paths = [...DEFAULT_PATHS];
-      paths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-      pathsGrid.innerHTML = paths.map((p, idx) => {
-        const cls = `p${(idx % 4) + 1}`;
-        const subLines = (p.subTe || "").replace(/\n/g, "<br>");
-        return `
-          <a class="path ${cls}" href="${esc(p.link || ('courses.html?path=' + p.id))}">
-            <div class="pic">
-              <img src="${esc(p.imageUrl)}" alt="${esc(p.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='🕉️';">
-            </div>
-            <div class="body">
-              <h3>${esc(p.title)}</h3>
-              <div class="age">${esc(p.ageRange || "")}</div>
-              <p class="te">${subLines}</p>
-            </div>
-            <span class="go">→</span>
-          </a>
-        `;
-      }).join("");
-    } catch (e) {
-      console.warn("Could not load dynamic learning paths:", e);
-    }
-  })();
-}
 
 // User auth avatar
 onAuthStateChanged(auth, u => {
