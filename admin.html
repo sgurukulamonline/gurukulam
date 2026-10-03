@@ -90,24 +90,81 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
     <form class="form" id="cForm">
       <input type="hidden" name="editId" id="cEditId">
       <input name="title" id="cTitle" placeholder="Course Title (e.g. Upanishads Intro)" required>
-      <input name="desc" id="cDesc" placeholder="Brief Course Description">
+      <input name="desc" id="cDesc" placeholder="Brief Course Description / Overview">
       <select name="type" id="cType">
         <option value="free">Free Course</option>
         <option value="paid">Paid Course</option>
       </select>
+      <select name="ageGroup" id="cAgeGroup" title="Target Age Group">
+        <option value="all">Target: All Ages / General</option>
+        <option value="bala">Bala Gurukulam (Ages 5–12)</option>
+        <option value="yuva">Yuva Gurukulam (Ages 13–25)</option>
+        <option value="sadhaka">Sadhaka Gurukulam (Ages 26–55)</option>
+        <option value="jnana">Jnana Gurukulam (Ages 56+)</option>
+      </select>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label for="cReleaseTime" style="font-size:.78rem;font-weight:600;color:var(--muted)">Release Date &amp; Time</label>
+        <input name="releaseTime" id="cReleaseTime" type="datetime-local" aria-label="Release Date and Time">
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#fcf5e5;padding:8px 12px;border-radius:12px;border:1px solid var(--line)">
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--maroon);cursor:pointer">
+          <input type="checkbox" name="pinned" id="cPinned" value="1" style="width:auto;cursor:pointer">
+          Pin to Home (Top 3)
+        </label>
+        <select name="pinOrder" id="cPinOrder" style="padding:4px 8px;font-size:.8rem;width:auto" title="Pin Order">
+          <option value="1">Pin Slot 1</option>
+          <option value="2">Pin Slot 2</option>
+          <option value="3">Pin Slot 3</option>
+        </select>
+      </div>
       <input name="lessons" id="cLessons" type="number" min="1" placeholder="Number of Lessons" required value="10">
-      <input name="imageUrl" id="cImage" placeholder="Image Path (e.g. images/yoga.png)">
-      <input name="videoUrl" id="cVideo" placeholder="YouTube Video URL (optional)">
+      <input name="imageUrl" id="cImage" placeholder="Cover Image Path/URL (e.g. images/bhagavth gita.png)">
       <select name="published" id="cPublished">
         <option value="1">Published</option>
         <option value="0">Draft</option>
       </select>
-      <div style="grid-column:1/-1;display:flex;gap:10px">
+
+      <!-- Dynamic Course Content Sequence Builder (Videos, Photos, Matter) -->
+      <div style="grid-column:1/-1;margin-top:10px;border-top:1px solid var(--line);padding-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+          <div>
+            <b style="font-size:1.05rem;color:var(--maroon)">Course Content Sequence (Videos, Photos &amp; Matter)</b>
+            <p class="muted">Add and arrange sections in any order. The student will see them sequentially in the course player.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn sm gold" id="btnAddVideo">+ 🎥 Add Video</button>
+            <button type="button" class="btn sm gold" id="btnAddPhoto">+ 🖼️ Add Photo</button>
+            <button type="button" class="btn sm gold" id="btnAddMatter">+ 📝 Add Matter</button>
+          </div>
+        </div>
+        <div id="cSectionsList" style="display:grid;gap:10px"></div>
+      </div>
+
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:8px">
         <button class="btn" id="cSubmitBtn" style="flex:1">Add New Course</button>
         <button type="button" class="btn ghost" id="cCancelBtn" style="display:none">Cancel Edit</button>
       </div>
     </form>
     <div id="cList"></div>
+  </div>
+
+  <div class="panel">
+    <h2>🎯 Homepage Learning Paths (Age Groups)</h2>
+    <p class="muted" style="margin-bottom:14px">Customize the learning paths featured on the homepage (Bala, Yuva, Sadhaka, Jnana).</p>
+    <form class="form" id="pathForm">
+      <input type="hidden" name="pathEditId" id="pathEditId">
+      <input name="title" id="pTitle" placeholder="Path Title (e.g. Bala Gurukulam)" required>
+      <input name="ageRange" id="pAge" placeholder="Age Range (e.g. Ages 5 – 12)" required>
+      <input name="subTe" id="pSubTe" placeholder="Telugu Tagline (e.g. సంస్కారం • సంప్రదాయం...)">
+      <input name="imageUrl" id="pImg" placeholder="Image URL (e.g. images/Bala%20Gurukulam.png)" required>
+      <input name="order" id="pOrder" type="number" min="1" max="10" placeholder="Display Order (1-4)" value="1">
+      <input name="link" id="pLink" placeholder="Target Link (e.g. courses.html?path=bala)">
+      <div style="grid-column:1/-1;display:flex;gap:10px">
+        <button class="btn" id="pSubmitBtn" style="flex:1">Save Learning Path</button>
+        <button type="button" class="btn ghost" id="pCancelBtn" style="display:none">Cancel Edit</button>
+      </div>
+    </form>
+    <div id="pathList"></div>
   </div>
 
   <div class="panel">
@@ -148,29 +205,157 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 </div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, push, update, remove, list } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_PATHS } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
 let me;
+let currentSections = [];
 $("out").onclick = adminLogout;
 
 // Strict Acharya authentication guard
 requireAdmin((u, p) => {
   me = u;
   $("wrap").hidden = false;
+  renderSectionsBuilder();
   load();
 });
 
+// Dynamic Course Content Sequence Builder
+function renderSectionsBuilder() {
+  const container = $("cSectionsList");
+  if (!container) return;
+
+  if (!currentSections.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:16px;border:1.5px dashed var(--line);border-radius:12px;background:#faf6ee;color:var(--muted);font-size:.85rem">
+        No content blocks added yet. Click <b>+ 🎥 Add Video</b>, <b>+ 🖼️ Add Photo</b>, or <b>+ 📝 Add Matter</b> to sequence this course!
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = currentSections.map((sec, idx) => {
+    const isFirst = idx === 0;
+    const isLast = idx === currentSections.length - 1;
+    let typeBadge = "";
+    let contentInputs = "";
+
+    if (sec.type === "video") {
+      typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🎥 Video Block #${idx + 1}</span>`;
+      const yt = parseYouTube(sec.url);
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Video Title (e.g. Chapter 2 Discourse)" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <input type="text" placeholder="YouTube Video URL (e.g. https://www.youtube.com/watch?v=...)" value="${esc(sec.url || "")}" oninput="window.updateSecVideoUrl(${idx}, this.value)">
+          ${yt ? `
+            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
+              <img src="${yt.thumbnailUrl}" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Preview">
+              <span style="font-size:.78rem;color:var(--muted)">YouTube ID: <b>${yt.videoId}</b> · Plays in custom Gurukulam player (no YouTube branding)</span>
+            </div>
+          ` : '<small class="muted">Paste any YouTube URL or Shorts link — our custom player will play it without YouTube branding.</small>'}
+        </div>
+      `;
+    } else if (sec.type === "photo" || sec.type === "image") {
+      typeBadge = `<span style="background:#e0f2fe;color:#0369a1;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🖼️ Photo Block #${idx + 1}</span>`;
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Photo Title or Heading" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <input type="text" placeholder="Image URL (e.g. images/bhagavth gita.png or https://...)" value="${esc(sec.url || "")}" oninput="window.updateSecField(${idx}, 'url', this.value)">
+          <input type="text" placeholder="Photo Caption / Description" value="${esc(sec.caption || "")}" onchange="window.updateSecField(${idx}, 'caption', this.value)">
+          ${sec.url ? `
+            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
+              <img src="${esc(sec.url)}" style="width:72px;height:48px;object-fit:cover;border-radius:6px" alt="Photo" onerror="this.style.display='none'">
+              <span style="font-size:.78rem;color:var(--muted)">Photo preview</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">📝 Matter / Text Block #${idx + 1}</span>`;
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Section Heading / Title" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <textarea rows="3" placeholder="Enter spiritual matter, shloka, Telugu meaning, or study guide text here..." style="font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;width:100%" onchange="window.updateSecField(${idx}, 'text', this.value)">${esc(sec.text || "")}</textarea>
+        </div>
+      `;
+    }
+
+    return `
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          ${typeBadge}
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, -1)" ${isFirst ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Up">⬆️</button>
+            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, 1)" ${isLast ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Down">⬇️</button>
+            <button type="button" class="btn sm" style="background:#fee2e2;color:#991b1b" onclick="window.removeSection(${idx})" title="Delete">🗑️</button>
+          </div>
+        </div>
+        ${contentInputs}
+      </div>
+    `;
+  }).join("");
+}
+
+window.updateSecField = (idx, field, val) => {
+  if (currentSections[idx]) {
+    currentSections[idx][field] = val;
+  }
+};
+
+window.updateSecVideoUrl = (idx, val) => {
+  if (currentSections[idx]) {
+    currentSections[idx].url = val;
+    const yt = parseYouTube(val);
+    if (yt) {
+      currentSections[idx].thumbnail = yt.thumbnailUrl;
+      currentSections[idx].videoId = yt.videoId;
+    }
+    renderSectionsBuilder();
+  }
+};
+
+window.moveSection = (idx, dir) => {
+  const target = idx + dir;
+  if (target < 0 || target >= currentSections.length) return;
+  const temp = currentSections[idx];
+  currentSections[idx] = currentSections[target];
+  currentSections[target] = temp;
+  renderSectionsBuilder();
+};
+
+window.removeSection = idx => {
+  currentSections.splice(idx, 1);
+  renderSectionsBuilder();
+};
+
+window.addSection = type => {
+  currentSections.push({
+    id: "sec_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+    type,
+    title: "",
+    url: "",
+    caption: "",
+    text: "",
+    thumbnail: ""
+  });
+  renderSectionsBuilder();
+};
+
+$("btnAddVideo")?.addEventListener("click", () => window.addSection("video"));
+$("btnAddPhoto")?.addEventListener("click", () => window.addSection("photo"));
+$("btnAddMatter")?.addEventListener("click", () => window.addSection("matter"));
+
 async function load() {
   try {
-    const [us, cs, ls, es, ns] = await Promise.all([
+    const [us, cs, ls, es, ns, ps] = await Promise.all([
       list("users"),
       list("courses"),
       list("liveClasses"),
       get(ref(db, "enrollments")),
-      list("notifications")
+      list("notifications"),
+      list("learningPaths")
     ]);
 
     let totalEnr = 0;
@@ -187,27 +372,49 @@ async function load() {
     $("sE").textContent = totalEnr;
     $("sN").textContent = (ns || []).length;
 
-    let currentCourses = cs;
-    $("cList").innerHTML = cs.map(c => `
+    window._adminCourses = cs;
+    $("cList").innerHTML = cs.map(c => {
+      const isPinned = c.pinned === true || c.pinned === "true";
+      const pinBadge = isPinned ? `<span class="tag" style="background:#fef08a;color:#854d0e;font-weight:700">📌 Pinned #${c.pinOrder || 1}</span>` : "";
+      const secCount = Array.isArray(c.sections) ? c.sections.length : (c.videoUrl ? 1 : 0);
+      const relTime = c.releaseTime ? ` · Release: ${when(c.releaseTime)}` : "";
+      return `
+        <div class="row">
+          <span>
+            <b>${esc(c.title)}</b> 
+            <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
+            <span class="tag">${esc(c.type || 'free')}</span>
+            ${pinBadge}
+            <span class="tag">${esc(c.ageGroup || 'all')}</span>
+            <br><span class="muted">${c.lessons || 0} lessons · ${secCount} content blocks${relTime}</span>
+          </span>
+          <span style="display:flex;gap:8px">
+            <button class="btn ghost sm" data-edit="${c.id}">Edit</button>
+            <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
+              ${c.published !== false ? "Unpublish" : "Publish"}
+            </button>
+            <button class="btn sm" data-del="courses/${c.id}">Delete</button>
+          </span>
+        </div>
+      `;
+    }).join("") || '<p class="muted">No courses yet. Add one above!</p>';
+
+    // Learning Paths (Bala, Yuva, Sadhaka, Jnana)
+    window._adminPaths = (ps && ps.length) ? ps : [...DEFAULT_PATHS];
+    $("pathList").innerHTML = window._adminPaths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0)).map(p => `
       <div class="row">
         <span>
-          <b>${esc(c.title)}</b> 
-          <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
-          <span class="tag">${esc(c.type)}</span>
-          <br><span class="muted">${c.lessons || 0} lessons · Created: ${c.createdAt ? when(c.createdAt) : 'Initial'}</span>
+          <b>${esc(p.title)}</b> 
+          <span class="tag">${esc(p.ageRange || "")}</span>
+          <span class="tag">Order: ${p.order || 1}</span>
+          <br><span class="muted">${esc((p.subTe || "").replace(/\n/g, " • "))} · Target: ${esc(p.link || "")}</span>
         </span>
         <span style="display:flex;gap:8px">
-          <button class="btn ghost sm" data-edit="${c.id}">Edit</button>
-          <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
-            ${c.published !== false ? "Unpublish" : "Publish"}
-          </button>
-          <button class="btn sm" data-del="courses/${c.id}">Delete</button>
+          <button class="btn ghost sm" data-editpath="${p.id}">Edit</button>
+          <button class="btn sm" data-del="learningPaths/${p.id}">Delete</button>
         </span>
       </div>
-    `).join("") || '<p class="muted">No courses yet. Add one above!</p>';
-
-    // Store courses in memory for edit population
-    window._adminCourses = cs;
+    `).join("") || '<p class="muted">No learning paths configured.</p>';
 
     $("lList").innerHTML = (ls || []).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
       <div class="row">
@@ -256,6 +463,10 @@ async function load() {
 const resetCourseForm = () => {
   $("cForm").reset();
   $("cEditId").value = "";
+  $("cPinned").checked = false;
+  $("cReleaseTime").value = "";
+  currentSections = [];
+  renderSectionsBuilder();
   $("cSubmitBtn").textContent = "Add New Course";
   $("cCancelBtn").style.display = "none";
 };
@@ -269,12 +480,22 @@ $("cForm").onsubmit = async e => {
   const courseData = {
     title: f.title,
     desc: f.desc || "",
-    type: f.type,
+    type: f.type || "free",
+    ageGroup: f.ageGroup || "all",
+    releaseTime: f.releaseTime ? new Date(f.releaseTime).getTime() : 0,
+    pinned: Boolean(f.pinned === "1" || f.pinned === "on" || f.pinned === true),
+    pinOrder: parseInt(f.pinOrder, 10) || 1,
     lessons: parseInt(f.lessons, 10) || 10,
     imageUrl: f.imageUrl || "",
-    videoUrl: f.videoUrl || "",
-    published: f.published === "1"
+    published: f.published === "1",
+    sections: currentSections
   };
+
+  // If first section is video, also set videoUrl for backwards compatibility
+  const firstVideo = currentSections.find(s => s.type === "video");
+  if (firstVideo && firstVideo.url) {
+    courseData.videoUrl = firstVideo.url;
+  }
 
   if (editId) {
     await update(ref(db, "courses/" + editId), courseData);
@@ -284,6 +505,35 @@ $("cForm").onsubmit = async e => {
   }
   resetCourseForm();
   await load();
+};
+
+// Learning Paths form submission
+$("pathForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const editId = f.pathEditId || f.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const pathData = {
+    id: editId,
+    title: f.title,
+    ageRange: f.ageRange,
+    subTe: f.subTe || "",
+    imageUrl: f.imageUrl,
+    order: parseInt(f.order, 10) || 1,
+    link: f.link || (`courses.html?path=${editId}`)
+  };
+  await set(ref(db, "learningPaths/" + editId), pathData);
+  e.target.reset();
+  $("pathEditId").value = "";
+  $("pSubmitBtn").textContent = "Save Learning Path";
+  $("pCancelBtn").style.display = "none";
+  await load();
+};
+
+$("pCancelBtn").onclick = () => {
+  $("pathForm").reset();
+  $("pathEditId").value = "";
+  $("pSubmitBtn").textContent = "Save Learning Path";
+  $("pCancelBtn").style.display = "none";
 };
 
 $("lForm").onsubmit = async e => {
@@ -339,13 +589,61 @@ document.addEventListener("click", async e => {
       $("cTitle").value = course.title || "";
       $("cDesc").value = course.desc || "";
       $("cType").value = course.type || "free";
+      $("cAgeGroup").value = course.ageGroup || "all";
+      if (course.releaseTime) {
+        const dt = new Date(course.releaseTime);
+        const pad = n => String(n).padStart(2, '0');
+        $("cReleaseTime").value = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+      } else {
+        $("cReleaseTime").value = "";
+      }
+      $("cPinned").checked = Boolean(course.pinned === true || course.pinned === "true");
+      $("cPinOrder").value = String(course.pinOrder || 1);
       $("cLessons").value = course.lessons || 10;
       $("cImage").value = course.imageUrl || "";
-      $("cVideo").value = course.videoUrl || "";
       $("cPublished").value = course.published !== false ? "1" : "0";
+
+      // Load sections into builder
+      if (Array.isArray(course.sections) && course.sections.length) {
+        currentSections = JSON.parse(JSON.stringify(course.sections));
+      } else {
+        currentSections = [];
+        if (course.videoUrl) {
+          currentSections.push({
+            id: "sec_init_v",
+            type: "video",
+            title: "Introduction Lecture",
+            url: course.videoUrl
+          });
+        }
+        if (course.desc) {
+          currentSections.push({
+            id: "sec_init_m",
+            type: "matter",
+            title: "Course Overview & Notes",
+            text: course.desc
+          });
+        }
+      }
+      renderSectionsBuilder();
+
       $("cSubmitBtn").textContent = "Update Course";
       $("cCancelBtn").style.display = "inline-flex";
       $("cForm").scrollIntoView({ behavior: "smooth" });
+    }
+  } else if (d.editpath) {
+    const p = (window._adminPaths || []).find(x => x.id === d.editpath);
+    if (p) {
+      $("pathEditId").value = p.id;
+      $("pTitle").value = p.title || "";
+      $("pAge").value = p.ageRange || "";
+      $("pSubTe").value = p.subTe || "";
+      $("pImg").value = p.imageUrl || "";
+      $("pOrder").value = p.order || 1;
+      $("pLink").value = p.link || "";
+      $("pSubmitBtn").textContent = "Update Learning Path";
+      $("pCancelBtn").style.display = "inline-flex";
+      $("pathForm").scrollIntoView({ behavior: "smooth" });
     }
   } else if (d.pub) {
     await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });

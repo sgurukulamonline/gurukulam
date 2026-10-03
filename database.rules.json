@@ -37,6 +37,10 @@
     "notifications": {
       ".read": true,
       ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+    },
+    "learningPaths": {
+      ".read": true,
+      ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     }
   }
 }

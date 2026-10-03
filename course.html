@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Course Details – Sanathana Gurukulam</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{
   --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
@@ -67,7 +68,188 @@ button{font:inherit;cursor:pointer;border:0}
 .lesson input{width:22px;height:22px;accent-color:var(--maroon);cursor:pointer}
 .lesson.completed{color:var(--muted);text-decoration:line-through}
 
-.video{aspect-ratio:16/9;width:100%;border:0;border-radius:16px;margin-bottom:24px;box-shadow:var(--shadow)}
+/* Custom Gurukulam Video Player */
+.gk-video-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #140702;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  margin-bottom: 24px;
+  border: 1px solid rgba(217,154,39,.3);
+  user-select: none;
+}
+.gk-video-player iframe {
+  position: absolute;
+  top: -12%;
+  left: 0;
+  width: 100%;
+  height: 124%;
+  pointer-events: none;
+  border: 0;
+}
+.gk-click-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+.gk-play-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  background: rgba(30,10,3,.35);
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.gk-play-overlay.hidden {
+  opacity: 0;
+}
+.gk-big-play-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d99a27, #e8c98f);
+  color: #4a1f0e;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5), 0 0 0 6px rgba(217,154,39,.35);
+  padding-left: 5px;
+}
+.gk-controls-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: linear-gradient(180deg, transparent, rgba(20,7,2,.85) 30%, #140702 100%);
+  padding: 10px 16px 12px;
+  color: #f7e8c8;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gk-timeline-wrap {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.gk-timeline-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: rgba(255,255,255,.25);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.gk-timeline-progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #d99a27, #f3dfb2);
+  border-radius: 4px;
+  transition: width .1s linear;
+}
+.gk-timeline-slider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  margin: 0;
+}
+.gk-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.gk-controls-left, .gk-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gk-btn {
+  background: rgba(255,255,255,.12);
+  color: #f7e8c8;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.15);
+}
+.gk-btn:hover {
+  background: var(--gold);
+  color: #4a1f0e;
+}
+.gk-time-display {
+  font-size: .82rem;
+  color: #e8c98f;
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
+}
+
+/* Sections Styling */
+.section-block {
+  margin-bottom: 28px;
+}
+.section-title {
+  font-size: 1.45rem;
+  color: var(--maroon);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.photo-card {
+  background: var(--card);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+.photo-card img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  background: #fbf5e8;
+  display: block;
+}
+.photo-caption {
+  padding: 14px 18px;
+  font-size: .92rem;
+  color: var(--brown);
+  border-top: 1px solid var(--line);
+  background: #fffdf9;
+}
+.matter-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  line-height: 1.7;
+}
+.matter-content {
+  font-size: 1.02rem;
+  color: #3b1709;
+}
+
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .muted{color:var(--muted);font-size:.85rem}
 .bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
@@ -96,12 +278,28 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <script type="module">
-import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, ytEmbed, DEFAULT_COURSES } from "./firebase-init.js";
+import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
 
 const box = document.getElementById("box");
 const id = new URLSearchParams(location.search).get("id");
 let user, course, enr;
 const path = () => `enrollments/${user.uid}/${id}`;
+
+const activePlayers = {};
+const activeIntervals = {};
+
+// Ensure YouTube Iframe API is ready
+const ensureYTApi = () => new Promise(resolve => {
+  if (window.YT && window.YT.Player) {
+    resolve(window.YT);
+    return;
+  }
+  const prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => {
+    if (typeof prev === "function") prev();
+    resolve(window.YT);
+  };
+});
 
 onAuthStateChanged(auth, async u => {
   user = u;
@@ -109,14 +307,15 @@ onAuthStateChanged(auth, async u => {
 });
 
 const getCourseIcon = id => {
-  if (id.includes("gita")) return "📖";
-  if (id.includes("sanskrit")) return "🪷";
-  if (id.includes("history")) return "📜";
-  if (id.includes("ramayan")) return "🏹";
-  if (id.includes("yoga")) return "🧘";
-  if (id.includes("vishnu")) return "🪔";
-  if (id.includes("veda")) return "🕉️";
-  if (id.includes("temple")) return "🛕";
+  const s = String(id || "").toLowerCase();
+  if (s.includes("gita")) return "📖";
+  if (s.includes("sanskrit")) return "🪷";
+  if (s.includes("history")) return "📜";
+  if (s.includes("ramayan")) return "🏹";
+  if (s.includes("yoga")) return "🧘";
+  if (s.includes("vishnu")) return "🪔";
+  if (s.includes("veda")) return "🕉️";
+  if (s.includes("temple")) return "🛕";
   return "🕉️";
 };
 
@@ -162,12 +361,164 @@ function saveGuestEnrollment(cid, data) {
   } catch(e) {}
 }
 
+function setupPlayerControls(player, idx) {
+  const scrubber = document.getElementById(`scrubber_${idx}`);
+  const progress = document.getElementById(`progress_${idx}`);
+  const timeDisplay = document.getElementById(`timeDisplay_${idx}`);
+  const playBtn = document.getElementById(`playBtn_${idx}`);
+  const rewindBtn = document.getElementById(`rewindBtn_${idx}`);
+  const forwardBtn = document.getElementById(`forwardBtn_${idx}`);
+  const muteBtn = document.getElementById(`muteBtn_${idx}`);
+  const fsBtn = document.getElementById(`fsBtn_${idx}`);
+  const clickOverlay = document.getElementById(`clickOverlay_${idx}`);
+  const playerWrap = document.getElementById(`playerWrap_${idx}`);
+
+  const formatTime = sec => {
+    sec = Math.floor(sec || 0);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+
+  const togglePlay = () => {
+    try {
+      const state = player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    } catch(e) {
+      player.playVideo();
+    }
+  };
+
+  clickOverlay?.addEventListener("click", togglePlay);
+  playBtn?.addEventListener("click", togglePlay);
+
+  rewindBtn?.addEventListener("click", () => {
+    const cur = player.getCurrentTime() || 0;
+    player.seekTo(Math.max(0, cur - 5), true);
+  });
+
+  forwardBtn?.addEventListener("click", () => {
+    const cur = player.getCurrentTime() || 0;
+    const dur = player.getDuration() || 0;
+    player.seekTo(Math.min(dur, cur + 5), true);
+  });
+
+  muteBtn?.addEventListener("click", () => {
+    if (player.isMuted()) {
+      player.unMute();
+      muteBtn.textContent = "🔊";
+    } else {
+      player.mute();
+      muteBtn.textContent = "🔇";
+    }
+  });
+
+  fsBtn?.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+      playerWrap?.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  });
+
+  let isSeeking = false;
+  scrubber?.addEventListener("input", e => {
+    isSeeking = true;
+    const dur = player.getDuration() || 0;
+    const val = parseFloat(e.target.value) || 0;
+    const target = (val / 100) * dur;
+    if (progress) progress.style.width = `${val}%`;
+    if (timeDisplay) timeDisplay.textContent = `${formatTime(target)} / ${formatTime(dur)}`;
+  });
+
+  scrubber?.addEventListener("change", e => {
+    const dur = player.getDuration() || 0;
+    const val = parseFloat(e.target.value) || 0;
+    const target = (val / 100) * dur;
+    player.seekTo(target, true);
+    isSeeking = false;
+  });
+
+  // Sync timeline progress
+  clearInterval(activeIntervals[idx]);
+  activeIntervals[idx] = setInterval(() => {
+    if (isSeeking) return;
+    try {
+      const cur = player.getCurrentTime() || 0;
+      const dur = player.getDuration() || 0;
+      if (dur > 0) {
+        const pct = (cur / dur) * 100;
+        if (scrubber) scrubber.value = pct;
+        if (progress) progress.style.width = `${pct}%`;
+        if (timeDisplay) timeDisplay.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+      }
+    } catch(e) {}
+  }, 250);
+}
+
+async function initPlayers(sections) {
+  Object.keys(activeIntervals).forEach(k => clearInterval(activeIntervals[k]));
+  Object.keys(activePlayers).forEach(k => {
+    try { activePlayers[k].destroy(); } catch(e) {}
+  });
+
+  await ensureYTApi();
+
+  sections.forEach((sec, idx) => {
+    if (sec.type !== "video") return;
+    const yt = parseYouTube(sec.url);
+    if (!yt || !yt.videoId) return;
+
+    const elId = `yt_player_${idx}`;
+    if (!document.getElementById(elId)) return;
+
+    try {
+      const player = new YT.Player(elId, {
+        videoId: yt.videoId,
+        playerVars: {
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0,
+          iv_load_policy: 3,
+          fs: 0,
+          disablekb: 1,
+          playsinline: 1,
+          origin: window.location.origin
+        },
+        events: {
+          onReady: () => {
+            setupPlayerControls(player, idx);
+          },
+          onStateChange: (event) => {
+            const playOverlay = document.getElementById(`playOverlay_${idx}`);
+            const playBtn = document.getElementById(`playBtn_${idx}`);
+            if (event.data === YT.PlayerState.PLAYING) {
+              playOverlay?.classList.add("hidden");
+              if (playBtn) playBtn.textContent = "⏸";
+            } else {
+              playOverlay?.classList.remove("hidden");
+              if (playBtn) playBtn.textContent = "▶";
+            }
+          }
+        }
+      });
+      activePlayers[idx] = player;
+    } catch(err) {
+      console.warn("Could not initialize video player for block " + idx, err);
+    }
+  });
+}
+
 function render() {
   const n = course.lessons || 10;
   const done = enr?.done || {};
   const completedCount = Object.keys(done).length;
   const pr = enr ? Math.min(100, Math.round(completedCount / n * 100)) : 0;
-  const embed = ytEmbed(course.videoUrl);
 
   const loginRedirect = "login.html?redirect=" + encodeURIComponent("course.html?id=" + id);
   const act = !enr
@@ -201,6 +552,87 @@ function render() {
     </div>
   ` : "";
 
+  // Prepare dynamic sections (video, photo, matter sequence)
+  let sections = Array.isArray(course.sections) && course.sections.length ? course.sections : [];
+  if (!sections.length) {
+    if (course.videoUrl) {
+      sections.push({
+        id: "sec_init_v",
+        type: "video",
+        title: "Introduction Lecture",
+        url: course.videoUrl
+      });
+    }
+    if (course.desc) {
+      sections.push({
+        id: "sec_init_m",
+        type: "matter",
+        title: "Course Overview & Study Guide",
+        text: course.desc
+      });
+    }
+  }
+
+  // Render sequential sections in order
+  const sectionsHtml = sections.map((sec, idx) => {
+    if (sec.type === "video") {
+      const yt = parseYouTube(sec.url);
+      const vid = yt ? yt.videoId : "";
+      return `
+        <div class="section-block video-block" id="block_${idx}">
+          ${sec.title ? `<h3 class="section-title">🎥 ${esc(sec.title)}</h3>` : ''}
+          <div class="gk-video-player" id="playerWrap_${idx}">
+            <div id="yt_player_${idx}" data-videoid="${vid}"></div>
+            <div class="gk-click-overlay" id="clickOverlay_${idx}"></div>
+            <div class="gk-play-overlay" id="playOverlay_${idx}">
+              <div class="gk-big-play-btn">▶</div>
+            </div>
+            <div class="gk-controls-bar" id="controlsBar_${idx}">
+              <div class="gk-timeline-wrap">
+                <div class="gk-timeline-track">
+                  <div class="gk-timeline-progress" id="progress_${idx}"></div>
+                </div>
+                <input type="range" class="gk-timeline-slider" id="scrubber_${idx}" min="0" max="100" value="0" step="0.1" aria-label="Video timeline scrubber">
+              </div>
+              <div class="gk-controls-row">
+                <div class="gk-controls-left">
+                  <button class="gk-btn" id="playBtn_${idx}" aria-label="Play or Pause">▶</button>
+                  <button class="gk-btn" id="rewindBtn_${idx}" aria-label="Rewind 5 seconds">⏪ 5s</button>
+                  <button class="gk-btn" id="forwardBtn_${idx}" aria-label="Forward 5 seconds">5s ⏩</button>
+                  <span class="gk-time-display" id="timeDisplay_${idx}">00:00 / 00:00</span>
+                </div>
+                <div class="gk-controls-right">
+                  <button class="gk-btn" id="muteBtn_${idx}" aria-label="Mute or Unmute">🔊</button>
+                  <button class="gk-btn" id="fsBtn_${idx}" aria-label="Fullscreen">⛶</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (sec.type === "photo" || sec.type === "image") {
+      return `
+        <div class="section-block photo-block" id="block_${idx}">
+          ${sec.title ? `<h3 class="section-title">🖼️ ${esc(sec.title)}</h3>` : ''}
+          <div class="photo-card">
+            <img src="${esc(sec.url)}" alt="${esc(sec.title || 'Course Photo')}" loading="lazy">
+            ${sec.caption ? `<div class="photo-caption">${esc(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    } else {
+      const formattedText = esc(sec.text || "").replace(/\n/g, "<br>");
+      return `
+        <div class="section-block matter-block" id="block_${idx}">
+          ${sec.title ? `<h3 class="section-title">📝 ${esc(sec.title)}</h3>` : ''}
+          <div class="matter-card">
+            <div class="matter-content">${formattedText}</div>
+          </div>
+        </div>
+      `;
+    }
+  }).join("");
+
   box.innerHTML = `
     <div class="hero2">
       <div class="pic-box">
@@ -217,7 +649,10 @@ function render() {
       </div>
     </div>
 
-    ${embed ? `<iframe class="video" src="${embed}" title="Course intro video" allowfullscreen></iframe>` : ""}
+    <!-- Course Dynamic Content Sequence (Custom Video Player, Photos, and Matter) -->
+    <div style="margin-bottom:28px">
+      ${sectionsHtml}
+    </div>
 
     <div class="panel">
       <h2>Course Modules & Lessons</h2>
@@ -226,6 +661,9 @@ function render() {
       ${enr ? '' : '<p class="muted" style="margin-top:16px">Click Enroll &amp; Start Learning to track your daily progress and unlock lesson checkboxes.</p>'}
     </div>
   `;
+
+  // Initialize YouTube API players with custom controls
+  initPlayers(sections);
 }
 
 function getLessonTitle(courseId, num) {

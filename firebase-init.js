@@ -43,6 +43,30 @@ export const DEFAULT_COURSES = [
     imageUrl: "images/bhagavth gita.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
+    pinned: true,
+    pinOrder: 1,
+    releaseTime: 1727800000000,
+    sections: [
+      {
+        id: "sec_gita_1",
+        type: "video",
+        title: "Introduction to Gita Wisdom",
+        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
+      },
+      {
+        id: "sec_gita_2",
+        type: "image",
+        title: "Vedic Wisdom Concept Map",
+        url: "images/bhagavth gita.png",
+        caption: "Sacred map of Kurukshetra & Arjuna Vishada Yoga"
+      },
+      {
+        id: "sec_gita_3",
+        type: "matter",
+        title: "Daily Swadhyaya Note",
+        text: "The Bhagavad Gita is the essence of all Upanishads. As the traditional meditation verse says: 'Sarvopanishado gavo, dogdha gopala-nandana' — All the Upanishads are the cows, the milker is Sri Krishna, the calf is Arjuna, and the nectar-like Gita is the supreme milk."
+      }
+    ],
     createdAt: 1727800000000
   },
   {
@@ -52,8 +76,25 @@ export const DEFAULT_COURSES = [
     type: "paid",
     lessons: 24,
     imageUrl: "images/sanskrit basics.png",
-    videoUrl: "",
+    videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
+    pinned: true,
+    pinOrder: 2,
+    releaseTime: 1727801000000,
+    sections: [
+      {
+        id: "sec_sans_1",
+        type: "video",
+        title: "Varnamala & Correct Akshara Pronunciation",
+        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
+      },
+      {
+        id: "sec_sans_2",
+        type: "matter",
+        title: "Introduction to Devanagari Aksharas",
+        text: "Sanskrit is known as the Devavani (language of the gods). Every sound originates from specific articulation points (Kanthya, Talavya, Murdhanya, Dantya, and Oshthya). Correct pronunciation aligns physical vibrations with inner calm."
+      }
+    ],
     createdAt: 1727801000000
   },
   {
@@ -63,8 +104,25 @@ export const DEFAULT_COURSES = [
     type: "paid",
     lessons: 28,
     imageUrl: "images/india history.png",
-    videoUrl: "",
+    videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
+    pinned: true,
+    pinOrder: 3,
+    releaseTime: 1727802000000,
+    sections: [
+      {
+        id: "sec_hist_1",
+        type: "video",
+        title: "Bharat: Civilizational Roots & Timeless Heritage",
+        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
+      },
+      {
+        id: "sec_hist_2",
+        type: "matter",
+        title: "The Continuity of Sanathana Dharma",
+        text: "Unlike civilizations that vanished with time, the Sanathana culture of Bharat has maintained an unbroken chain of philosophical inquiry, scientific contributions, temple architecture, and cultural wisdom for thousands of years."
+      }
+    ],
     createdAt: 1727802000000
   },
   {
@@ -201,6 +259,45 @@ export const DEFAULT_NOTIFICATIONS = [
   }
 ];
 
+export const DEFAULT_PATHS = [
+  {
+    id: "bala",
+    title: "Bala Gurukulam",
+    ageRange: "Ages 5 – 12",
+    subTe: "సంస్కారం • సంప్రదాయం\nసంతోషంగా",
+    imageUrl: "images/Bala%20Gurukulam.png",
+    link: "courses.html?path=bala",
+    order: 1
+  },
+  {
+    id: "yuva",
+    title: "Yuva Gurukulam",
+    ageRange: "Ages 13 – 25",
+    subTe: "జ్ఞానం • నాయకత్వం\nజీవిత నైపుణ్యాలు",
+    imageUrl: "images/Yuva%20Gurukulam.png",
+    link: "courses.html?path=yuva",
+    order: 2
+  },
+  {
+    id: "sadhaka",
+    title: "Sadhaka Gurukulam",
+    ageRange: "Ages 26 – 55",
+    subTe: "ఆధ్యాత్మికం • కుటుంబం\nజీవన విలువలు",
+    imageUrl: "images/Sadhaka%20Gurukulam.png",
+    link: "courses.html?path=sadhaka",
+    order: 3
+  },
+  {
+    id: "jnana",
+    title: "Jnana Gurukulam",
+    ageRange: "Ages 56+",
+    subTe: "భక్తి • ఆధ్యాత్మిక జ్ఞానం\nసహజమైన జీవితం",
+    imageUrl: "images/Jnana%20Gurukulam.png",
+    link: "courses.html?path=jnana",
+    order: 4
+  }
+];
+
 // -------------------------------------------------------------
 // LOCAL / MOCK ENGINE (used if Firebase not configured or offline)
 // -------------------------------------------------------------
@@ -216,6 +313,7 @@ function initMockDB() {
     courses: {},
     liveClasses: {},
     notifications: {},
+    learningPaths: {},
     community: DEFAULT_COMMUNITY,
     users: {
       "learner-1": { name: "Learner", email: "learner@gurukulam.org", role: "learner", createdAt: Date.now() },
@@ -230,6 +328,7 @@ function initMockDB() {
   DEFAULT_COURSES.forEach(c => { initial.courses[c.id] = c; });
   DEFAULT_LIVE.forEach(l => { initial.liveClasses[l.id] = l; });
   DEFAULT_NOTIFICATIONS.forEach(n => { initial.notifications[n.id] = n; });
+  DEFAULT_PATHS.forEach(p => { initial.learningPaths[p.id] = p; });
   localStorage.setItem(LS_DB_KEY, JSON.stringify(initial));
   return initial;
 }
@@ -388,6 +487,15 @@ export async function seedDefaultDataIfEmpty() {
       await fbSet(fbRef(realDb, "notifications"), initialNotifs);
 
       await fbSet(fbRef(realDb, "community"), DEFAULT_COMMUNITY);
+    }
+
+    // Seed learningPaths if empty
+    const pathSnap = await fbGet(fbRef(realDb, "learningPaths"));
+    if (!pathSnap.exists() || !pathSnap.val() || Object.keys(pathSnap.val()).length === 0) {
+      console.log("Seeding initial Learning Paths to Firebase Realtime Database...");
+      const initialPaths = {};
+      DEFAULT_PATHS.forEach(p => { initialPaths[p.id] = p; });
+      await fbSet(fbRef(realDb, "learningPaths"), initialPaths);
     }
   } catch (err) {
     console.warn("Auto-seeding check (please ensure database rules are published):", err);
@@ -773,10 +881,24 @@ export async function signInAdminWithEmail(emailOrUser, password) {
   throw new Error("Invalid email or password.");
 }
 
+// Parse any YouTube link into videoId, embedUrl, and clean thumbnails
+export const parseYouTube = u => {
+  const s = String(u || "").trim();
+  const m = s.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+  if (!m) return null;
+  const videoId = m[1];
+  return {
+    videoId,
+    embedUrl: "https://www.youtube.com/embed/" + videoId,
+    thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+    maxThumbnailUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+  };
+};
+
 // Turn a YouTube link into an embed URL ("" if it is not a YouTube link)
 export const ytEmbed = u => {
-  const m = String(u || "").match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
-  return m ? "https://www.youtube.com/embed/" + m[1] : "";
+  const p = parseYouTube(u);
+  return p ? p.embedUrl : "";
 };
 
 export const getCourseIcon = id => {
@@ -792,20 +914,46 @@ export const getCourseIcon = id => {
   return "🕉️";
 };
 
-// Fill a container with published courses
-export async function loadCourses(el, limit) {
+// Fill a container with published courses (can optionally prioritize pinned courses for home)
+export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = false) {
   try {
-    let cs = (await list("courses")).filter(c => c.published !== false).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    let cs = (await list("courses")).filter(c => c.published !== false);
     if (!cs.length) cs = [...DEFAULT_COURSES];
+
+    if (onlyPinned) {
+      // Sort pinned courses first, by pinOrder or releaseTime
+      const pinned = cs.filter(c => c.pinned === true || c.pinned === "true");
+      const others = cs.filter(c => !(c.pinned === true || c.pinned === "true"));
+      pinned.sort((a, b) => (Number(a.pinOrder) || 1) - (Number(b.pinOrder) || 1));
+      others.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      cs = [...pinned, ...others];
+    } else {
+      cs.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    }
+
     if (limit) cs = cs.slice(0, limit);
     if (!cs.length || !el) return;
-    el.innerHTML = cs.map(c => {
+
+    let html = cs.map(c => {
       const k = c.type === "free" ? "free" : "paid";
       const icon = getCourseIcon(c.id);
       return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
       ${c.imageUrl ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`}
       <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${c.lessons || 0} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
     }).join("");
+
+    if (showMoreCard) {
+      html += `
+        <a class="course more-card" href="courses.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 18px;background:linear-gradient(135deg,#fcf5e5,#f1dcb0);border:2px dashed var(--maroon);border-radius:16px;min-height:220px;text-decoration:none;transition:transform .25s,box-shadow .25s;">
+          <div style="width:58px;height:58px;border-radius:50%;background:var(--maroon);color:var(--cream);display:grid;place-items:center;font-size:1.7rem;margin-bottom:12px;box-shadow:0 4px 12px rgba(122,46,22,.25);">📚</div>
+          <h3 style="font-size:1.35rem;color:var(--maroon);margin-bottom:6px;">More Courses</h3>
+          <p style="font-size:.82rem;color:var(--brown);margin-bottom:14px;line-height:1.4">Explore our complete sacred curriculum &amp; acharya-guided lectures</p>
+          <span style="font-weight:600;font-size:.86rem;color:var(--maroon);background:rgba(255,255,255,.6);padding:6px 16px;border-radius:20px;border:1px solid var(--maroon)">View All Courses →</span>
+        </a>
+      `;
+    }
+
+    el.innerHTML = html;
   } catch (e) {
     console.warn("Using built-in course list:", e.code || e);
   }

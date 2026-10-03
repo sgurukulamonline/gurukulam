@@ -233,7 +233,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
   <section id="paths"><div class="wrap">
     <div class="sec-h"><div><h2 id="pathsH2">Choose Your Learning Path</h2><p id="pathsSub">Select your age group to get a personalized experience</p></div></div>
-    <div class="paths">
+    <div class="paths" id="pathsGrid">
       <a class="path p1" href="courses.html?path=bala"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Bala Gurukulam" loading="lazy"></div><div class="body"><h3>Bala Gurukulam</h3><div class="age">Ages 5 – 12</div><p class="te">సంస్కారం • సంప్రదాయం<br>సంతోషంగా</p></div><span class="go">→</span></a>
       <a class="path p2" href="courses.html?path=yuva"><div class="pic"><img src="images/Yuva%20Gurukulam.png" alt="Yuva Gurukulam" loading="lazy"></div><div class="body"><h3>Yuva Gurukulam</h3><div class="age">Ages 13 – 25</div><p class="te">జ్ఞానం • నాయకత్వం<br>జీవిత నైపుణ్యాలు</p></div><span class="go">→</span></a>
       <a class="path p3" href="courses.html?path=sadhaka"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka Gurukulam" loading="lazy"></div><div class="body"><h3>Sadhaka Gurukulam</h3><div class="age">Ages 26 – 55</div><p class="te">ఆధ్యాత్మికం • కుటుంబం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
@@ -259,7 +259,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       </div>
       <div class="wisdom">
         <h3>🎁 Today's Wisdom <span class="date" id="today"></span></h3>
-        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फलेषु कदाचन ।</p>
+        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फలేషు कदाचन ।</p>
         <p class="te" id="shlokaMeaning">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
         <div class="acts">
           <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
@@ -270,27 +270,9 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   </div></section>
 
   <section id="courses"><div class="wrap">
-    <div class="sec-h"><h2>Popular Courses</h2><a href="courses.html">View All →</a></div>
+    <div class="sec-h"><h2>Courses</h2><a href="courses.html">View All →</a></div>
     <div class="courses" id="popularCourses">
-      <p class="muted" style="grid-column:1/-1;text-align:center;padding:30px">Loading popular courses…</p>
-    </div>
-  </div></section>
-
-  <section id="quick"><div class="wrap">
-    <div class="sec-h"><h2>Quick Access</h2></div>
-    <div class="quick">
-      <a class="q" href="course.html?id=intro-vedas"><span>🕉️</span>Vedas</a>
-      <a class="q" href="course.html?id=bhagavad-gita"><span>📖</span>Bhagavad Gita</a>
-      <a class="q" href="course.html?id=sanskrit-basics"><span>🪷</span>Sanskrit</a>
-      <a class="q" href="course.html?id=yoga-daily"><span>🧘</span>Yoga</a>
-      <a class="q" href="courses.html"><span>☸️</span>Dharma</a>
-      <a class="q" href="course.html?id=ramayanam"><span>📜</span>Itihasas</a>
-      <a class="q" href="courses.html?filter=free"><span>🎁</span>Free Content</a>
-      <a class="q" href="courses.html"><span>📚</span>Books Library</a>
-      <a class="q" href="courses.html"><span>🎧</span>Audio Library</a>
-      <a class="q" href="live.html"><span>📅</span>Events</a>
-      <a class="q" href="certificate.html"><span>🏅</span>Certificates</a>
-      <a class="q" href="more.html"><span>⠿</span>More</a>
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:30px">Loading courses…</p>
     </div>
   </div></section>
 
@@ -364,14 +346,45 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 </nav>
 
 <script type="module">
-import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc } from "./firebase-init.js";
+import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list, DEFAULT_PATHS } from "./firebase-init.js";
 
 // Today date
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
-// Load dynamic courses
+// Load dynamic courses: 3 pinned courses + 1 "More Courses" card (total 4 cards)
 const popularEl = document.getElementById("popularCourses");
-if (popularEl) loadCourses(popularEl, 4);
+if (popularEl) loadCourses(popularEl, 3, true, true);
+
+// Dynamically render Learning Paths
+const pathsGrid = document.getElementById("pathsGrid");
+if (pathsGrid) {
+  (async () => {
+    try {
+      let paths = await list("learningPaths");
+      if (!paths || !paths.length) paths = [...DEFAULT_PATHS];
+      paths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+      pathsGrid.innerHTML = paths.map((p, idx) => {
+        const cls = `p${(idx % 4) + 1}`;
+        const subLines = (p.subTe || "").replace(/\n/g, "<br>");
+        return `
+          <a class="path ${cls}" href="${esc(p.link || ('courses.html?path=' + p.id))}">
+            <div class="pic">
+              <img src="${esc(p.imageUrl)}" alt="${esc(p.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='🕉️';">
+            </div>
+            <div class="body">
+              <h3>${esc(p.title)}</h3>
+              <div class="age">${esc(p.ageRange || "")}</div>
+              <p class="te">${subLines}</p>
+            </div>
+            <span class="go">→</span>
+          </a>
+        `;
+      }).join("");
+    } catch (e) {
+      console.warn("Could not load dynamic learning paths:", e);
+    }
+  })();
+}
 
 // User auth avatar
 onAuthStateChanged(auth, u => {
