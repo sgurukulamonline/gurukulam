@@ -194,11 +194,11 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
+      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a>
     </nav>
     <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="courseSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
-    <a class="avatar" id="userAvatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
+    <a class="avatar" id="userAvatar" href="login.html" aria-label="Account">👤</a>
   </div>
 </header>
 <main><div class="wrap">
@@ -227,7 +227,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a class="on" href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
   <a href="community.html"><span>👥</span>Community</a>
-  <a href="dashboard.html"><span>👤</span>Dashboard</a>
+  <a href="more.html"><span>🛕</span>Explore</a>
 </nav>
 <script type="module">
 import { list, esc, getCourseIcon, DEFAULT_COURSES, auth, onAuthStateChanged } from "./firebase-init.js";
@@ -241,6 +241,21 @@ let allCourses = [];
 let activeFilter = initialFilter;
 const searchInput = document.getElementById("courseSearch");
 const grid = document.getElementById("coursesGrid");
+
+onAuthStateChanged(auth, u => {
+  const av = document.getElementById("userAvatar");
+  if (av) {
+    if (u) {
+      av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
+      av.title = "Namaste, " + (u.displayName || u.email || "Learner");
+      av.href = "dashboard.html";
+    } else {
+      av.textContent = "👤";
+      av.title = "Sign In / Login";
+      av.href = "login.html";
+    }
+  }
+});
 
 if (initialQuery && searchInput) {
   searchInput.value = initialQuery;

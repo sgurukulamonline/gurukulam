@@ -285,7 +285,7 @@ function notifyListeners() {
 }
 
 // Mock User Storage
-function getMockUser() {
+export function getMockUser() {
   const s = localStorage.getItem(LS_USER_KEY);
   if (!s) return null;
   try { return JSON.parse(s); } catch (e) { return null; }

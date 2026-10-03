@@ -76,10 +76,11 @@ button{font:inherit;cursor:pointer;border:0}
 <div class="top">
   <b><a href="index.html">Sanathana Gurukulam</a></b>
   <span>
+    <a href="index.html">Home</a>
     <a href="courses.html">Courses</a>
     <a href="live.html">Live</a>
     <a href="community.html">Community</a>
-    <a href="dashboard.html">Dashboard</a>
+    <a href="more.html">Explore</a>
   </span>
 </div>
 
@@ -115,8 +116,8 @@ async function verifyAndRender(targetUserId, recipientName) {
   if (!id) {
     box.innerHTML = `<div style="text-align:center;padding:40px">
       <h2>No Course Specified</h2>
-      <p style="color:var(--muted);margin:10px 0 20px">Please select a course from your dashboard.</p>
-      <a class="btn" href="dashboard.html">Back to Dashboard</a>
+      <p style="color:var(--muted);margin:10px 0 20px">Please select a course to view credentials.</p>
+      <a class="btn" href="courses.html">Browse Courses</a>
     </div>`;
     return;
   }
@@ -140,7 +141,7 @@ async function verifyAndRender(targetUserId, recipientName) {
       <p style="color:var(--muted);margin:10px 0 16px">Progress: <b>${pr}%</b> for <b>${esc(course ? course.title : "this course")}</b>. Complete all lessons to confer official Gurukulam certificate!</p>
       <div style="display:flex;justify-content:center;gap:12px">
         <a class="btn" href="course.html?id=${encodeURIComponent(id)}">Continue Course</a>
-        <a class="btn ghost" href="dashboard.html">Return to Dashboard</a>
+        <a class="btn ghost" href="courses.html">All Courses</a>
       </div>
     </div>`;
     return;
@@ -191,7 +192,7 @@ async function verifyAndRender(targetUserId, recipientName) {
     <div class="actions noprint">
       <button class="btn gold" id="btnPrint">🖨️ Print / Save as PDF</button>
       <button class="btn ghost" id="btnShareCert">🔗 Copy Shareable Link</button>
-      <a class="btn ghost" href="dashboard.html">← Back to Dashboard</a>
+      <a class="btn ghost" href="courses.html">← Explore More Courses</a>
     </div>
   `;
 

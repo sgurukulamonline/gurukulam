@@ -3,32 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Dashboard – Sanathana Gurukulam</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Sadhaka Portal & Profile – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
-  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 8px 24px rgba(74,31,14,.1);
 }
 *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
 body{
   font-family:'Poppins',sans-serif;color:var(--brown);
   background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
 }
-h1,h2,h3{font-family:'Cormorant Garamond',serif}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0}
-input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
 .btn{
   background:var(--maroon);color:var(--cream);padding:9px 18px;border-radius:12px;
-  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;
   transition:all .2s;text-align:center;
 }
 .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
-.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.gold{background:var(--gold);color:var(--brown)}
+.btn.ghost{background:none;border:1.5px solid var(--maroon);color:var(--maroon)}
 .btn.sm{padding:6px 14px;font-size:.82rem}
 
 .top{
@@ -40,20 +40,109 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
 .top a:hover{color:var(--gold)}
 
-.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
-.header-row{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:20px}
-.wrap h1{font-size:2.4rem;color:var(--maroon);line-height:1.1}
-.wrap p.sub{color:var(--muted);font-size:.92rem}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 80px}
 
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:26px}
-.stat{background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);font-size:.85rem;color:var(--muted);border:1px solid var(--line)}
-.stat b{display:block;font-family:'Cormorant Garamond';font-size:2.4rem;color:var(--maroon);line-height:1.1;margin-bottom:4px}
+/* Professional Sadhaka Profile Hero */
+.profile-card{
+  background:linear-gradient(135deg,#FFFDF7 0%,#FFF4DF 100%);
+  border:1.5px solid var(--sand);border-radius:24px;padding:26px 24px;
+  box-shadow:var(--shadow);margin-bottom:28px;position:relative;overflow:hidden;
+}
+.profile-card::after{
+  content:"🕉️";position:absolute;right:18px;bottom:-15px;font-size:8rem;
+  opacity:.04;pointer-events:none;user-select:none;
+}
+.profile-main{
+  display:flex;gap:24px;align-items:center;flex-wrap:wrap;
+}
+.avatar-box{position:relative}
+.avatar-circle{
+  width:96px;height:96px;border-radius:50%;background:#FFF8EA;
+  border:3px solid var(--gold);display:grid;place-items:center;
+  font-size:3.2rem;box-shadow:0 6px 16px rgba(122,46,22,.15);user-select:none;
+}
+.avatar-badge{
+  position:absolute;bottom:0;right:0;width:30px;height:30px;border-radius:50%;
+  background:var(--maroon);color:var(--cream);display:grid;place-items:center;
+  font-size:.8rem;border:2px solid #fff;cursor:pointer;transition:transform .2s;
+}
+.avatar-badge:hover{transform:scale(1.1)}
+.profile-info{flex:1;min-width:260px}
+.name-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.profile-info h1{font-size:2.3rem;color:var(--maroon);line-height:1.1}
+.tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.tag.admin{background:var(--maroon);color:var(--cream)}
+.tag.verified{background:#dcfce7;color:#166534;border:1px solid #86efac;font-size:.7rem}
+.sub-title{color:var(--muted);font-size:.88rem;margin-bottom:12px}
 
-.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
-.panel h2{font-size:1.7rem;color:var(--maroon);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.badges-row{
+  display:flex;flex-wrap:wrap;gap:8px 12px;font-size:.82rem;margin-bottom:14px;
+}
+.badge-pill{
+  display:inline-flex;align-items:center;gap:6px;background:#fff;
+  padding:5px 12px;border-radius:20px;border:1px solid var(--line);
+  box-shadow:0 1px 4px rgba(74,31,14,.04);
+}
+.badge-pill b{color:var(--brown)}
+.badge-pill .check{color:#166534;font-weight:700}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 8px rgba(74,31,14,.06);transition:transform .2s}
+.profile-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Sankalpa Box */
+.sankalpa-box{
+  margin-top:20px;padding:14px 18px;background:rgba(217,154,39,.08);
+  border-left:4px solid var(--gold);border-radius:12px;
+}
+.sankalpa-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;
+  font-size:.78rem;font-weight:600;color:var(--maroon);text-transform:uppercase;letter-spacing:.5px;
+}
+.sankalpa-text{font-style:italic;font-size:.9rem;color:var(--brown);line-height:1.4}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px}
+.stat{
+  background:var(--card);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);
+  font-size:.85rem;color:var(--muted);border:1px solid var(--line);display:flex;align-items:center;gap:14px;
+}
+.stat.highlight{border-color:var(--gold);background:linear-gradient(135deg,#FFFDF7,#FEF8EB)}
+.stat-icon{font-size:2.2rem}
+.stat b{display:block;font-family:'Cormorant Garamond';font-size:2.3rem;color:var(--maroon);line-height:1}
+.stat span{font-size:.82rem}
+
+/* Panels */
+.panel{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow);margin-bottom:26px;border:1px solid var(--line)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.panel h2{font-size:1.8rem;color:var(--maroon)}
+
+/* Certificates Section */
+.cert-card{
+  background:#fff;border:1.5px solid var(--gold);border-radius:16px;padding:18px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  box-shadow:0 4px 12px rgba(217,154,39,.12);margin-bottom:12px;
+}
+.cert-info{display:flex;align-items:center;gap:16px}
+.cert-icon{
+  width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#FFF6E0,#F5D082);
+  display:grid;place-items:center;font-size:1.8rem;border:2px solid var(--gold);flex-shrink:0;
+}
+.cert-title{font-size:1.15rem;font-weight:600;color:var(--maroon)}
+.cert-meta{font-size:.8rem;color:var(--muted)}
+.cert-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.cert-empty{
+  background:#fff;border:1px dashed var(--sand);border-radius:16px;padding:24px;
+  text-align:center;color:var(--muted);
+}
+.cert-empty .big-seal{font-size:3rem;margin-bottom:8px}
+.cert-empty p{font-size:.9rem;max-width:540px;margin:0 auto 14px}
+
+/* Grid & Cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{
+  border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;
+  display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 8px rgba(74,31,14,.06);transition:transform .2s;
+}
 .card:hover{transform:translateY(-2px)}
 .card .pic-holder{width:100%;height:130px;border-radius:12px;overflow:hidden;background:#f3e3c6;display:grid;place-items:center}
 .card img{width:100%;height:100%;object-fit:cover;display:block}
@@ -64,13 +153,38 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
 .row:last-child{border-bottom:0}
-
 .actions{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
-.muted{color:var(--muted);font-size:.85rem}
-.tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
-.tag.admin{background:#7A2E16;color:var(--cream)}
 
-.alert{padding:12px 16px;background:#fef3c7;border-left:4px solid var(--gold);border-radius:8px;margin-bottom:16px;font-size:.9rem}
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(74,31,14,.55);backdrop-filter:blur(4px);
+  z-index:999;display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal-box{
+  background:var(--card);max-width:440px;width:100%;border-radius:24px;padding:26px 22px;
+  border:1.5px solid var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.25);position:relative;
+}
+.modal-close{
+  position:absolute;top:14px;right:16px;background:none;font-size:1.3rem;color:var(--muted);
+}
+.modal-title{font-size:1.8rem;color:var(--maroon);margin-bottom:4px}
+.avatar-selector{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px;justify-content:center}
+.av-opt{
+  width:42px;height:42px;border-radius:50%;background:#fff;border:1.5px solid var(--line);
+  font-size:1.4rem;display:grid;place-items:center;transition:all .15s;
+}
+.av-opt:hover,.av-opt.active{
+  border-color:var(--gold);transform:scale(1.12);background:var(--sand);
+}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:76px;left:50%;transform:translateX(-50%);z-index:9999;
+  background:var(--brown);color:var(--cream);padding:10px 20px;border-radius:30px;
+  font-size:.88rem;box-shadow:0 8px 24px rgba(0,0,0,.2);display:none;align-items:center;gap:8px;
+}
+
+/* Mobile Bottom Nav */
 .bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
 .bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0}
 .bottom a span{display:block;font-size:1.3rem}
@@ -93,67 +207,332 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 </div>
 
 <div class="wrap">
-  <div class="header-row">
-    <div>
-      <h1 id="hello">Namaste</h1>
-      <p class="sub">Welcome to your Gurukulam learning dashboard</p>
+  <!-- Professional Sadhaka Profile Section -->
+  <div class="profile-card">
+    <div class="profile-main">
+      <div class="avatar-box">
+        <div class="avatar-circle" id="pAvatar">🕉️</div>
+        <button class="avatar-badge" id="btnAvatarEdit" title="Change Spiritual Emblem">✏️</button>
+      </div>
+      <div class="profile-info">
+        <div class="name-line">
+          <h1 id="pName">Sadhaka</h1>
+          <span class="tag" id="userRole">Learner</span>
+        </div>
+        <div class="sub-title" id="pSubTitle">Sadhaka · Sanathana Gurukulam Online</div>
+        
+        <div class="badges-row">
+          <span class="badge-pill">
+            <span>📱</span> <b id="pPhone">Pending</b> <span class="check" id="pPhoneBadge">✓</span>
+          </span>
+          <span class="badge-pill">
+            <span>📧</span> <b id="pEmail">Pending</b> <span class="check">✓</span>
+          </span>
+          <span class="badge-pill">
+            <span>🆔</span> <span id="pUid">SG-LEARNER</span>
+          </span>
+          <span class="badge-pill">
+            <span>📅</span> <span id="pJoined">Oct 2026</span>
+          </span>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn sm gold" id="btnOpenEdit">✏️ Edit Profile</button>
+          <a class="btn sm ghost" href="#certificatesPanel">🏅 My Certificates</a>
+        </div>
+      </div>
     </div>
-    <div>
-      <span class="tag" id="userRole">Learner</span>
+
+    <!-- Spiritual Sankalpa Box -->
+    <div class="sankalpa-box">
+      <div class="sankalpa-header">
+        <span>✨ Sacred Sankalpa (Spiritual Intention)</span>
+        <button id="btnEditSankalpa" style="background:none;color:var(--maroon);font-weight:600;font-size:.78rem;text-decoration:underline">Update</button>
+      </div>
+      <p class="sankalpa-text" id="pSankalpa">“अथातो ब्रह्मजिज्ञासा — Living in alignment with Dharma, daily Gita adhyayana, and Samskrita swadhyaya.”</p>
     </div>
   </div>
 
+  <!-- Learning Metrics -->
   <div class="stats">
-    <div class="stat"><b id="sE">0</b>Courses enrolled</div>
-    <div class="stat"><b id="sD">0</b>Completed</div>
-    <div class="stat"><b id="sA">0%</b>Average progress</div>
-    <div class="stat"><b id="sL">0</b>Upcoming live classes</div>
+    <div class="stat">
+      <div class="stat-icon">📚</div>
+      <div><b id="sE">0</b><span>Enrolled Courses</span></div>
+    </div>
+    <div class="stat highlight">
+      <div class="stat-icon">🏅</div>
+      <div><b id="sD">0</b><span>Certificates Earned</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">📈</div>
+      <div><b id="sA">0%</b><span>Average Progress</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">🎥</div>
+      <div><b id="sL">0</b><span>Live Sessions</span></div>
+    </div>
   </div>
 
+  <!-- Dedicated Certificates Panel -->
+  <div class="panel" id="certificatesPanel">
+    <div class="panel-head">
+      <div>
+        <h2>🏅 My Earned Certificates</h2>
+        <p class="muted" style="font-size:.85rem">Official verified completion credentials with public authentication link</p>
+      </div>
+      <a href="courses.html" class="btn sm ghost">Browse Courses</a>
+    </div>
+    <div id="certsContainer"></div>
+  </div>
+
+  <!-- Enrolled Courses -->
   <div class="panel">
-    <h2>My Enrolled Courses</h2>
+    <div class="panel-head">
+      <h2>My Enrolled Courses</h2>
+      <a href="courses.html" class="btn sm ghost">All Courses</a>
+    </div>
     <div class="grid" id="mine"></div>
   </div>
 
+  <!-- Live Classes -->
   <div class="panel">
-    <h2>Live Classes</h2>
+    <div class="panel-head">
+      <h2>Upcoming Live Classes</h2>
+      <a href="live.html" class="btn sm ghost">Live Schedule</a>
+    </div>
     <div id="live"></div>
   </div>
 
+  <!-- Explore More Courses -->
   <div class="panel">
-    <h2>Explore Courses</h2>
+    <div class="panel-head">
+      <h2>Explore More Courses</h2>
+    </div>
     <div class="grid" id="all"></div>
   </div>
 </div>
 
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeModal" type="button">✕</button>
+    <h3 class="modal-title">Edit Sadhaka Profile</h3>
+    <p class="muted" style="font-size:.85rem;margin-bottom:14px">Customize your spiritual emblem and profile credentials</p>
+
+    <form id="profileForm" style="display:grid;gap:12px">
+      <div>
+        <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Spiritual Emblem</label>
+        <div class="avatar-selector" id="emblemPicker">
+          <button type="button" class="av-opt" data-icon="🕉️">🕉️</button>
+          <button type="button" class="av-opt" data-icon="🪷">🪷</button>
+          <button type="button" class="av-opt" data-icon="🧘">🧘</button>
+          <button type="button" class="av-opt" data-icon="📖">📖</button>
+          <button type="button" class="av-opt" data-icon="🪔">🪔</button>
+          <button type="button" class="av-opt" data-icon="🏹">🏹</button>
+          <button type="button" class="av-opt" data-icon="🛕">🛕</button>
+          <button type="button" class="av-opt" data-icon="🐚">🐚</button>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Full Name</label>
+        <input type="text" id="epName" placeholder="Your Full Name" required>
+      </div>
+      <div>
+        <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Phone Number</label>
+        <input type="text" id="epPhone" placeholder="+91 98765 43210">
+      </div>
+      <div>
+        <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Email Address</label>
+        <input type="email" id="epEmail" placeholder="yourname@gurukulam.org">
+      </div>
+      <div>
+        <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Sacred Sankalpa (Spiritual Intention)</label>
+        <textarea id="epSankalpa" rows="2" placeholder="Describe your spiritual study goal..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px">
+        <button type="button" class="btn ghost sm" id="btnCancelEdit">Cancel</button>
+        <button type="submit" class="btn gold sm">Save Profile</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Floating Feedback Toast -->
+<div id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Notification</span>
+</div>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="bottom" aria-label="App">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a class="on" href="dashboard.html"><span>👤</span>Profile</a>
+</nav>
+
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, set, update, list, DEFAULT_COURSES } from "./firebase-init.js";
+import { db, requireUser, logout, esc, ref, get, set, update, list, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
-let me, courses = [], enr = {};
+let me, userProfile = {}, courses = [], enr = {};
+let selectedEmblem = "🕉️";
+
+function toast(msg, icon = "✅") {
+  const t = $("toast");
+  $("toastMsg").textContent = msg;
+  $("toastIcon").textContent = icon;
+  t.style.display = "flex";
+  setTimeout(() => t.style.display = "none", 3500);
+}
+
+window.copyCertLink = (courseId) => {
+  const baseUrl = location.href.replace(/dashboard\.html.*/, "");
+  const certUrl = baseUrl + "certificate.html?id=" + encodeURIComponent(courseId) + "&uid=" + encodeURIComponent(me.uid);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(certUrl).then(() => {
+      toast("Certificate link copied! Share with friends 📋", "📜");
+    }).catch(() => fallbackCopy(certUrl));
+  } else {
+    fallbackCopy(certUrl);
+  }
+};
+
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    toast("Certificate link copied to clipboard!", "📋");
+  } catch (e) {
+    prompt("Copy this Certificate Link:", text);
+  }
+  document.body.removeChild(ta);
+}
+
 $("out").onclick = logout;
 
-requireUser((u, p) => {
+requireUser(async (u, p) => {
   me = u;
-  $("hello").textContent = "Namaste, " + (p.name || u.displayName || "Learner");
-  $("userRole").textContent = p.role === "admin" ? "Acharya (Admin)" : "Learner";
-  if (p.role === "admin") $("userRole").classList.add("admin");
-  $("adminLink").hidden = p.role !== "admin";
-  load();
+  userProfile = p || {};
+  renderProfile();
+  await load();
 });
 
-const getCourseIcon = id => {
-  if (id.includes("gita")) return "📖";
-  if (id.includes("sanskrit")) return "🪷";
-  if (id.includes("history")) return "📜";
-  if (id.includes("ramayan")) return "🏹";
-  if (id.includes("yoga")) return "🧘";
-  if (id.includes("vishnu")) return "🪔";
-  if (id.includes("veda")) return "🕉️";
-  if (id.includes("temple")) return "🛕";
-  return "🕉️";
+function renderProfile() {
+  const name = userProfile.name || me.displayName || "Sadhaka";
+  const email = userProfile.email || me.email || "learner@gurukulam.org";
+  const phone = userProfile.phone || me.phoneNumber || "+91 98765 43210";
+  const role = userProfile.role || me.role || "learner";
+  const emblem = userProfile.avatar || me.avatar || "🕉️";
+  const sankalpa = userProfile.sankalpa || "“अथातो ब्रह्मजिज्ञासा — Living in alignment with Dharma, daily Gita adhyayana, and Samskrita swadhyaya.”";
+  const joinedDate = userProfile.createdAt ? new Date(userProfile.createdAt).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : "Oct 2026";
+
+  selectedEmblem = emblem;
+  $("pAvatar").textContent = emblem;
+  $("pName").textContent = name;
+  $("userRole").textContent = role === "admin" ? "Acharya (Admin)" : "Sadhaka (Learner)";
+  if (role === "admin") {
+    $("userRole").classList.add("admin");
+    $("adminLink").hidden = false;
+  }
+  $("pSubTitle").textContent = (role === "admin" ? "Acharya · Spiritual Guide" : "Sadhaka · Vedic Learner") + " · Sanathana Gurukulam";
+  
+  $("pPhone").textContent = phone;
+  $("pEmail").textContent = email;
+  
+  // Format clean ID
+  const cleanUid = (me.uid || "").replace(/^u_|^g_|^ph_/, "").slice(0, 8).toUpperCase();
+  $("pUid").textContent = "SG-" + (cleanUid || "SADHAKA");
+  $("pJoined").textContent = "Joined " + joinedDate;
+  
+  // Sankalpa
+  $("pSankalpa").textContent = sankalpa;
+
+  // Set Phone Badge text based on provider
+  if (me.authProvider === "msg91_otp" || (me.uid && me.uid.startsWith("ph_"))) {
+    $("pPhoneBadge").textContent = "✓ MSG91 Verified";
+    $("pPhoneBadge").className = "tag verified";
+  }
+
+  // Pre-fill Edit Modal Inputs
+  $("epName").value = name;
+  $("epPhone").value = phone;
+  $("epEmail").value = email;
+  $("epSankalpa").value = sankalpa;
+  updateEmblemSelector();
+}
+
+function updateEmblemSelector() {
+  document.querySelectorAll(".av-opt").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.icon === selectedEmblem);
+  });
+}
+
+document.querySelectorAll(".av-opt").forEach(btn => {
+  btn.onclick = () => {
+    selectedEmblem = btn.dataset.icon;
+    updateEmblemSelector();
+  };
+});
+
+// Edit Profile Modal Open/Close
+const modal = $("editModal");
+$("btnOpenEdit").onclick = () => { modal.style.display = "flex"; };
+$("btnAvatarEdit").onclick = () => { modal.style.display = "flex"; };
+$("btnEditSankalpa").onclick = () => {
+  modal.style.display = "flex";
+  $("epSankalpa").focus();
+};
+$("closeModal").onclick = () => { modal.style.display = "none"; };
+$("btnCancelEdit").onclick = () => { modal.style.display = "none"; };
+modal.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+// Save Profile
+$("profileForm").onsubmit = async e => {
+  e.preventDefault();
+  const newName = $("epName").value.trim();
+  const newPhone = $("epPhone").value.trim();
+  const newEmail = $("epEmail").value.trim();
+  const newSankalpa = $("epSankalpa").value.trim();
+
+  userProfile.name = newName;
+  userProfile.phone = newPhone;
+  userProfile.email = newEmail;
+  userProfile.sankalpa = newSankalpa;
+  userProfile.avatar = selectedEmblem;
+
+  // Update mock user storage
+  const mu = getMockUser() || {};
+  mu.displayName = newName;
+  mu.phoneNumber = newPhone;
+  mu.email = newEmail;
+  mu.avatar = selectedEmblem;
+  mu.sankalpa = newSankalpa;
+  setMockUser(mu);
+
+  // Update DB user profile
+  try {
+    await update(ref(db, "users/" + me.uid), {
+      name: newName,
+      phone: newPhone,
+      email: newEmail,
+      sankalpa: newSankalpa,
+      avatar: selectedEmblem,
+      updatedAt: Date.now()
+    });
+  } catch (err) {
+    console.warn("Could not update cloud user profile:", err);
+  }
+
+  renderProfile();
+  modal.style.display = "none";
+  toast("Profile updated successfully! 🙏", "🕉️");
 };
 
 const card = (c, extra) => `
@@ -184,6 +563,35 @@ async function load() {
     const mine = courses.filter(c => enr[c.id]);
     const rest = courses.filter(c => !enr[c.id]);
     const prog = c => (enr[c.id] && typeof enr[c.id].progress === "number") ? enr[c.id].progress : 0;
+    const completedList = mine.filter(c => prog(c) >= 100);
+
+    // Render Dedicated Certificates Panel
+    if (completedList.length > 0) {
+      $("certsContainer").innerHTML = completedList.map(c => `
+        <div class="cert-card">
+          <div class="cert-info">
+            <div class="cert-icon">🏅</div>
+            <div>
+              <div class="cert-title">${esc(c.title)}</div>
+              <div class="cert-meta">Official Certificate of Completion · Issued by Sanathana Gurukulam</div>
+            </div>
+          </div>
+          <div class="cert-actions">
+            <a class="btn sm gold" href="certificate.html?id=${esc(c.id)}&uid=${esc(me.uid)}">🏅 View Certificate</a>
+            <button class="btn sm ghost" onclick="window.copyCertLink('${esc(c.id)}')">📋 Copy Link</button>
+          </div>
+        </div>
+      `).join("");
+    } else {
+      $("certsContainer").innerHTML = `
+        <div class="cert-empty">
+          <div class="big-seal">📜</div>
+          <h3 style="font-size:1.4rem;color:var(--maroon);margin-bottom:6px">Earn Your Official Gurukulam Certificate</h3>
+          <p>Complete 100% of any enrolled course (such as Bhagavad Gita) to unlock your verified Sanathana Gurukulam Certificate authenticated with your name and unique ID.</p>
+          <a href="#mine" class="btn sm gold">Continue Your Lessons →</a>
+        </div>
+      `;
+    }
 
     // Render My Courses
     $("mine").innerHTML = mine.map(c => {
@@ -193,11 +601,12 @@ async function load() {
         <div class="bar"><i style="width:${p}%"></i></div>
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted)">
           <span>Progress: <b>${p}%</b></span>
-          ${isComplete ? '<span style="color:#166534;font-weight:600">Completed!</span>' : ''}
+          ${isComplete ? '<span style="color:#166534;font-weight:600">✓ Completed!</span>' : ''}
         </div>
         <div class="actions">
           ${isComplete 
-            ? `<a class="btn sm gold" href="certificate.html?id=${esc(c.id)}">🏅 Certificate</a>` 
+            ? `<a class="btn sm gold" href="certificate.html?id=${esc(c.id)}&uid=${esc(me.uid)}">🏅 Certificate</a>
+               <button class="btn sm ghost" onclick="window.copyCertLink('${esc(c.id)}')">Share Link</button>`
             : `<a class="btn sm" href="course.html?id=${esc(c.id)}">Continue</a>
                <button class="btn sm ghost" data-step="${esc(c.id)}">+ 1 Lesson</button>`
           }
@@ -227,7 +636,7 @@ async function load() {
 
     // Update Stats
     $("sE").textContent = mine.length;
-    $("sD").textContent = mine.filter(c => prog(c) >= 100).length;
+    $("sD").textContent = completedList.length;
     $("sA").textContent = (mine.length ? Math.round(mine.reduce((s, c) => s + prog(c), 0) / mine.length) : 0) + "%";
     $("sL").textContent = live.length;
 
@@ -248,6 +657,7 @@ document.addEventListener("click", async e => {
     const r = ref(db, `enrollments/${me.uid}/${enrollId}`);
     await set(r, { progress: 0, enrolledAt: Date.now(), done: {} });
     await load();
+    toast("Enrolled successfully! May Saraswati bless your study. 🙏", "📖");
   } else if (stepId) {
     b.disabled = true;
     const c = courses.find(x => x.id === stepId) || DEFAULT_COURSES.find(x => x.id === stepId);
@@ -273,15 +683,13 @@ document.addEventListener("click", async e => {
       ...(newProgress >= 100 ? { completedAt: Date.now() } : {})
     });
     await load();
+    if (newProgress >= 100) {
+      toast("Congratulations! Course completed. Certificate unlocked! 🏅", "🎉");
+    } else {
+      toast(`Lesson ${nextIdx} completed! (${newProgress}% total)`, "✨");
+    }
   }
 });
 </script>
-<nav class="bottom" aria-label="App">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="courses.html"><span>📖</span>Courses</a>
-  <a href="live.html"><span>🎥</span>Live</a>
-  <a href="community.html"><span>👥</span>Community</a>
-  <a class="on" href="dashboard.html"><span>👤</span>Dashboard</a>
-</nav>
 </body>
 </html>

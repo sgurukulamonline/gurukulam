@@ -194,11 +194,11 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
+      <a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="more.html" style="color:var(--gold)">Explore</a>
     </nav>
     <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="moreSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
-    <a class="avatar" id="moreAvatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
+    <a class="avatar" id="moreAvatar" href="login.html" aria-label="Account">👤</a>
   </div>
 </header>
 <main><div class="wrap">
@@ -223,7 +223,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <a class="q" href="courses.html?q=audio"><span>🎧</span>Audio Library</a>
       <a class="q" href="courses.html"><span>⬇️</span>Download / Offline</a>
       <a class="q" href="live.html"><span>📅</span>Live Events</a>
-      <a class="q" href="dashboard.html"><span>🏅</span>Certificates</a>
+      <a class="q" href="certificate.html"><span>🏅</span>Certificates</a>
     </div>
   </section>
 </div></main>
@@ -237,16 +237,23 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
   <a href="community.html"><span>👥</span>Community</a>
-  <a href="dashboard.html"><span>👤</span>Dashboard</a>
+  <a class="on" href="more.html"><span>🛕</span>Explore</a>
 </nav>
 <script type="module">
 import { auth, onAuthStateChanged } from "./firebase-init.js";
 
 onAuthStateChanged(auth, u => {
   const av = document.getElementById("moreAvatar");
-  if (av && u) {
-    av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
-    av.title = "Signed in as " + (u.displayName || u.email || "Learner");
+  if (av) {
+    if (u) {
+      av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
+      av.title = "Namaste, " + (u.displayName || u.email || "Learner");
+      av.href = "dashboard.html";
+    } else {
+      av.textContent = "👤";
+      av.title = "Sign In / Login";
+      av.href = "login.html";
+    }
   }
 });
 
