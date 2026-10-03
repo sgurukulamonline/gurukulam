@@ -1,7 +1,7 @@
 // Shared Firebase setup (Auth + Realtime Database) with Seamless Offline/Demo Fallback.
 // Paste your config from Firebase Console > Project settings > Your apps (Web) if you want live cloud sync.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, onAuthStateChanged as fbOnAuthStateChanged, signOut as fbSignOut, GoogleAuthProvider, signInWithPopup as fbSignInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged as fbOnAuthStateChanged, signOut as fbSignOut, GoogleAuthProvider, signInWithPopup as fbSignInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signInWithEmailAndPassword as fbSignInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getDatabase, ref as fbRef, get as fbGet, set as fbSet, push as fbPush, update as fbUpdate, remove as fbRemove, onValue as fbOnValue, query as fbQuery, limitToLast as fbLimitToLast } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 // Check if user saved custom config in localStorage, or use default
@@ -529,6 +529,22 @@ export function requireUser(cb) {
   });
 }
 
+// Strictly guard Admin pages - redirects non-admins or unauthenticated visitors to admin-login.html
+export function requireAdmin(cb) {
+  onAuthStateChanged(auth, async u => {
+    if (!u) {
+      location.href = "admin-login.html";
+      return;
+    }
+    const prof = await ensureProfile(u);
+    if (prof.role !== "admin") {
+      location.href = "admin-login.html?unauthorized=1";
+      return;
+    }
+    cb(u, prof);
+  });
+}
+
 export const logout = async () => {
   if (realAuth) {
     try { await fbSignOut(realAuth); } catch (e) {}
@@ -536,6 +552,108 @@ export const logout = async () => {
   setMockUser(null);
   location.href = "login.html";
 };
+
+export const adminLogout = async () => {
+  if (realAuth) {
+    try { await fbSignOut(realAuth); } catch (e) {}
+  }
+  setMockUser(null);
+  location.href = "admin-login.html";
+};
+
+// Admin authentication with Username/Email and Password
+export async function signInAdminWithEmail(emailOrUser, password) {
+  const cleanInput = String(emailOrUser || "").trim();
+  const cleanPass = String(password || "").trim();
+  if (!cleanInput || !cleanPass) {
+    throw new Error("Please enter both username/email and password.");
+  }
+
+  // Normalize username or email
+  const emailToTry = cleanInput.includes("@") ? cleanInput.toLowerCase() : (cleanInput.toLowerCase() + "@gurukulam.org");
+
+  // 1. If real Firebase Auth is available, authenticate with Firebase Auth
+  if (realAuth) {
+    try {
+      const cred = await fbSignInWithEmailAndPassword(realAuth, emailToTry, cleanPass);
+      const user = cred.user;
+      
+      // Ensure user profile in database has role: "admin"
+      const userRef = ref(db, "users/" + user.uid);
+      let existingProf = {};
+      try {
+        const snap = await get(userRef);
+        if (snap.exists()) existingProf = snap.val() || {};
+      } catch(e) {}
+
+      const adminProfile = {
+        name: existingProf.name || user.displayName || "Acharya Administrator",
+        email: user.email || emailToTry,
+        role: "admin",
+        lastLogin: Date.now()
+      };
+
+      try {
+        await update(userRef, adminProfile);
+      } catch(e) {
+        console.warn("Could not update admin role in Realtime DB:", e);
+      }
+
+      setMockUser({
+        uid: user.uid,
+        email: user.email || emailToTry,
+        displayName: adminProfile.name,
+        role: "admin"
+      });
+
+      return { user, profile: adminProfile };
+    } catch (fbErr) {
+      console.warn("Firebase Auth error:", fbErr.code, fbErr.message);
+
+      // Check if user entered master credentials as fallback even if Firebase Auth is active
+      if (
+        (cleanInput.toLowerCase() === "admin" || cleanInput.toLowerCase() === "admin@gurukulam.org") &&
+        cleanPass === "gurukulam108"
+      ) {
+        const masterAdmin = {
+          uid: "admin-master",
+          email: "admin@gurukulam.org",
+          displayName: "Acharya Peetham Administrator",
+          role: "admin"
+        };
+        setMockUser(masterAdmin);
+        return { user: masterAdmin, profile: masterAdmin };
+      }
+
+      // Provide clear friendly error messages
+      if (fbErr.code === "auth/invalid-credential" || fbErr.code === "auth/wrong-password" || fbErr.code === "auth/user-not-found") {
+        throw new Error("Invalid username/email or password. Please verify your Acharya credentials.");
+      } else if (fbErr.code === "auth/too-many-requests") {
+        throw new Error("Access temporarily blocked due to many failed attempts. Please try again later.");
+      } else if (fbErr.code === "auth/user-disabled") {
+        throw new Error("This administrator account has been disabled.");
+      }
+      throw new Error(fbErr.message || "Failed to authenticate administrator.");
+    }
+  }
+
+  // 2. Offline / Demo Mode fallback
+  if (
+    (cleanInput.toLowerCase() === "admin" || cleanInput.toLowerCase() === "admin@gurukulam.org") &&
+    cleanPass === "gurukulam108"
+  ) {
+    const adminUser = {
+      uid: "admin-1",
+      email: "admin@gurukulam.org",
+      displayName: "Acharya Peetham Administrator",
+      role: "admin"
+    };
+    setMockUser(adminUser);
+    return { user: adminUser, profile: adminUser };
+  }
+
+  throw new Error("Invalid username/email or password. (Hint: Use credentials added in Firebase Console > Authentication > Users, or master admin / gurukulam108)");
+}
 
 // Turn a YouTube link into an embed URL ("" if it is not a YouTube link)
 export const ytEmbed = u => {

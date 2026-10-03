@@ -147,76 +147,21 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   </div>
 </div>
 
-<div id="denied" style="display:none;text-align:center;padding:50px 24px;max-width:480px;margin:50px auto;background:#fff;border-radius:24px;box-shadow:var(--shadow);border:1.5px solid var(--sand)">
-  <div style="font-size:3.5rem;margin-bottom:10px">🛡️</div>
-  <h2 style="font-size:2rem;color:var(--maroon);margin-bottom:6px">Acharya Access Verification</h2>
-  <p style="color:var(--muted);margin:0 auto 18px;max-width:380px;font-size:.9rem">You are signed in as <b id="deniedUserName">Learner</b> (<span id="deniedUserRole">learner</span>). Elevate your role to access the Admin Peetham:</p>
-  
-  <div style="display:grid;gap:12px;margin-bottom:18px">
-    <button class="btn gold full" id="btnPromoteSelf" style="padding:14px;font-size:1.02rem;font-weight:700">
-      👑 Elevate My Account to Acharya (Admin)
-    </button>
-    <button class="btn ghost full" id="btnSwitchAdminQuick">
-      ⚡ 1-Click Login as Acharya Dr. Sharma
-    </button>
-  </div>
-
-  <div style="display:flex;justify-content:center;gap:16px;font-size:.85rem">
-    <a class="muted" href="dashboard.html" style="text-decoration:underline">← Return to Learner Portal</a>
-    <button id="btnDeniedLogout" style="background:none;color:var(--maroon);border:0;cursor:pointer;text-decoration:underline">Sign Out</button>
-  </div>
-</div>
-
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, push, update, remove, list, getMockUser, setMockUser } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, push, update, remove, list } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
 let me;
-$("out").onclick = logout;
-$("btnDeniedLogout").onclick = logout;
+$("out").onclick = adminLogout;
 
-requireUser((u, p) => {
+// Strict Acharya authentication guard
+requireAdmin((u, p) => {
   me = u;
-  if (p.role !== "admin") {
-    $("deniedUserName").textContent = p.name || u.displayName || "Sadhaka";
-    $("deniedUserRole").textContent = p.role || "learner";
-    $("denied").style.display = "block";
-    return;
-  }
   $("wrap").hidden = false;
   load();
 });
-
-$("btnPromoteSelf").onclick = async () => {
-  $("btnPromoteSelf").disabled = true;
-  $("btnPromoteSelf").innerHTML = "<span>⏳</span> Activating Admin Access...";
-
-  const mu = getMockUser() || me || {};
-  mu.role = "admin";
-  setMockUser(mu);
-
-  try {
-    if (me?.uid) {
-      await update(ref(db, "users/" + me.uid), { role: "admin" });
-    }
-  } catch (err) {
-    console.warn("Could not update role in cloud DB:", err);
-  }
-
-  location.reload();
-};
-
-$("btnSwitchAdminQuick").onclick = () => {
-  setMockUser({
-    uid: "admin-1",
-    displayName: "Acharya Dr. Sharma",
-    email: "acharya@gurukulam.org",
-    role: "admin"
-  });
-  location.reload();
-};
 
 async function load() {
   try {

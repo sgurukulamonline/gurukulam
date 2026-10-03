@@ -89,9 +89,6 @@ details .cfg-box{margin-top:10px}
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:14px" id="loggedRole">Role: Learner</p>
     <div class="stack">
       <a class="btn gold full" id="goDash" href="dashboard.html">Enter Learning Portal →</a>
-      <button class="btn ghost full" id="btnSwitchToAdmin" type="button" style="display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600">
-        <span>👑</span> Enter Admin Peetham (Acharya)
-      </button>
       <button class="btn ghost full" id="btnSwitch" type="button">Sign Out / Switch Account</button>
     </div>
   </div>
@@ -117,16 +114,11 @@ details .cfg-box{margin-top:10px}
         <button class="btn full">Enter Gurukulam</button>
       </form>
 
-      <div class="or-divider">DEMO &amp; ACHARYA ACCESS</div>
+      <div class="or-divider">GUEST LEARNER ACCESS</div>
 
       <!-- 1-Click Learner Login -->
       <button class="btn ghost sm full" id="btnQuickLearner">
-        <span>🚀</span> Continue as Learner (1-Click Demo)
-      </button>
-
-      <!-- Admin Login -->
-      <button class="btn ghost sm full" id="btnQuickAdmin">
-        <span>👑</span> Login as Admin (Acharya)
+        <span>🚀</span> Continue as Guest Learner (1-Click Demo)
       </button>
     </div>
 
@@ -353,18 +345,6 @@ $("customNameForm").onsubmit = e => {
   setTimeout(() => location.href = redirect, 500);
 };
 
-// Quick Admin Login
-$("btnQuickAdmin").onclick = () => {
-  setMockUser({
-    uid: "admin-1",
-    displayName: "Acharya Dr. Sharma",
-    email: "acharya@gurukulam.org",
-    role: "admin"
-  });
-  showMsg("Welcome Acharya! Redirecting...", false);
-  setTimeout(() => location.href = redirect, 500);
-};
-
 // Google Sign-In
 $("btnGoogle").onclick = async () => {
   const savedCfg = localStorage.getItem("sg_firebase_config");
@@ -442,28 +422,12 @@ $("googleForm").onsubmit = async e => {
   setTimeout(() => location.href = redirect, 600);
 };
 
-// Elevate / Switch to Admin
-$("btnSwitchToAdmin").onclick = async () => {
-  $("btnSwitchToAdmin").disabled = true;
-  $("btnSwitchToAdmin").innerHTML = "<span>⏳</span> Opening Admin Peetham...";
-  const mu = getMockUser() || {};
-  mu.role = "admin";
-  setMockUser(mu);
-  try {
-    if (mu.uid) {
-      await update(ref(db, "users/" + mu.uid), { role: "admin" });
-    }
-  } catch(e) {}
-  showMsg("Switched to Acharya (Admin)! Redirecting to Admin Peetham...", false);
-  setTimeout(() => location.href = "admin.html", 300);
-};
-
 // Switch account
 $("btnSwitch").onclick = async () => {
   await logout();
   $("alreadyIn").style.display = "none";
   $("loginForms").style.display = "block";
-  showMsg("Signed out. Select a sign-in method or Continue as Admin below.", false);
+  showMsg("Signed out. Select a sign-in method or Continue as Guest below.", false);
 };
 
 // Config helpers

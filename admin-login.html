@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acharya Peetham Login – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 12px 32px rgba(74,31,14,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 50% 10%,#3d1607 0%,#200b03 100%);
+  min-height:100vh;display:flex;flex-direction:column;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+input{
+  font:inherit;padding:14px 16px;border:1.5px solid rgba(217,154,39,0.3);
+  border-radius:14px;background:#fff;color:var(--brown);width:100%;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,154,39,0.25)}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;padding:16px 28px;
+  background:rgba(20,7,2,0.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(217,154,39,0.2);
+  color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.45rem;letter-spacing:.5px}
+.top b a{display:flex;align-items:center;gap:8px}
+.top span{display:flex;gap:18px;align-items:center;font-size:.86rem;color:var(--sand)}
+.top a:hover{color:var(--gold)}
+
+.container{
+  max-width:440px;width:92%;margin:auto;margin-top:50px;margin-bottom:60px;
+  background:var(--card);border-radius:26px;padding:36px 30px;box-shadow:var(--shadow);
+  border:2px solid var(--sand);position:relative;overflow:hidden;
+}
+.container::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--maroon),var(--gold),var(--maroon));
+}
+.badge-seal{
+  width:68px;height:68px;margin:0 auto 14px;border-radius:50%;
+  background:linear-gradient(135deg,#93361a,#4a1f0e);
+  color:var(--gold);display:flex;align-items:center;justify-content:center;
+  font-size:2.1rem;box-shadow:0 6px 18px rgba(74,31,14,.3);
+  border:2px solid var(--gold);
+}
+.container h1{font-size:2.3rem;color:var(--maroon);text-align:center;line-height:1.15}
+.container p.sub{color:var(--muted);font-size:.88rem;text-align:center;margin:8px 0 24px}
+
+.form-group{margin-bottom:16px;text-align:left}
+.form-group label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;color:var(--brown);letter-spacing:.3px}
+.input-wrap{position:relative}
+.pw-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  padding:4px;
+}
+
+.btn{
+  background:linear-gradient(135deg,#7A2E16,#571e0c);color:var(--cream);padding:14px 22px;border-radius:14px;
+  font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;font-size:1.02rem;
+}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 6px 18px rgba(122,46,22,0.35)}
+.btn.gold{
+  background:linear-gradient(135deg,#e3a32f,#bf7b13);color:#2d1105;font-weight:700;
+  box-shadow:0 6px 20px rgba(217,154,39,0.35);
+}
+.btn.gold:hover{filter:brightness(1.08);box-shadow:0 8px 24px rgba(217,154,39,0.45)}
+.btn.full{width:100%}
+
+#msg{
+  font-size:.86rem;margin-top:14px;padding:12px 14px;border-radius:10px;display:none;line-height:1.4;
+}
+#msg.err{background:#fee2e2;color:#991b1b;border:1px solid #f87171;display:block}
+#msg.succ{background:#dcfce7;color:#166534;border:1px solid #86efac;display:block}
+#msg.warn{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;display:block}
+
+.info-note{
+  margin-top:22px;padding:14px;background:rgba(232,201,143,0.25);border-radius:14px;
+  border:1px solid rgba(122,46,22,0.15);font-size:.8rem;color:var(--muted);line-height:1.45;
+}
+.info-note b{color:var(--maroon)}
+
+.back-link{
+  display:block;text-align:center;margin-top:18px;font-size:.84rem;color:var(--muted);
+}
+.back-link:hover{color:var(--maroon);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="index.html">🕉️ Sanathana Gurukulam</a></b>
+  <span>
+    <span style="font-size:.8rem;padding:3px 10px;background:rgba(217,154,39,0.2);border:1px solid rgba(217,154,39,0.35);border-radius:20px;color:var(--sand)">Acharya Gateway</span>
+  </span>
+</div>
+
+<div class="container">
+  <div class="badge-seal">👑</div>
+  <h1>Acharya Peetham</h1>
+  <p class="sub">Restricted Administrative Portal · Verification Required</p>
+
+  <div id="unauthAlert" class="msg warn" style="display:none;margin-bottom:16px">
+    🛡️ <b>Access Restricted:</b> The Admin Peetham requires verified Acharya credentials. Please sign in below.
+  </div>
+
+  <form id="adminForm" novalidate>
+    <div class="form-group">
+      <label for="adminUser">Acharya Email or Username</label>
+      <input type="text" id="adminUser" placeholder="admin@gurukulam.org or username" required autocomplete="username" spellcheck="false">
+    </div>
+
+    <div class="form-group">
+      <label for="adminPass">Secret Password</label>
+      <div class="input-wrap">
+        <input type="password" id="adminPass" placeholder="Enter administrative password..." required autocomplete="current-password">
+        <button type="button" class="pw-toggle" id="btnTogglePw" aria-label="Toggle password visibility">👁️</button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn gold full" id="btnSubmit">
+      <span>🔐</span> Authenticate &amp; Enter Peetham
+    </button>
+  </form>
+
+  <div id="msg"></div>
+
+  <div class="info-note">
+    <p><b>🔑 Firebase Authentication:</b> Manage authorized administrators directly in your <a href="https://console.firebase.google.com" target="_blank" style="text-decoration:underline;color:var(--maroon)">Firebase Console</a> under <b>Authentication &gt; Users</b> (Email/Password).</p>
+    <p style="margin-top:6px;font-size:.76rem;color:#8a644e">Offline/Emergency Master: <code>admin@gurukulam.org</code> / <code>gurukulam108</code></p>
+  </div>
+
+  <a class="back-link" href="index.html">← Return to Gurukulam Home</a>
+</div>
+
+<script type="module">
+import { signInAdminWithEmail, auth, onAuthStateChanged, ensureProfile } from "./firebase-init.js";
+
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+
+// Show alert if redirected due to lack of admin role
+if (params.get("unauthorized") === "1") {
+  $("unauthAlert").style.display = "block";
+}
+
+// Password toggle
+const pwInput = $("adminPass");
+const btnToggle = $("btnTogglePw");
+btnToggle.onclick = () => {
+  if (pwInput.type === "password") {
+    pwInput.type = "text";
+    btnToggle.textContent = "🙈";
+  } else {
+    pwInput.type = "password";
+    btnToggle.textContent = "👁️";
+  }
+};
+
+const showMsg = (txt, type) => {
+  const m = $("msg");
+  m.textContent = txt;
+  m.className = type; // "err" | "succ" | "warn"
+  m.style.display = "block";
+};
+
+// Check if already an authenticated admin
+onAuthStateChanged(auth, async u => {
+  if (u) {
+    try {
+      const prof = await ensureProfile(u);
+      if (prof && prof.role === "admin") {
+        showMsg("Already authenticated as Acharya (" + (prof.name || u.displayName || "Admin") + "). Redirecting...", "succ");
+        setTimeout(() => location.href = "admin.html", 600);
+      }
+    } catch(e) {}
+  }
+});
+
+$("adminForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const userOrEmail = $("adminUser").value.trim();
+  const pass = $("adminPass").value.trim();
+
+  if (!userOrEmail || !pass) {
+    showMsg("Please enter both username/email and password.", "err");
+    return;
+  }
+
+  const btn = $("btnSubmit");
+  btn.disabled = true;
+  btn.innerHTML = "<span>⏳</span> Authenticating Acharya...";
+  showMsg("Verifying credentials with Peetham security...", "warn");
+
+  try {
+    const res = await signInAdminWithEmail(userOrEmail, pass);
+    showMsg("Pranams Acharya! Verification successful. Entering Admin Peetham...", "succ");
+    btn.innerHTML = "<span>✅</span> Verified! Redirecting...";
+    setTimeout(() => {
+      location.href = "admin.html";
+    }, 700);
+  } catch (err) {
+    console.error("Admin Login Error:", err);
+    btn.disabled = false;
+    btn.innerHTML = "<span>🔐</span> Authenticate &amp; Enter Peetham";
+    showMsg(err.message || "Invalid Acharya credentials. Please check your username and password.", "err");
+  }
+};
+</script>
+
+</body>
+</html>
