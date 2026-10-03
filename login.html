@@ -60,10 +60,6 @@ input,textarea{font:inherit;padding:12px 14px;border:1px solid var(--line);borde
 #msg{font-size:.85rem;margin-top:12px;padding:8px 12px;border-radius:8px;display:none}
 #msg.err{background:#fee2e2;color:#991b1b;display:block}
 #msg.succ{background:#dcfce7;color:#166534;display:block}
-
-details{text-align:left;font-size:.85rem;margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
-details summary{cursor:pointer;color:var(--muted);font-weight:500}
-details .cfg-box{margin-top:10px}
 </style>
 </head>
 <body>
@@ -121,19 +117,6 @@ details .cfg-box{margin-top:10px}
         <span>🚀</span> Continue as Guest Learner (1-Click Demo)
       </button>
     </div>
-
-    <!-- Optional Firebase Config Drawer -->
-    <details>
-      <summary>⚙️ Firebase Project Setup (Optional)</summary>
-      <div class="cfg-box">
-        <p style="margin-bottom:6px;color:var(--muted)">Paste your Firebase Web Config JSON below to enable live cloud database sync:</p>
-        <textarea id="cfgInput" rows="4" placeholder='{"apiKey":"AIzaSy...","projectId":"your-project",...}'></textarea>
-        <div style="margin-top:8px;display:flex;gap:8px">
-          <button class="btn sm" id="btnSaveCfg">Save Config</button>
-          <button class="btn ghost sm" id="btnClearCfg">Clear</button>
-        </div>
-      </div>
-    </details>
   </div>
 
   <div id="msg"></div>
@@ -428,28 +411,6 @@ $("btnSwitch").onclick = async () => {
   $("alreadyIn").style.display = "none";
   $("loginForms").style.display = "block";
   showMsg("Signed out. Select a sign-in method or Continue as Guest below.", false);
-};
-
-// Config helpers
-const cur = localStorage.getItem("sg_firebase_config");
-if (cur) $("cfgInput").value = cur;
-$("btnSaveCfg").onclick = () => {
-  const v = $("cfgInput").value.trim();
-  if (!v) return;
-  try {
-    JSON.parse(v);
-    localStorage.setItem("sg_firebase_config", v);
-    showMsg("Firebase config saved! Reloading...", false);
-    setTimeout(() => location.reload(), 800);
-  } catch (e) {
-    showMsg("Invalid JSON format. Please paste a valid JSON object.", true);
-  }
-};
-$("btnClearCfg").onclick = () => {
-  localStorage.removeItem("sg_firebase_config");
-  $("cfgInput").value = "";
-  showMsg("Config cleared. Reverting to local mode.", false);
-  setTimeout(() => location.reload(), 600);
 };
 </script>
 </body>
