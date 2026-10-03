@@ -270,6 +270,19 @@ onAuthStateChanged(auth, u => {
   }
 });
 
+const pathNames = {
+  bala: "👶 Bala Gurukulam (Ages 5–12)",
+  yuva: "🏹 Yuva Gurukulam (Ages 13–25)",
+  sadhaka: "🕉️ Sadhaka Gurukulam (Ages 26–55)",
+  jnana: "🪷 Jnana Gurukulam (Ages 56+)"
+};
+if (initialPath && pathNames[initialPath]) {
+  const pt = document.getElementById("pageTitle");
+  const ps = document.getElementById("pageSub");
+  if (pt) pt.textContent = pathNames[initialPath];
+  if (ps) ps.innerHTML = `Curated lessons for ${pathNames[initialPath]} · <a href="courses.html" style="color:var(--maroon);text-decoration:underline;font-weight:600">View All Courses →</a>`;
+}
+
 // Render courses matching filter & search
 function render() {
   const q = (searchInput?.value || "").trim().toLowerCase();
@@ -278,9 +291,10 @@ function render() {
     if (activeFilter === "free" && c.type !== "free") return false;
     if (activeFilter === "paid" && c.type !== "paid") return false;
     if (initialPath) {
-      const id = (c.id || "").toLowerCase();
-      if (initialPath === "bala" && !id.includes("sanskrit") && !id.includes("story")) return true;
-      if (initialPath === "yuva" && !id.includes("history") && !id.includes("temple")) return true;
+      const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
+        ? c.ageGroups
+        : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
+      if (!ages.includes('all') && !ages.includes(initialPath)) return false;
     }
     if (q) {
       const matchTitle = (c.title || "").toLowerCase().includes(q);

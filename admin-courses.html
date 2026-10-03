@@ -91,15 +91,33 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           <option value="paid">Paid Course</option>
         </select>
       </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Age Group</label>
-        <select name="ageGroup" id="cAgeGroup">
-          <option value="all">Target: All Ages / General</option>
-          <option value="bala">Bala Gurukulam (Ages 5–12)</option>
-          <option value="yuva">Yuva Gurukulam (Ages 13–25)</option>
-          <option value="sadhaka">Sadhaka Gurukulam (Ages 26–55)</option>
-          <option value="jnana">Jnana Gurukulam (Ages 56+)</option>
-        </select>
+      <div style="grid-column:1/-1;background:#fff8ea;padding:14px;border-radius:12px;border:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+          <label style="font-size:.84rem;font-weight:700;color:var(--maroon)">🎯 Target Age Groups Checklist (Select 1, 2, or Any)</label>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn ghost sm" id="btnSelectAllAges" style="padding:2px 8px;font-size:.74rem">Select All</button>
+            <button type="button" class="btn ghost sm" id="btnClearAllAges" style="padding:2px 8px;font-size:.74rem">Clear All</button>
+          </div>
+        </div>
+        <p class="muted" style="font-size:.78rem;margin-bottom:10px">Check the sections this course should be published to:</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
+          <label style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-size:.85rem">
+            <input type="checkbox" name="courseAges" value="bala" class="course-age-cb" checked style="width:auto">
+            <span>👶 <b>Bala</b> (5–12)</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-size:.85rem">
+            <input type="checkbox" name="courseAges" value="yuva" class="course-age-cb" style="width:auto">
+            <span>🏹 <b>Yuva</b> (13–25)</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-size:.85rem">
+            <input type="checkbox" name="courseAges" value="sadhaka" class="course-age-cb" style="width:auto">
+            <span>🕉️ <b>Sadhaka</b> (26–55)</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-size:.85rem">
+            <input type="checkbox" name="courseAges" value="jnana" class="course-age-cb" style="width:auto">
+            <span>🪷 <b>Jnana</b> (56+)</span>
+          </label>
+        </div>
       </div>
       <div>
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Release Date &amp; Time (optional)</label>
@@ -305,6 +323,13 @@ $("btnAddVideo")?.addEventListener("click", () => window.addSection("video"));
 $("btnAddPhoto")?.addEventListener("click", () => window.addSection("photo"));
 $("btnAddMatter")?.addEventListener("click", () => window.addSection("matter"));
 
+$("btnSelectAllAges")?.addEventListener("click", () => {
+  document.querySelectorAll(".course-age-cb").forEach(cb => cb.checked = true);
+});
+$("btnClearAllAges")?.addEventListener("click", () => {
+  document.querySelectorAll(".course-age-cb").forEach(cb => cb.checked = false);
+});
+
 async function load() {
   try {
     const cs = await list("courses");
@@ -315,6 +340,11 @@ async function load() {
       const pinBadge = isPinned ? `<span class="tag" style="background:#fef08a;color:#854d0e;font-weight:700">📌 Pinned #${c.pinOrder || 1}</span>` : "";
       const secCount = Array.isArray(c.sections) ? c.sections.length : (c.videoUrl ? 1 : 0);
       const relTime = c.releaseTime ? ` · Release: ${when(c.releaseTime)}` : "";
+      const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
+        ? c.ageGroups
+        : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
+      const ageLabels = ages.map(a => a.charAt(0).toUpperCase() + a.slice(1)).join(", ");
+
       return `
         <div class="row">
           <span>
@@ -322,7 +352,7 @@ async function load() {
             <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
             <span class="tag">${esc(c.type || 'free')}</span>
             ${pinBadge}
-            <span class="tag">${esc(c.ageGroup || 'all')}</span>
+            <span class="tag" style="background:#fef3c7;color:#92400e">🎯 ${esc(ageLabels)}</span>
             <br><span class="muted">${c.lessons || 0} lessons · ${secCount} content blocks${relTime}</span>
           </span>
           <span style="display:flex;gap:8px">
@@ -345,6 +375,9 @@ const resetCourseForm = () => {
   $("cEditId").value = "";
   $("cPinned").checked = false;
   $("cReleaseTime").value = "";
+  document.querySelectorAll(".course-age-cb").forEach(cb => {
+    cb.checked = (cb.value === "bala");
+  });
   currentSections = [];
   renderSectionsBuilder();
   $("formHeader").textContent = "Add / Edit Course";
@@ -358,11 +391,16 @@ $("cForm").onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
   const editId = f.editId;
+
+  const checkedAges = Array.from(document.querySelectorAll('.course-age-cb:checked')).map(cb => cb.value);
+  const selectedAgeGroups = checkedAges.length ? checkedAges : ["bala", "yuva", "sadhaka", "jnana"];
+
   const courseData = {
     title: f.title,
     desc: f.desc || "",
     type: f.type || "free",
-    ageGroup: f.ageGroup || "all",
+    ageGroups: selectedAgeGroups,
+    ageGroup: selectedAgeGroups.join(","),
     releaseTime: f.releaseTime ? new Date(f.releaseTime).getTime() : 0,
     pinned: Boolean(f.pinned === "1" || f.pinned === "on" || f.pinned === true),
     pinOrder: parseInt(f.pinOrder, 10) || 1,
@@ -399,7 +437,14 @@ document.addEventListener("click", async e => {
       $("cTitle").value = course.title || "";
       $("cDesc").value = course.desc || "";
       $("cType").value = course.type || "free";
-      $("cAgeGroup").value = course.ageGroup || "all";
+      
+      const courseAges = Array.isArray(course.ageGroups) && course.ageGroups.length
+        ? course.ageGroups
+        : (course.ageGroup ? (course.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : course.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
+      document.querySelectorAll('.course-age-cb').forEach(cb => {
+        cb.checked = courseAges.includes(cb.value);
+      });
+
       if (course.releaseTime) {
         const dt = new Date(course.releaseTime);
         const pad = n => String(n).padStart(2, '0');

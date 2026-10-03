@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Age Groups Management – Sanathana Gurukulam</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
@@ -37,163 +37,693 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 }
 .top b{font-family:'Cormorant Garamond';font-size:1.5rem}
 .top b a{color:inherit}
-.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem;flex-wrap:wrap}
 .top a:hover{color:var(--gold)}
 
-.wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
 .panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
 .panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
 .row:last-child{border-bottom:0}
-.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
 .muted{color:var(--muted);font-size:.85rem}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.tag.active{background:var(--maroon);color:#fff}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
+
+/* Age Checklist UI */
+.age-check-wrapper{
+  background:#fffdf9;border:1.5px solid rgba(122,46,22,.2);border-radius:16px;
+  padding:18px;margin-bottom:16px;box-shadow:0 3px 12px rgba(122,46,22,.06);
+}
+.age-check-hdr{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;
+}
+.age-check-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:10px;
+}
+.age-box{
+  position:relative;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;
+  background:#fff;border:1.5px solid var(--line);border-radius:14px;cursor:pointer;
+  transition:all .2s;user-select:none;
+}
+.age-box:hover{border-color:var(--maroon);transform:translateY(-1px);box-shadow:0 4px 12px rgba(122,46,22,.08)}
+.age-box.checked{
+  background:linear-gradient(135deg,#fff8ec,#faebd0);border-color:var(--maroon);
+  box-shadow:0 4px 14px rgba(122,46,22,.12);
+}
+.age-cb{
+  width:20px;height:20px;margin-top:2px;cursor:pointer;accent-color:var(--maroon);flex-shrink:0;
+}
+.age-box-body{flex:1}
+.age-box-title{font-weight:700;font-size:.95rem;color:var(--maroon);display:flex;align-items:center;gap:6px}
+.age-box-range{font-size:.78rem;font-weight:600;color:var(--gold);margin-top:2px}
+.age-box-sub{font-size:.74rem;color:var(--muted);margin-top:3px;font-style:italic}
+
+/* Telemetry Pills */
+.telemetry{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:22px;
+}
+.tele-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;
+  display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);
+}
+.tele-icon{font-size:2rem}
+.tele-val{font-size:1.6rem;font-weight:700;color:var(--maroon);line-height:1}
+.tele-lbl{font-size:.78rem;color:var(--muted);font-weight:500}
+
+/* Filter Chips */
+.filter-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{
+  background:#fff;border:1px solid var(--line);padding:7px 16px;border-radius:20px;
+  font-size:.84rem;font-weight:600;color:var(--brown);transition:all .2s;
+}
+.filter-btn:hover{border-color:var(--maroon);color:var(--maroon)}
+.filter-btn.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:24px;right:24px;background:var(--brown);color:var(--cream);
+  padding:12px 20px;border-radius:12px;font-size:.88rem;box-shadow:var(--shadow);
+  display:none;z-index:999;align-items:center;gap:8px;border-left:4px solid var(--gold);
+}
 </style>
 </head>
 <body>
 
 <div class="top">
-  <b><a href="admin.html">Sanathana Gurukulam · Admin</a></b>
+  <b><a href="admin.html">Sanathana Gurukulam · Admin Dashboard</a></b>
   <span>
     <a href="admin.html">← Dashboard Hub</a>
     <a href="admin-courses.html">Courses</a>
     <a href="admin-live.html">Live</a>
     <a href="admin-community.html">Community</a>
+    <a href="admin-notifications.html">Notifications</a>
     <button class="btn gold sm" id="out">Logout</button>
   </span>
 </div>
 
 <div class="wrap" id="wrap" hidden>
   <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
+  
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
-      <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Section</h1>
-      <p class="muted">Manage the learning paths featured on the homepage (Bala, Yuva, Sadhaka, Jnana).</p>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Section Management</h1>
+      <p class="muted">Check 1, 2, or any age groups below to publish and synchronize the same content across multiple sections instantly.</p>
     </div>
   </div>
 
+  <!-- Telemetry Bar -->
+  <div class="telemetry">
+    <div class="tele-card">
+      <div class="tele-icon">👶</div>
+      <div>
+        <div class="tele-val" id="cntBala">0</div>
+        <div class="tele-lbl">Bala Gurukulam (5–12)</div>
+      </div>
+    </div>
+    <div class="tele-card">
+      <div class="tele-icon">🏹</div>
+      <div>
+        <div class="tele-val" id="cntYuva">0</div>
+        <div class="tele-lbl">Yuva Gurukulam (13–25)</div>
+      </div>
+    </div>
+    <div class="tele-card">
+      <div class="tele-icon">🕉️</div>
+      <div>
+        <div class="tele-val" id="cntSadhaka">0</div>
+        <div class="tele-lbl">Sadhaka Gurukulam (26–55)</div>
+      </div>
+    </div>
+    <div class="tele-card">
+      <div class="tele-icon">🪷</div>
+      <div>
+        <div class="tele-val" id="cntJnana">0</div>
+        <div class="tele-lbl">Jnana Gurukulam (56+)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Panel: Add Content to Multiple Age Groups via Checklist -->
   <div class="panel">
-    <h2 id="formTitle">Add / Edit Age Group Path</h2>
-    <form class="form" id="pathForm">
-      <input type="hidden" name="pathEditId" id="pathEditId">
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Path Title</label>
-        <input name="title" id="pTitle" placeholder="e.g. Bala Gurukulam" required>
+    <h2 id="contentFormTitle">➕ Add / Edit Content for Age Group Sections</h2>
+    
+    <form id="ageContentForm">
+      <input type="hidden" id="editContentId" name="editId">
+
+      <!-- The Age Group Checklist -->
+      <div class="age-check-wrapper">
+        <div class="age-check-hdr">
+          <span style="font-size:1rem;font-weight:700;color:var(--maroon)">
+            ☑️ Target Age Groups Checklist (Select 1, 2, or Any):
+          </span>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn ghost sm" id="btnSelectAll">✓ Select All (All Ages)</button>
+            <button type="button" class="btn ghost sm" id="btnClearAll">✕ Clear All</button>
+          </div>
+        </div>
+        <p class="muted" style="font-size:.82rem;margin-bottom:8px">
+          💡 <b>Select 1 or 2 or any:</b> Whatever boxes you check, this same lesson/course will automatically appear in all of those selected age group sections!
+        </p>
+
+        <div class="age-check-grid">
+          <label class="age-box" id="card-bala">
+            <input type="checkbox" name="targetAges" value="bala" class="age-cb" checked>
+            <div class="age-box-body">
+              <div class="age-box-title">👶 Bala Gurukulam</div>
+              <div class="age-box-range">Ages 5 – 12</div>
+              <div class="age-box-sub">సంస్కారం • సంప్రదాయం</div>
+            </div>
+          </label>
+
+          <label class="age-box" id="card-yuva">
+            <input type="checkbox" name="targetAges" value="yuva" class="age-cb">
+            <div class="age-box-body">
+              <div class="age-box-title">🏹 Yuva Gurukulam</div>
+              <div class="age-box-range">Ages 13 – 25</div>
+              <div class="age-box-sub">జ్ఞానం • నాయకత్వం</div>
+            </div>
+          </label>
+
+          <label class="age-box" id="card-sadhaka">
+            <input type="checkbox" name="targetAges" value="sadhaka" class="age-cb">
+            <div class="age-box-body">
+              <div class="age-box-title">🕉️ Sadhaka Gurukulam</div>
+              <div class="age-box-range">Ages 26 – 55</div>
+              <div class="age-box-sub">ఆధ్యాత్మికం • కుటుంబం</div>
+            </div>
+          </label>
+
+          <label class="age-box" id="card-jnana">
+            <input type="checkbox" name="targetAges" value="jnana" class="age-cb">
+            <div class="age-box-body">
+              <div class="age-box-title">🪷 Jnana Gurukulam</div>
+              <div class="age-box-range">Ages 56+</div>
+              <div class="age-box-sub">భక్తి • ఆత్మజ్ఞానం</div>
+            </div>
+          </label>
+        </div>
       </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Age Range</label>
-        <input name="ageRange" id="pAge" placeholder="e.g. Ages 5 – 12" required>
-      </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Display Order (1 - 4)</label>
-        <input name="order" id="pOrder" type="number" min="1" max="10" placeholder="1" value="1">
-      </div>
-      <div style="grid-column:1/-1">
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Telugu Tagline / Subtitle (Use newlines for breaks)</label>
-        <textarea name="subTe" id="pSubTe" rows="2" placeholder="e.g. సంస్కారం • సంప్రదాయం&#10;సంతోషంగా"></textarea>
-      </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Artwork / Image Path</label>
-        <input name="imageUrl" id="pImg" placeholder="e.g. images/Bala%20Gurukulam.png" required>
-      </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Link</label>
-        <input name="link" id="pLink" placeholder="e.g. courses.html?path=bala">
-      </div>
-      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px">
-        <button class="btn" id="pSubmitBtn" style="flex:1">Save Learning Path</button>
-        <button type="button" class="btn ghost" id="pCancelBtn" style="display:none">Cancel Edit</button>
+
+      <!-- Content Meta Form -->
+      <div class="form">
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Content / Course Title</label>
+          <input name="title" id="cTitle" placeholder="e.g. Sanskrit Shlokas &amp; Ramayana Moral Stories" required>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Content Access Type</label>
+          <select name="type" id="cType">
+            <option value="free">Free for All Sadhakas</option>
+            <option value="paid">Paid Sacred Course</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Number of Lessons / Modules</label>
+          <input name="lessons" id="cLessons" type="number" min="1" value="10" required>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Cover Image URL / Path</label>
+          <input name="imageUrl" id="cImg" placeholder="e.g. images/Bala%20Gurukulam.png or https://...">
+        </div>
+        <div style="grid-column:1/-1">
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">YouTube Video URL (optional - auto-extracts preview thumbnail &amp; custom video stream)</label>
+          <input name="videoUrl" id="cVideo" placeholder="e.g. https://www.youtube.com/watch?v=...">
+          <div id="ytPreview" style="display:none;margin-top:8px;background:#fff8ea;padding:8px 12px;border-radius:10px;border:1px solid var(--line);align-items:center;gap:12px">
+            <img id="ytThumb" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Thumb">
+            <span style="font-size:.8rem;color:var(--muted)">YouTube Video detected. Plays in custom Gurukulam player with full timeline scrub.</span>
+          </div>
+        </div>
+        <div style="grid-column:1/-1">
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Overview &amp; Study Matter Description</label>
+          <textarea name="desc" id="cDesc" rows="3" placeholder="Enter lesson overview, significance, and study guidance for sadhakas..."></textarea>
+        </div>
+        
+        <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:6px">
+          <button class="btn" id="btnSubmitContent" style="flex:1">➕ Publish Content to Selected Age Group Sections</button>
+          <button type="button" class="btn ghost" id="btnCancelEdit" style="display:none">Cancel Edit</button>
+        </div>
       </div>
     </form>
   </div>
 
+  <!-- Content Browser & Interactive In-card Checklist Section -->
   <div class="panel">
-    <h2>Current Homepage Learning Paths</h2>
-    <div id="pathList"><p class="muted">Loading paths…</p></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <h2>📚 Content by Age Group Section</h2>
+      <span class="muted" style="font-size:.82rem">Use checkboxes on any card below to toggle sections with a single click.</span>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-filter="all">All Content (<span id="fAll">0</span>)</button>
+      <button class="filter-btn" data-filter="bala">👶 Bala Gurukulam (<span id="fBala">0</span>)</button>
+      <button class="filter-btn" data-filter="yuva">🏹 Yuva Gurukulam (<span id="fYuva">0</span>)</button>
+      <button class="filter-btn" data-filter="sadhaka">🕉️ Sadhaka Gurukulam (<span id="fSadhaka">0</span>)</button>
+      <button class="filter-btn" data-filter="jnana">🪷 Jnana Gurukulam (<span id="fJnana">0</span>)</button>
+    </div>
+
+    <div id="contentList">
+      <p class="muted">Loading content items…</p>
+    </div>
   </div>
+
+  <!-- Collapsible Panel: Homepage Learning Paths Customizer -->
+  <div class="panel" style="background:#faf5ea">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" id="togglePathsPanel">
+      <div>
+        <h2 style="margin-bottom:2px">🎨 Homepage Learning Path Cards Setup</h2>
+        <p class="muted">Customize the 4 prominent gateway cards shown on the homepage (Title, Age Bracket, Telugu Tagline, and Artwork).</p>
+      </div>
+      <button class="btn ghost sm" type="button" id="btnTogglePaths">Expand / Collapse ▾</button>
+    </div>
+
+    <div id="pathsPanelBody" style="display:none;margin-top:18px;border-top:1px solid var(--line);padding-top:18px">
+      <form class="form" id="pathForm">
+        <input type="hidden" name="pathEditId" id="pathEditId">
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Path Title</label>
+          <input name="title" id="pTitle" placeholder="e.g. Bala Gurukulam" required>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Age Range</label>
+          <input name="ageRange" id="pAge" placeholder="e.g. Ages 5 – 12" required>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Display Order (1 - 4)</label>
+          <input name="order" id="pOrder" type="number" min="1" max="10" placeholder="1" value="1">
+        </div>
+        <div style="grid-column:1/-1">
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Telugu Tagline / Subtitle (Use newlines for breaks)</label>
+          <textarea name="subTe" id="pSubTe" rows="2" placeholder="e.g. సంస్కారం • సంప్రదాయం&#10;సంతోషంగా"></textarea>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Artwork / Image Path</label>
+          <input name="imageUrl" id="pImg" placeholder="e.g. images/Bala%20Gurukulam.png" required>
+        </div>
+        <div>
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Link</label>
+          <input name="link" id="pLink" placeholder="e.g. courses.html?path=bala">
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px">
+          <button class="btn" id="pSubmitBtn" style="flex:1">Save Homepage Path</button>
+          <button type="button" class="btn ghost" id="pCancelBtn" style="display:none">Cancel Edit</button>
+        </div>
+      </form>
+
+      <h3 style="font-size:1.3rem;color:var(--maroon);margin:20px 0 10px">Current Homepage Gateway Paths</h3>
+      <div id="pathList"><p class="muted">Loading paths…</p></div>
+    </div>
+  </div>
+
 </div>
 
+<!-- Floating Toast -->
+<div id="toast">✅ Action completed</div>
+
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, set, remove, list, DEFAULT_PATHS } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_PATHS, DEFAULT_COURSES } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
+const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 $("out").onclick = adminLogout;
 
+let windowCourses = [];
 let windowPaths = [];
+let activeFilter = "all";
 
+const showToast = msg => {
+  const t = $("toast");
+  t.textContent = msg;
+  t.style.display = "inline-flex";
+  setTimeout(() => { t.style.display = "none"; }, 3000);
+};
+
+// Authentication guard
 requireAdmin((u, p) => {
   $("wrap").hidden = false;
-  load();
+  setupCheckboxes();
+  loadAll();
 });
 
-async function load() {
+// Setup visual checkbox click feedback
+function setupCheckboxes() {
+  document.querySelectorAll(".age-cb").forEach(cb => {
+    const parent = cb.closest(".age-box");
+    if (cb.checked) parent?.classList.add("checked");
+    cb.addEventListener("change", () => {
+      if (cb.checked) {
+        parent?.classList.add("checked");
+      } else {
+        parent?.classList.remove("checked");
+      }
+    });
+  });
+}
+
+// Select All & Clear All checklist buttons
+$("btnSelectAll").onclick = () => {
+  document.querySelectorAll(".age-cb").forEach(cb => {
+    cb.checked = true;
+    cb.closest(".age-box")?.classList.add("checked");
+  });
+};
+
+$("btnClearAll").onclick = () => {
+  document.querySelectorAll(".age-cb").forEach(cb => {
+    cb.checked = false;
+    cb.closest(".age-box")?.classList.remove("checked");
+  });
+};
+
+// YouTube URL auto preview in content form
+$("cVideo").addEventListener("input", e => {
+  const val = e.target.value.trim();
+  const yt = parseYouTube(val);
+  if (yt) {
+    $("ytThumb").src = yt.thumbnailUrl;
+    $("ytPreview").style.display = "flex";
+    if (!$("cImg").value) {
+      $("cImg").value = yt.thumbnailUrl;
+    }
+  } else {
+    $("ytPreview").style.display = "none";
+  }
+});
+
+// Toggle paths collapsible
+$("togglePathsPanel").onclick = (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
+  const b = $("pathsPanelBody");
+  b.style.display = b.style.display === "none" ? "block" : "none";
+};
+$("btnTogglePaths").onclick = () => {
+  const b = $("pathsPanelBody");
+  b.style.display = b.style.display === "none" ? "block" : "none";
+};
+
+// Filter tabs
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.filter || "all";
+    renderContentList();
+  };
+});
+
+// Load everything from Firebase
+async function loadAll() {
   try {
-    const ps = await list("learningPaths");
+    const [cs, ps] = await Promise.all([
+      list("courses"),
+      list("learningPaths")
+    ]);
+    windowCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
     windowPaths = (ps && ps.length) ? ps : [...DEFAULT_PATHS];
     windowPaths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
 
-    $("pathList").innerHTML = windowPaths.map(p => `
-      <div class="row">
-        <span style="display:flex;align-items:center;gap:14px">
-          ${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line)" alt="Pic" onerror="this.style.display='none'">` : ''}
-          <span>
-            <b>${esc(p.title)}</b> 
-            <span class="tag">${esc(p.ageRange || "")}</span>
-            <span class="tag">Slot #${p.order || 1}</span>
-            <br><span class="muted">${esc((p.subTe || "").replace(/\n/g, " • "))} · Target: ${esc(p.link || "")}</span>
-          </span>
-        </span>
-        <span style="display:flex;gap:8px">
-          <button class="btn ghost sm" data-editpath="${p.id}">Edit</button>
-          <button class="btn sm" data-del="learningPaths/${p.id}">Delete</button>
-        </span>
-      </div>
-    `).join("") || '<p class="muted">No learning paths configured.</p>';
+    updateTelemetry();
+    renderContentList();
+    renderPathsList();
   } catch (err) {
     console.error("Age groups load error:", err);
   }
 }
 
-$("pathForm").onsubmit = async e => {
+// Compute counts for telemetry and filter pills
+function getAgesArray(course) {
+  if (Array.isArray(course.ageGroups) && course.ageGroups.length) {
+    return course.ageGroups;
+  }
+  if (course.ageGroup) {
+    if (course.ageGroup === "all") return ["bala", "yuva", "sadhaka", "jnana"];
+    return course.ageGroup.split(",").map(s => s.trim());
+  }
+  return ["bala", "yuva", "sadhaka", "jnana"];
+}
+
+function updateTelemetry() {
+  let cBala = 0, cYuva = 0, cSadhaka = 0, cJnana = 0;
+  windowCourses.forEach(c => {
+    const ages = getAgesArray(c);
+    if (ages.includes("bala")) cBala++;
+    if (ages.includes("yuva")) cYuva++;
+    if (ages.includes("sadhaka")) cSadhaka++;
+    if (ages.includes("jnana")) cJnana++;
+  });
+
+  $("cntBala").textContent = cBala;
+  $("cntYuva").textContent = cYuva;
+  $("cntSadhaka").textContent = cSadhaka;
+  $("cntJnana").textContent = cJnana;
+
+  $("fAll").textContent = windowCourses.length;
+  $("fBala").textContent = cBala;
+  $("fYuva").textContent = cYuva;
+  $("fSadhaka").textContent = cSadhaka;
+  $("fJnana").textContent = cJnana;
+}
+
+// Render content items with in-card checklist controls
+function renderContentList() {
+  let filtered = windowCourses.filter(c => {
+    if (activeFilter === "all") return true;
+    const ages = getAgesArray(c);
+    return ages.includes(activeFilter);
+  });
+
+  if (!filtered.length) {
+    $("contentList").innerHTML = `
+      <div style="text-align:center;padding:36px;border:1.5px dashed var(--line);border-radius:14px;background:#fff8ee;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:6px">📭</div>
+        <b>No content found in this age group section.</b>
+        <p style="font-size:.84rem;margin-top:4px">Use the form above to add lessons and check this section in the checklist!</p>
+      </div>
+    `;
+    return;
+  }
+
+  $("contentList").innerHTML = filtered.map(c => {
+    const ages = getAgesArray(c);
+    const hasBala = ages.includes("bala");
+    const hasYuva = ages.includes("yuva");
+    const hasSadhaka = ages.includes("sadhaka");
+    const hasJnana = ages.includes("jnana");
+
+    const img = c.imageUrl || (c.videoUrl ? parseYouTube(c.videoUrl)?.thumbnailUrl : "images/Bala%20Gurukulam.png");
+
+    return `
+      <div class="row" style="background:#fff;padding:16px;border-radius:14px;border:1px solid var(--line);margin-bottom:12px;box-shadow:0 2px 8px rgba(122,46,22,.05)">
+        <div style="display:flex;align-items:flex-start;gap:14px;flex:1;min-width:280px">
+          ${img ? `<img src="${esc(img)}" style="width:68px;height:68px;border-radius:12px;object-fit:cover;border:1px solid var(--line);flex-shrink:0" alt="Cover" onerror="this.src='images/bhagavth gita.png'">` : ''}
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <b style="font-size:1.15rem;color:var(--maroon)">${esc(c.title)}</b>
+              <span class="tag ${c.type === 'free' ? '' : 'admin'}">${c.type === 'free' ? 'Free' : 'Paid'}</span>
+              <span class="muted" style="font-size:.78rem">· ${c.lessons || 10} lessons</span>
+            </div>
+            
+            <p class="muted" style="margin:5px 0 10px;font-size:.85rem;line-height:1.4">${esc(c.desc || "No description provided.")}</p>
+
+            <!-- In-Card Checklist for Instant Section Assignment -->
+            <div style="background:#fcf8f0;padding:8px 12px;border-radius:10px;border:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="font-size:.78rem;font-weight:700;color:var(--maroon)">Assigned Sections:</span>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="bala" ${hasBala ? 'checked' : ''} style="width:auto"> 👶 Bala
+              </label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="yuva" ${hasYuva ? 'checked' : ''} style="width:auto"> 🏹 Yuva
+              </label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="sadhaka" ${hasSadhaka ? 'checked' : ''} style="width:auto"> 🕉️ Sadhaka
+              </label>
+              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="jnana" ${hasJnana ? 'checked' : ''} style="width:auto"> 🪷 Jnana
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn ghost sm" data-editcontent="${c.id}">Edit Details</button>
+          <button class="btn sm" data-delcontent="${c.id}">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Attach change listener to in-card checklist checkboxes
+  document.querySelectorAll(".in-card-cb").forEach(cb => {
+    cb.onchange = async () => {
+      const courseId = cb.dataset.id;
+      const card = cb.closest(".row");
+      const checkedVals = Array.from(card.querySelectorAll(".in-card-cb:checked")).map(x => x.dataset.val);
+      
+      const newAges = checkedVals.length ? checkedVals : ["bala", "yuva", "sadhaka", "jnana"];
+      
+      try {
+        await update(ref(db, "courses/" + courseId), {
+          ageGroups: newAges,
+          ageGroup: newAges.join(",")
+        });
+        
+        // Update local object
+        const item = windowCourses.find(x => x.id === courseId);
+        if (item) {
+          item.ageGroups = newAges;
+          item.ageGroup = newAges.join(",");
+        }
+        
+        updateTelemetry();
+        showToast("✓ Updated sections for: " + (item?.title || "course"));
+      } catch (err) {
+        console.error("In-card checklist update failed:", err);
+      }
+    };
+  });
+}
+
+// Render homepage gateway paths (Bala, Yuva, Sadhaka, Jnana)
+function renderPathsList() {
+  $("pathList").innerHTML = windowPaths.map(p => `
+    <div class="row">
+      <span style="display:flex;align-items:center;gap:14px">
+        ${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line)" alt="Pic" onerror="this.style.display='none'">` : ''}
+        <span>
+          <b>${esc(p.title)}</b> 
+          <span class="tag">${esc(p.ageRange || "")}</span>
+          <span class="tag">Order Slot #${p.order || 1}</span>
+          <br><span class="muted">${esc((p.subTe || "").replace(/\n/g, " • "))} · Target: ${esc(p.link || "")}</span>
+        </span>
+      </span>
+      <span style="display:flex;gap:8px">
+        <button class="btn ghost sm" data-editpath="${p.id}">Edit Path</button>
+        <button class="btn sm" data-delpath="${p.id}">Delete</button>
+      </span>
+    </div>
+  `).join("") || '<p class="muted">No homepage paths configured.</p>';
+}
+
+// Age Content Form Submission
+$("ageContentForm").onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
-  const editId = f.pathEditId || f.title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const pathData = {
-    id: editId,
-    title: f.title,
-    ageRange: f.ageRange,
-    subTe: f.subTe || "",
-    imageUrl: f.imageUrl,
-    order: parseInt(f.order, 10) || 1,
-    link: f.link || (`courses.html?path=${editId}`)
+  const editId = f.editId;
+
+  // Read checklist
+  const checkedBoxes = Array.from(document.querySelectorAll('input[name="targetAges"]:checked')).map(cb => cb.value);
+  if (!checkedBoxes.length) {
+    alert("Please check at least one age group section in the checklist.");
+    return;
+  }
+
+  const courseData = {
+    title: f.title.trim(),
+    desc: (f.desc || "").trim(),
+    type: f.type || "free",
+    lessons: parseInt(f.lessons, 10) || 10,
+    imageUrl: (f.imageUrl || "").trim(),
+    ageGroups: checkedBoxes,
+    ageGroup: checkedBoxes.join(","),
+    published: true,
+    updatedAt: Date.now()
   };
-  await set(ref(db, "learningPaths/" + editId), pathData);
-  e.target.reset();
-  $("pathEditId").value = "";
-  $("formTitle").textContent = "Add / Edit Age Group Path";
-  $("pSubmitBtn").textContent = "Save Learning Path";
-  $("pCancelBtn").style.display = "none";
-  await load();
+
+  const videoUrl = (f.videoUrl || "").trim();
+  if (videoUrl) {
+    courseData.videoUrl = videoUrl;
+    const yt = parseYouTube(videoUrl);
+    if (yt && !courseData.imageUrl) {
+      courseData.imageUrl = yt.thumbnailUrl;
+    }
+  }
+
+  if (editId) {
+    await update(ref(db, "courses/" + editId), courseData);
+    showToast("✓ Content updated across selected sections!");
+  } else {
+    courseData.createdAt = Date.now();
+    await push(ref(db, "courses"), courseData);
+    showToast("✓ New content added across selected sections!");
+  }
+
+  resetContentForm();
+  await loadAll();
 };
 
-$("pCancelBtn").onclick = () => {
-  $("pathForm").reset();
-  $("pathEditId").value = "";
-  $("formTitle").textContent = "Add / Edit Age Group Path";
-  $("pSubmitBtn").textContent = "Save Learning Path";
-  $("pCancelBtn").style.display = "none";
-};
+function resetContentForm() {
+  $("ageContentForm").reset();
+  $("editContentId").value = "";
+  $("contentFormTitle").textContent = "➕ Add / Edit Content for Age Group Sections";
+  $("btnSubmitContent").textContent = "➕ Publish Content to Selected Age Group Sections";
+  $("btnCancelEdit").style.display = "none";
+  $("ytPreview").style.display = "none";
+  // Reset checklist to Bala checked
+  document.querySelectorAll(".age-cb").forEach(cb => {
+    cb.checked = (cb.value === "bala");
+    if (cb.checked) cb.closest(".age-box")?.classList.add("checked");
+    else cb.closest(".age-box")?.classList.remove("checked");
+  });
+}
+$("btnCancelEdit").onclick = resetContentForm;
 
+// Handle Edit / Delete Content
 document.addEventListener("click", async e => {
   const b = e.target.closest("button");
   const d = b?.dataset;
   if (!d) return;
 
+  // Edit Content
+  if (d.editcontent) {
+    const course = windowCourses.find(x => x.id === d.editcontent);
+    if (course) {
+      $("editContentId").value = course.id;
+      $("cTitle").value = course.title || "";
+      $("cDesc").value = course.desc || "";
+      $("cType").value = course.type || "free";
+      $("cLessons").value = course.lessons || 10;
+      $("cImg").value = course.imageUrl || "";
+      $("cVideo").value = course.videoUrl || "";
+
+      if (course.videoUrl) {
+        const yt = parseYouTube(course.videoUrl);
+        if (yt) {
+          $("ytThumb").src = yt.thumbnailUrl;
+          $("ytPreview").style.display = "flex";
+        }
+      }
+
+      // Pre-check the checklist
+      const ages = getAgesArray(course);
+      document.querySelectorAll(".age-cb").forEach(cb => {
+        cb.checked = ages.includes(cb.value);
+        if (cb.checked) cb.closest(".age-box")?.classList.add("checked");
+        else cb.closest(".age-box")?.classList.remove("checked");
+      });
+
+      $("contentFormTitle").textContent = `Editing: ${course.title}`;
+      $("btnSubmitContent").textContent = "Update Content Across Selected Sections";
+      $("btnCancelEdit").style.display = "inline-flex";
+      $("ageContentForm").scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  // Delete Content
+  if (d.delcontent) {
+    if (!confirm("Are you sure you want to permanently delete this content?")) return;
+    await remove(ref(db, "courses/" + d.delcontent));
+    showToast("Content removed.");
+    await loadAll();
+  }
+
+  // Edit Homepage Path
   if (d.editpath) {
     const p = windowPaths.find(x => x.id === d.editpath);
     if (p) {
+      $("pathsPanelBody").style.display = "block";
       $("pathEditId").value = p.id;
       $("pTitle").value = p.title || "";
       $("pAge").value = p.ageRange || "";
@@ -201,17 +731,50 @@ document.addEventListener("click", async e => {
       $("pImg").value = p.imageUrl || "";
       $("pOrder").value = p.order || 1;
       $("pLink").value = p.link || "";
-      $("formTitle").textContent = `Editing: ${p.title}`;
-      $("pSubmitBtn").textContent = "Update Learning Path";
+      $("pSubmitBtn").textContent = "Update Homepage Path";
       $("pCancelBtn").style.display = "inline-flex";
       $("pathForm").scrollIntoView({ behavior: "smooth" });
     }
-  } else if (d.del) {
-    if (!confirm("Are you sure you want to permanently delete this learning path?")) return;
-    await remove(ref(db, d.del));
-    await load();
+  }
+
+  // Delete Homepage Path
+  if (d.delpath) {
+    if (!confirm("Are you sure you want to permanently delete this gateway path?")) return;
+    await remove(ref(db, "learningPaths/" + d.delpath));
+    showToast("Homepage path removed.");
+    await loadAll();
   }
 });
+
+// Homepage Path Form Submission
+$("pathForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const editId = f.pathEditId || f.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const pathData = {
+    id: editId,
+    title: f.title.trim(),
+    ageRange: f.ageRange.trim(),
+    subTe: f.subTe || "",
+    imageUrl: f.imageUrl.trim(),
+    order: parseInt(f.order, 10) || 1,
+    link: f.link || (`courses.html?path=${editId}`)
+  };
+  await set(ref(db, "learningPaths/" + editId), pathData);
+  $("pathForm").reset();
+  $("pathEditId").value = "";
+  $("pSubmitBtn").textContent = "Save Homepage Path";
+  $("pCancelBtn").style.display = "none";
+  showToast("✓ Homepage path saved!");
+  await loadAll();
+};
+
+$("pCancelBtn").onclick = () => {
+  $("pathForm").reset();
+  $("pathEditId").value = "";
+  $("pSubmitBtn").textContent = "Save Homepage Path";
+  $("pCancelBtn").style.display = "none";
+};
 </script>
 </body>
 </html>
