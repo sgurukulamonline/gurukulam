@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications & Broadcast Alerts – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:9px 18px;border-radius:12px;
+  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;text-align:center;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.sm{padding:5px 12px;font-size:.8rem}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top a:hover{color:var(--gold)}
+
+.wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
+.panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
+.row:last-child{border-bottom:0}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
+.muted{color:var(--muted);font-size:.85rem}
+.tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
+.back-nav:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="admin.html">Sanathana Gurukulam · Admin</a></b>
+  <span>
+    <a href="admin.html">← Dashboard Hub</a>
+    <a href="admin-age-groups.html">Age Groups</a>
+    <a href="admin-courses.html">Courses</a>
+    <a href="admin-live.html">Live</a>
+    <a href="admin-community.html">Community</a>
+    <button class="btn gold sm" id="out">Logout</button>
+  </span>
+</div>
+
+<div class="wrap" id="wrap" hidden>
+  <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">🔔 Notifications &amp; Broadcast Alerts</h1>
+      <p class="muted">Send real-time alerts, announcements, and holy reminders across all student devices and portals.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>📢 Broadcast New Notification to All Sadhakas</h2>
+    <p class="muted" style="margin-bottom:14px">Notifications sent here appear immediately on the homepage bell badge and learner dashboards.</p>
+    <form class="form" id="nForm">
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Notification Title</label>
+        <input name="title" id="nTitle" placeholder="e.g. Special Chanting Satsang Tonight at 7 PM" required>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Notification Category</label>
+        <select name="type" id="nType">
+          <option value="announcement">📢 General Announcement</option>
+          <option value="live">🎥 Live Class Alert</option>
+          <option value="course">📖 Course &amp; Study Update</option>
+          <option value="wisdom">🕉️ Divine Wisdom &amp; Blessing</option>
+          <option value="festival">🛕 Festival &amp; Temple News</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Action Link (optional)</label>
+        <input name="link" id="nLink" placeholder="e.g. live.html or course.html?id=bhagavad-gita">
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Message Details for Sadhakas</label>
+        <textarea name="message" id="nMsg" rows="3" placeholder="Enter notification message here..." required></textarea>
+      </div>
+      <button class="btn" style="grid-column:1/-1;margin-top:6px" id="nSubmitBtn">Broadcast Notification Now</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Active Broadcast Notifications</h2>
+    <div id="nList"><p class="muted">Loading notifications…</p></div>
+  </div>
+</div>
+
+<script type="module">
+import { db, requireAdmin, adminLogout, esc, ref, push, remove, list } from "./firebase-init.js";
+
+const $ = id => document.getElementById(id);
+const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+$("out").onclick = adminLogout;
+
+requireAdmin((u, p) => {
+  $("wrap").hidden = false;
+  load();
+});
+
+async function load() {
+  try {
+    const ns = await list("notifications");
+    $("nList").innerHTML = (ns || []).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).map(n => `
+      <div class="row">
+        <span>
+          <span style="font-size:1.3rem;margin-right:6px">${esc(n.icon || "📢")}</span>
+          <b>${esc(n.title)}</b> 
+          <span class="tag">${esc(n.type || "announcement")}</span>
+          <br><span style="font-size:.88rem;color:var(--brown)">${esc(n.message)}</span>
+          ${n.link ? `<br><a href="${esc(n.link)}" target="_blank" style="color:var(--gold);font-size:.78rem;text-decoration:underline">Action Link: ${esc(n.link)}</a>` : ""}
+          <br><span class="muted">🕒 ${n.createdAt ? when(n.createdAt) : "Recently"}</span>
+        </span>
+        <button class="btn sm" data-del="notifications/${esc(n.id)}">Delete</button>
+      </div>
+    `).join("") || '<p class="muted">No notifications sent yet. Use the form above to broadcast one.</p>';
+  } catch (err) {
+    console.error("Notifications load error:", err);
+  }
+}
+
+$("nForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const title = (f.title || "").trim();
+  const message = (f.message || "").trim();
+  const type = f.type || "announcement";
+  const link = (f.link || "").trim();
+  if (!title || !message) return;
+
+  let icon = "📢";
+  if (type === "live") icon = "🎥";
+  if (type === "course") icon = "📖";
+  if (type === "wisdom") icon = "🕉️";
+  if (type === "festival") icon = "🛕";
+
+  await push(ref(db, "notifications"), {
+    title,
+    message,
+    type,
+    icon,
+    link,
+    createdAt: Date.now()
+  });
+  e.target.reset();
+  await load();
+};
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button");
+  const d = b?.dataset;
+  if (!d) return;
+
+  if (d.del) {
+    if (!confirm("Are you sure you want to permanently delete this broadcast notification?")) return;
+    await remove(ref(db, d.del));
+    await load();
+  }
+});
+</script>
+</body>
+</html>
