@@ -87,7 +87,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .avatar-circle{
   width:96px;height:96px;border-radius:50%;background:#FFF8EA;
   border:3px solid var(--gold);display:grid;place-items:center;
-  font-size:3.2rem;box-shadow:0 6px 16px rgba(122,46,22,.15);user-select:none;
+  font-size:3.2rem;box-shadow:0 6px 16px rgba(122,46,22,.15);user-select:none;overflow:hidden;
 }
 .avatar-badge{
   position:absolute;bottom:0;right:0;width:30px;height:30px;border-radius:50%;
@@ -260,17 +260,17 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
         <div class="sub-title" id="pSubTitle">Sadhaka · Sanathana Gurukulam Online</div>
         
         <div class="badges-row">
-          <span class="badge-pill">
-            <span>📱</span> <b id="pPhone">Pending</b> <span class="check" id="pPhoneBadge">✓</span>
+          <span class="badge-pill" id="pillPhone" style="display:none">
+            <span>📱</span> <b id="pPhone"></b> <span class="check" id="pPhoneBadge">✓</span>
           </span>
-          <span class="badge-pill">
-            <span>📧</span> <b id="pEmail">Pending</b> <span class="check">✓</span>
+          <span class="badge-pill" id="pillEmail" style="display:none">
+            <span>📧</span> <b id="pEmail"></b> <span class="check" id="pEmailBadge">✓</span>
           </span>
-          <span class="badge-pill">
+          <span class="badge-pill" id="pillUid">
             <span>🆔</span> <span id="pUid">SG-LEARNER</span>
           </span>
-          <span class="badge-pill">
-            <span>📅</span> <span id="pJoined">Oct 2026</span>
+          <span class="badge-pill" id="pillJoined" style="display:none">
+            <span>📅</span> <span id="pJoined"></span>
           </span>
         </div>
 
@@ -389,11 +389,11 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
       </div>
       <div>
         <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Phone Number</label>
-        <input type="text" id="epPhone" placeholder="+91 98765 43210">
+        <input type="text" id="epPhone" placeholder="e.g. +91 9876543210 (Optional)">
       </div>
       <div>
         <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Email Address</label>
-        <input type="email" id="epEmail" placeholder="yourname@gurukulam.org">
+        <input type="email" id="epEmail" placeholder="e.g. yourname@example.com (Optional)">
       </div>
       <div>
         <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Sacred Sankalpa (Spiritual Intention)</label>
@@ -490,15 +490,23 @@ requireUser(async (u, p) => {
 
 function renderProfile() {
   const name = userProfile.name || me.displayName || "Sadhaka";
-  const email = userProfile.email || me.email || "learner@gurukulam.org";
-  const phone = userProfile.phone || me.phoneNumber || "+91 98765 43210";
+  const rawEmail = (userProfile.email || me.email || "").trim();
+  const rawPhone = (userProfile.phone || me.phoneNumber || "").trim();
+  const photo = userProfile.photo || me.photoURL || "";
   const role = userProfile.role || me.role || "learner";
   const emblem = userProfile.avatar || me.avatar || "🕉️";
   const sankalpa = userProfile.sankalpa || "“अथातो ब्रह्मजिज्ञासा — Living in alignment with Dharma, daily Gita adhyayana, and Samskrita swadhyaya.”";
-  const joinedDate = userProfile.createdAt ? new Date(userProfile.createdAt).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : "Oct 2026";
+  const joinedDate = userProfile.createdAt ? new Date(userProfile.createdAt).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : "";
 
   selectedEmblem = emblem;
-  $("pAvatar").textContent = emblem;
+
+  // Render Avatar (Google profile photo if available, or sacred emblem)
+  if (photo) {
+    $("pAvatar").innerHTML = `<img src="${esc(photo)}" alt="${esc(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer">`;
+  } else {
+    $("pAvatar").textContent = emblem;
+  }
+
   $("pName").textContent = name;
   $("userRole").textContent = role === "admin" ? "Acharya (Admin)" : "Sadhaka (Learner)";
   if (role === "admin") {
@@ -507,27 +515,51 @@ function renderProfile() {
   }
   $("pSubTitle").textContent = (role === "admin" ? "Acharya · Spiritual Guide" : "Sadhaka · Vedic Learner") + " · Sanathana Gurukulam";
   
-  $("pPhone").textContent = phone;
-  $("pEmail").textContent = email;
+  // Phone display: show ONLY if real verified/entered phone exists and is not fake fallback
+  const isFakePhone = !rawPhone || rawPhone === "+91 98765 43210" || rawPhone.toLowerCase() === "pending";
+  if (!isFakePhone) {
+    $("pPhone").textContent = rawPhone;
+    $("pillPhone").style.display = "inline-flex";
+    if (me.authProvider === "msg91_otp" || (me.uid && me.uid.startsWith("ph_"))) {
+      $("pPhoneBadge").textContent = "✓ MSG91 Verified";
+      $("pPhoneBadge").className = "tag verified";
+    } else {
+      $("pPhoneBadge").textContent = "✓";
+      $("pPhoneBadge").className = "check";
+    }
+  } else {
+    $("pillPhone").style.display = "none";
+  }
+
+  // Email display: show ONLY if real email exists and is not fake fallback
+  const isFakeEmail = !rawEmail || (rawEmail.endsWith("@gurukulam.org") && !rawEmail.startsWith("admin")) || rawEmail === "learner@gurukulam.org" || rawEmail.toLowerCase() === "pending";
+  if (!isFakeEmail) {
+    $("pEmail").textContent = rawEmail;
+    $("pillEmail").style.display = "inline-flex";
+    if ($("pEmailBadge")) $("pEmailBadge").textContent = "✓ Verified";
+  } else {
+    $("pillEmail").style.display = "none";
+  }
   
   // Format clean ID
   const cleanUid = (me.uid || "").replace(/^u_|^g_|^ph_/, "").slice(0, 8).toUpperCase();
   $("pUid").textContent = "SG-" + (cleanUid || "SADHAKA");
-  $("pJoined").textContent = "Joined " + joinedDate;
+
+  // Joined Date
+  if (joinedDate) {
+    $("pJoined").textContent = "Joined " + joinedDate;
+    $("pillJoined").style.display = "inline-flex";
+  } else {
+    $("pillJoined").style.display = "none";
+  }
   
   // Sankalpa
   $("pSankalpa").textContent = sankalpa;
 
-  // Set Phone Badge text based on provider
-  if (me.authProvider === "msg91_otp" || (me.uid && me.uid.startsWith("ph_"))) {
-    $("pPhoneBadge").textContent = "✓ MSG91 Verified";
-    $("pPhoneBadge").className = "tag verified";
-  }
-
   // Pre-fill Edit Modal Inputs
   $("epName").value = name;
-  $("epPhone").value = phone;
-  $("epEmail").value = email;
+  $("epPhone").value = isFakePhone ? "" : rawPhone;
+  $("epEmail").value = isFakeEmail ? "" : rawEmail;
   $("epSankalpa").value = sankalpa;
   updateEmblemSelector();
 }

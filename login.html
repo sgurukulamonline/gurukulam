@@ -96,61 +96,17 @@ input,textarea{font:inherit;padding:12px 14px;border:1px solid var(--line);borde
         <span>📱</span> Login with Mobile OTP
       </button>
 
-      <!-- Google Sign In -->
-      <button class="btn ghost full" id="btnGoogle" type="button" style="display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;background:#fff;border-color:rgba(122,46,22,.25);color:var(--brown)">
+      <div class="or-divider">OR</div>
+
+      <!-- Google Sign In via Firebase -->
+      <button class="btn ghost full" id="btnGoogle" type="button" style="display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;background:#fff;border-color:rgba(122,46,22,.25);color:var(--brown);padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
         <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.86c2.26-2.09 3.685-5.17 3.685-9.09z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.28v3.09C3.26 21.3 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.28C.46 8.24 0 10.06 0 12s.46 3.76 1.28 5.38l3.99-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.7 1.28 6.62l3.99 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
         Sign in with Google
-      </button>
-
-      <div class="or-divider">OR CONTINUE WITH NAME</div>
-
-      <!-- Custom Name Form -->
-      <form id="customNameForm" style="display:grid;gap:8px">
-        <input type="text" id="custName" placeholder="Enter your full name..." required>
-        <button class="btn full">Enter Gurukulam</button>
-      </form>
-
-      <div class="or-divider">GUEST LEARNER ACCESS</div>
-
-      <!-- 1-Click Learner Login -->
-      <button class="btn ghost sm full" id="btnQuickLearner">
-        <span>🚀</span> Continue as Guest Learner (1-Click Demo)
       </button>
     </div>
   </div>
 
   <div id="msg"></div>
-</div>
-
-<!-- Google Account Sign-In Modal -->
-<div id="googleModal" style="display:none;position:fixed;inset:0;background:rgba(74,31,14,0.55);backdrop-filter:blur(4px);z-index:999;align-items:center;justify-content:center">
-  <div style="background:var(--card);max-width:390px;width:92%;border-radius:22px;padding:26px 22px;border:1px solid var(--line);box-shadow:var(--shadow);position:relative;text-align:center">
-    <button id="closeGoogleModal" type="button" style="position:absolute;top:14px;right:16px;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;border:0">✕</button>
-    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
-      <svg width="26" height="26" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.86c2.26-2.09 3.685-5.17 3.685-9.09z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.28v3.09C3.26 21.3 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.28C.46 8.24 0 10.06 0 12s.46 3.76 1.28 5.38l3.99-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.7 1.28 6.62l3.99 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-      <h2 style="font-size:1.5rem;color:var(--brown)">Sign in with Google</h2>
-    </div>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Connect your Google Account to Gurukulam:</p>
-
-    <!-- 1-Click Quick Google Option -->
-    <button type="button" class="btn sm ghost full" id="btnQuickGoogle" style="background:#fff;border-color:rgba(122,46,22,.25);font-size:.85rem;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">
-      <span>⚡</span> 1-Click Google Account (Arjun Sharma)
-    </button>
-
-    <div class="or-divider" style="margin:10px 0 14px">OR ENTER YOUR GOOGLE DETAILS</div>
-
-    <form id="googleForm" style="display:grid;gap:12px;text-align:left">
-      <div>
-        <label style="font-size:.82rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Your Full Name</label>
-        <input type="text" id="gName" placeholder="e.g. Arjun Sharma" required>
-      </div>
-      <div>
-        <label style="font-size:.82rem;font-weight:600;display:block;margin-bottom:4px;color:var(--brown)">Google Email Address</label>
-        <input type="email" id="gEmail" placeholder="yourname@gmail.com" required>
-      </div>
-      <button class="btn gold full" type="submit" style="margin-top:6px;font-weight:600">Complete Google Sign In</button>
-    </form>
-  </div>
 </div>
 
 <!-- MSG91 Secure OTP Widget Integration -->
@@ -207,9 +163,9 @@ window.handleOtpSuccess = async (data) => {
 
   const cleanDigits = String(verifiedPhone).replace(/\D/g, "");
   const uid = cleanDigits ? ("ph_" + cleanDigits) : ("ph_" + Date.now().toString(36));
-  const displayName = cleanDigits ? ("Sadhaka (" + cleanDigits.slice(-4) + ")") : "Verified Sadhaka";
-  const formattedPhone = cleanDigits ? ("+91 " + cleanDigits.slice(-10)) : (verifiedPhone || "Verified Mobile");
-  const email = verifiedEmail || (cleanDigits ? (cleanDigits + "@gurukulam.org") : "learner@gurukulam.org");
+  const displayName = cleanDigits ? ("Sadhaka (" + cleanDigits.slice(-4) + ")") : "Sadhaka";
+  const formattedPhone = cleanDigits ? ("+91 " + cleanDigits.slice(-10)) : (verifiedPhone || "");
+  const email = verifiedEmail || "";
 
   const userObj = {
     uid,
@@ -300,117 +256,54 @@ onAuthStateChanged(auth, async u => {
   }
 });
 
-// Quick Learner Login
-$("btnQuickLearner").onclick = () => {
-  setMockUser({
-    uid: "learner-1",
-    displayName: "Sadhaka Arjun",
-    email: "arjun@gurukulam.org",
-    role: "learner"
-  });
-  showMsg("Namaste! Redirecting...", false);
-  setTimeout(() => location.href = redirect, 500);
-};
 
-// Quick Custom Name
-$("customNameForm").onsubmit = e => {
-  e.preventDefault();
-  const name = $("custName").value.trim();
-  if (!name) return;
-  const uid = "u_" + Date.now().toString(36);
-  setMockUser({
-    uid,
-    displayName: name,
-    email: name.toLowerCase().replace(/\s+/g, ".") + "@gurukulam.org",
-    role: "learner"
-  });
-  showMsg("Namaste " + name + "! Redirecting...", false);
-  setTimeout(() => location.href = redirect, 500);
-};
 
-// Google Sign-In
+// Google Sign-In with Firebase
 $("btnGoogle").onclick = async () => {
-  const savedCfg = localStorage.getItem("sg_firebase_config");
-  if (savedCfg && typeof signInWithPopup === "function") {
-    try {
-      const res = await signInWithPopup(auth, new GoogleAuthProvider());
-      if (res && res.user) {
-        showMsg("Welcome " + (res.user.displayName || "Sadhaka") + "! Redirecting...", false);
-        setTimeout(() => location.href = redirect, 600);
-        return;
+  const btn = $("btnGoogle");
+  const origHtml = btn.innerHTML;
+  try {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> Connecting to Google...';
+    showMsg("Opening Google Sign-In...", false);
+
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const res = await signInWithPopup(auth, provider);
+    if (res && res.user) {
+      const u = res.user;
+      showMsg("Namaste " + (u.displayName || "Sadhaka") + "! Signed in with Google. Redirecting...", false);
+      try {
+        await ensureProfile(u);
+      } catch (e) {
+        console.warn("ensureProfile warning:", e);
       }
-    } catch (err) {
-      console.warn("Live Google popup error, opening Google account form:", err);
+      setTimeout(() => location.href = redirect, 500);
+    }
+  } catch (err) {
+    console.error("Google sign-in error:", err);
+    btn.disabled = false;
+    btn.innerHTML = origHtml;
+    if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
+      showMsg("Google sign-in was closed or cancelled.", true);
+    } else if (err.code === "auth/unauthorized-domain") {
+      showMsg("This domain is not authorized in Firebase Console yet. Please add this domain under Authentication > Settings > Authorized domains in Firebase Console.", true);
+    } else {
+      showMsg(err.message || "Failed to sign in with Google.", true);
     }
   }
-  // Open the Google Account modal so the student signs in with their real name and email
-  $("googleModal").style.display = "flex";
-  $("gName").focus();
 };
 
-$("closeGoogleModal").onclick = () => {
-  $("googleModal").style.display = "none";
-};
 
-$("googleModal").onclick = e => {
-  if (e.target === $("googleModal")) $("googleModal").style.display = "none";
-};
 
-// 1-Click Google Account Option
-$("btnQuickGoogle").onclick = async () => {
-  const userObj = {
-    uid: "g_arjun_demo",
-    displayName: "Arjun Sharma",
-    email: "arjun.sharma@gmail.com",
-    photoURL: "https://lh3.googleusercontent.com/a/default-user=s96-c",
-    role: "learner",
-    authProvider: "google"
-  };
-  setMockUser(userObj);
-  try {
-    await ensureProfile(userObj);
-  } catch (err) {
-    console.warn("ensureProfile fallback:", err);
-  }
-  $("googleModal").style.display = "none";
-  showMsg("Namaste Arjun Sharma! Signed in with Google. Redirecting...", false);
-  setTimeout(() => location.href = redirect, 500);
-};
 
-$("googleForm").onsubmit = async e => {
-  e.preventDefault();
-  const name = $("gName").value.trim();
-  const email = $("gEmail").value.trim().toLowerCase();
-  if (!name || !email) return;
-
-  const uid = "g_" + btoa(email).replace(/[^a-zA-Z0-9]/g, "").slice(0, 16);
-  const userObj = {
-    uid,
-    displayName: name,
-    email,
-    photoURL: "https://lh3.googleusercontent.com/a/default-user=s96-c",
-    role: "learner",
-    authProvider: "google"
-  };
-
-  setMockUser(userObj);
-  try {
-    await ensureProfile(userObj);
-  } catch (err) {
-    console.warn("ensureProfile fallback:", err);
-  }
-
-  $("googleModal").style.display = "none";
-  showMsg("Namaste " + name + "! Signed in with Google. Redirecting...", false);
-  setTimeout(() => location.href = redirect, 600);
-};
 
 // Switch account
 $("btnSwitch").onclick = async () => {
   await logout();
   $("alreadyIn").style.display = "none";
   $("loginForms").style.display = "block";
-  showMsg("Signed out. Select a sign-in method or Continue as Guest below.", false);
+  showMsg("Signed out. Select a sign-in method below.", false);
 };
 </script>
 </body>
