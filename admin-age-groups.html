@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Age Groups Management – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:9px 18px;border-radius:12px;
+  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;text-align:center;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.sm{padding:5px 12px;font-size:.8rem}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top a:hover{color:var(--gold)}
+
+.wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
+.panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
+.row:last-child{border-bottom:0}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
+.muted{color:var(--muted);font-size:.85rem}
+.tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
+.back-nav:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="admin.html">Sanathana Gurukulam · Admin</a></b>
+  <span>
+    <a href="admin.html">← Dashboard Hub</a>
+    <a href="admin-courses.html">Courses</a>
+    <a href="admin-live.html">Live</a>
+    <a href="admin-community.html">Community</a>
+    <button class="btn gold sm" id="out">Logout</button>
+  </span>
+</div>
+
+<div class="wrap" id="wrap" hidden>
+  <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Section</h1>
+      <p class="muted">Manage the learning paths featured on the homepage (Bala, Yuva, Sadhaka, Jnana).</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 id="formTitle">Add / Edit Age Group Path</h2>
+    <form class="form" id="pathForm">
+      <input type="hidden" name="pathEditId" id="pathEditId">
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Path Title</label>
+        <input name="title" id="pTitle" placeholder="e.g. Bala Gurukulam" required>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Age Range</label>
+        <input name="ageRange" id="pAge" placeholder="e.g. Ages 5 – 12" required>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Display Order (1 - 4)</label>
+        <input name="order" id="pOrder" type="number" min="1" max="10" placeholder="1" value="1">
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Telugu Tagline / Subtitle (Use newlines for breaks)</label>
+        <textarea name="subTe" id="pSubTe" rows="2" placeholder="e.g. సంస్కారం • సంప్రదాయం&#10;సంతోషంగా"></textarea>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Artwork / Image Path</label>
+        <input name="imageUrl" id="pImg" placeholder="e.g. images/Bala%20Gurukulam.png" required>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Link</label>
+        <input name="link" id="pLink" placeholder="e.g. courses.html?path=bala">
+      </div>
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px">
+        <button class="btn" id="pSubmitBtn" style="flex:1">Save Learning Path</button>
+        <button type="button" class="btn ghost" id="pCancelBtn" style="display:none">Cancel Edit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Current Homepage Learning Paths</h2>
+    <div id="pathList"><p class="muted">Loading paths…</p></div>
+  </div>
+</div>
+
+<script type="module">
+import { db, requireAdmin, adminLogout, esc, ref, get, set, remove, list, DEFAULT_PATHS } from "./firebase-init.js";
+
+const $ = id => document.getElementById(id);
+$("out").onclick = adminLogout;
+
+let windowPaths = [];
+
+requireAdmin((u, p) => {
+  $("wrap").hidden = false;
+  load();
+});
+
+async function load() {
+  try {
+    const ps = await list("learningPaths");
+    windowPaths = (ps && ps.length) ? ps : [...DEFAULT_PATHS];
+    windowPaths.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+
+    $("pathList").innerHTML = windowPaths.map(p => `
+      <div class="row">
+        <span style="display:flex;align-items:center;gap:14px">
+          ${p.imageUrl ? `<img src="${esc(p.imageUrl)}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--line)" alt="Pic" onerror="this.style.display='none'">` : ''}
+          <span>
+            <b>${esc(p.title)}</b> 
+            <span class="tag">${esc(p.ageRange || "")}</span>
+            <span class="tag">Slot #${p.order || 1}</span>
+            <br><span class="muted">${esc((p.subTe || "").replace(/\n/g, " • "))} · Target: ${esc(p.link || "")}</span>
+          </span>
+        </span>
+        <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-editpath="${p.id}">Edit</button>
+          <button class="btn sm" data-del="learningPaths/${p.id}">Delete</button>
+        </span>
+      </div>
+    `).join("") || '<p class="muted">No learning paths configured.</p>';
+  } catch (err) {
+    console.error("Age groups load error:", err);
+  }
+}
+
+$("pathForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const editId = f.pathEditId || f.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const pathData = {
+    id: editId,
+    title: f.title,
+    ageRange: f.ageRange,
+    subTe: f.subTe || "",
+    imageUrl: f.imageUrl,
+    order: parseInt(f.order, 10) || 1,
+    link: f.link || (`courses.html?path=${editId}`)
+  };
+  await set(ref(db, "learningPaths/" + editId), pathData);
+  e.target.reset();
+  $("pathEditId").value = "";
+  $("formTitle").textContent = "Add / Edit Age Group Path";
+  $("pSubmitBtn").textContent = "Save Learning Path";
+  $("pCancelBtn").style.display = "none";
+  await load();
+};
+
+$("pCancelBtn").onclick = () => {
+  $("pathForm").reset();
+  $("pathEditId").value = "";
+  $("formTitle").textContent = "Add / Edit Age Group Path";
+  $("pSubmitBtn").textContent = "Save Learning Path";
+  $("pCancelBtn").style.display = "none";
+};
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button");
+  const d = b?.dataset;
+  if (!d) return;
+
+  if (d.editpath) {
+    const p = windowPaths.find(x => x.id === d.editpath);
+    if (p) {
+      $("pathEditId").value = p.id;
+      $("pTitle").value = p.title || "";
+      $("pAge").value = p.ageRange || "";
+      $("pSubTe").value = p.subTe || "";
+      $("pImg").value = p.imageUrl || "";
+      $("pOrder").value = p.order || 1;
+      $("pLink").value = p.link || "";
+      $("formTitle").textContent = `Editing: ${p.title}`;
+      $("pSubmitBtn").textContent = "Update Learning Path";
+      $("pCancelBtn").style.display = "inline-flex";
+      $("pathForm").scrollIntoView({ behavior: "smooth" });
+    }
+  } else if (d.del) {
+    if (!confirm("Are you sure you want to permanently delete this learning path?")) return;
+    await remove(ref(db, d.del));
+    await load();
+  }
+});
+</script>
+</body>
+</html>

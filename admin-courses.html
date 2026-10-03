@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Courses Curriculum & Content Builder – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0}
+input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:9px 18px;border-radius:12px;
+  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;text-align:center;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.sm{padding:5px 12px;font-size:.8rem}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top a:hover{color:var(--gold)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
+.panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
+.row:last-child{border-bottom:0}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
+.muted{color:var(--muted);font-size:.85rem}
+.tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.tag.published{background:#dcfce7;color:#166534}
+.tag.draft{background:#fee2e2;color:#991b1b}
+.back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
+.back-nav:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <b><a href="admin.html">Sanathana Gurukulam · Admin</a></b>
+  <span>
+    <a href="admin.html">← Dashboard Hub</a>
+    <a href="admin-age-groups.html">Age Groups</a>
+    <a href="admin-live.html">Live</a>
+    <a href="admin-community.html">Community</a>
+    <button class="btn gold sm" id="out">Logout</button>
+  </span>
+</div>
+
+<div class="wrap" id="wrap" hidden>
+  <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+    <div>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">📖 Courses Curriculum &amp; Content Builder</h1>
+      <p class="muted">Add courses, arrange content blocks (video, photos, matter) in any order, set release times, and pin top courses.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 id="formHeader">Add / Edit Course</h2>
+    <form class="form" id="cForm">
+      <input type="hidden" name="editId" id="cEditId">
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Course Title</label>
+        <input name="title" id="cTitle" placeholder="e.g. Bhagavad Gita Deep Study" required>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Course Type</label>
+        <select name="type" id="cType">
+          <option value="free">Free Course</option>
+          <option value="paid">Paid Course</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Target Age Group</label>
+        <select name="ageGroup" id="cAgeGroup">
+          <option value="all">Target: All Ages / General</option>
+          <option value="bala">Bala Gurukulam (Ages 5–12)</option>
+          <option value="yuva">Yuva Gurukulam (Ages 13–25)</option>
+          <option value="sadhaka">Sadhaka Gurukulam (Ages 26–55)</option>
+          <option value="jnana">Jnana Gurukulam (Ages 56+)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Release Date &amp; Time (optional)</label>
+        <input name="releaseTime" id="cReleaseTime" type="datetime-local">
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#fcf5e5;padding:8px 12px;border-radius:12px;border:1px solid var(--line)">
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--maroon);cursor:pointer">
+          <input type="checkbox" name="pinned" id="cPinned" value="1" style="width:auto;cursor:pointer">
+          Pin to Home (Top 3)
+        </label>
+        <select name="pinOrder" id="cPinOrder" style="padding:4px 8px;font-size:.8rem;width:auto" title="Pin Order">
+          <option value="1">Pin Slot 1</option>
+          <option value="2">Pin Slot 2</option>
+          <option value="3">Pin Slot 3</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Number of Lessons</label>
+        <input name="lessons" id="cLessons" type="number" min="1" placeholder="10" required value="10">
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Cover Image URL / Path</label>
+        <input name="imageUrl" id="cImage" placeholder="e.g. images/bhagavth gita.png">
+      </div>
+      <div>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Publication Status</label>
+        <select name="published" id="cPublished">
+          <option value="1">Published</option>
+          <option value="0">Draft</option>
+        </select>
+      </div>
+      <div style="grid-column:1/-1">
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Brief Course Description / Overview</label>
+        <textarea name="desc" id="cDesc" rows="2" placeholder="Brief summary of the course..."></textarea>
+      </div>
+
+      <!-- Dynamic Course Content Sequence Builder -->
+      <div style="grid-column:1/-1;margin-top:10px;border-top:1px solid var(--line);padding-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+          <div>
+            <b style="font-size:1.05rem;color:var(--maroon)">Course Content Sequence (Videos, Photos &amp; Matter)</b>
+            <p class="muted">Add and arrange sections in any order. The student will see them sequentially in the course player.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn sm gold" id="btnAddVideo">+ 🎥 Add Video</button>
+            <button type="button" class="btn sm gold" id="btnAddPhoto">+ 🖼️ Add Photo</button>
+            <button type="button" class="btn sm gold" id="btnAddMatter">+ 📝 Add Matter</button>
+          </div>
+        </div>
+        <div id="cSectionsList" style="display:grid;gap:10px"></div>
+      </div>
+
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:8px">
+        <button class="btn" id="cSubmitBtn" style="flex:1">Add New Course</button>
+        <button type="button" class="btn ghost" id="cCancelBtn" style="display:none">Cancel Edit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>All Gurukulam Courses</h2>
+    <div id="cList"><p class="muted">Loading courses…</p></div>
+  </div>
+</div>
+
+<script type="module">
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
+
+const $ = id => document.getElementById(id);
+const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+$("out").onclick = adminLogout;
+
+let currentSections = [];
+window._adminCourses = [];
+
+requireAdmin((u, p) => {
+  $("wrap").hidden = false;
+  renderSectionsBuilder();
+  load();
+});
+
+function renderSectionsBuilder() {
+  const container = $("cSectionsList");
+  if (!container) return;
+
+  if (!currentSections.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:16px;border:1.5px dashed var(--line);border-radius:12px;background:#faf6ee;color:var(--muted);font-size:.85rem">
+        No content blocks added yet. Click <b>+ 🎥 Add Video</b>, <b>+ 🖼️ Add Photo</b>, or <b>+ 📝 Add Matter</b> to sequence this course!
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = currentSections.map((sec, idx) => {
+    const isFirst = idx === 0;
+    const isLast = idx === currentSections.length - 1;
+    let typeBadge = "";
+    let contentInputs = "";
+
+    if (sec.type === "video") {
+      typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🎥 Video Block #${idx + 1}</span>`;
+      const yt = parseYouTube(sec.url);
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Video Title (e.g. Chapter 2 Discourse)" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <input type="text" placeholder="YouTube Video URL (e.g. https://www.youtube.com/watch?v=...)" value="${esc(sec.url || "")}" oninput="window.updateSecVideoUrl(${idx}, this.value)">
+          ${yt ? `
+            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
+              <img src="${yt.thumbnailUrl}" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Preview">
+              <span style="font-size:.78rem;color:var(--muted)">YouTube ID: <b>${yt.videoId}</b> · Plays in custom Gurukulam player (no YouTube branding)</span>
+            </div>
+          ` : '<small class="muted">Paste any YouTube URL or Shorts link — our custom player will play it without YouTube branding.</small>'}
+        </div>
+      `;
+    } else if (sec.type === "photo" || sec.type === "image") {
+      typeBadge = `<span style="background:#e0f2fe;color:#0369a1;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🖼️ Photo Block #${idx + 1}</span>`;
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Photo Title or Heading" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <input type="text" placeholder="Image URL (e.g. images/bhagavth gita.png or https://...)" value="${esc(sec.url || "")}" oninput="window.updateSecField(${idx}, 'url', this.value)">
+          <input type="text" placeholder="Photo Caption / Description" value="${esc(sec.caption || "")}" onchange="window.updateSecField(${idx}, 'caption', this.value)">
+          ${sec.url ? `
+            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
+              <img src="${esc(sec.url)}" style="width:72px;height:48px;object-fit:cover;border-radius:6px" alt="Photo" onerror="this.style.display='none'">
+              <span style="font-size:.78rem;color:var(--muted)">Photo preview loaded</span>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">📝 Matter / Text Block #${idx + 1}</span>`;
+      contentInputs = `
+        <div style="display:grid;gap:8px;margin-top:8px">
+          <input type="text" placeholder="Section Heading / Title" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
+          <textarea rows="3" placeholder="Enter spiritual matter, shloka, Telugu meaning, or study guide text here..." style="font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;width:100%" onchange="window.updateSecField(${idx}, 'text', this.value)">${esc(sec.text || "")}</textarea>
+        </div>
+      `;
+    }
+
+    return `
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          ${typeBadge}
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, -1)" ${isFirst ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Up">⬆️</button>
+            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, 1)" ${isLast ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Down">⬇️</button>
+            <button type="button" class="btn sm" style="background:#fee2e2;color:#991b1b" onclick="window.removeSection(${idx})" title="Delete">🗑️</button>
+          </div>
+        </div>
+        ${contentInputs}
+      </div>
+    `;
+  }).join("");
+}
+
+window.updateSecField = (idx, field, val) => {
+  if (currentSections[idx]) {
+    currentSections[idx][field] = val;
+  }
+};
+
+window.updateSecVideoUrl = (idx, val) => {
+  if (currentSections[idx]) {
+    currentSections[idx].url = val;
+    const yt = parseYouTube(val);
+    if (yt) {
+      currentSections[idx].thumbnail = yt.thumbnailUrl;
+      currentSections[idx].videoId = yt.videoId;
+    }
+    renderSectionsBuilder();
+  }
+};
+
+window.moveSection = (idx, dir) => {
+  const target = idx + dir;
+  if (target < 0 || target >= currentSections.length) return;
+  const temp = currentSections[idx];
+  currentSections[idx] = currentSections[target];
+  currentSections[target] = temp;
+  renderSectionsBuilder();
+};
+
+window.removeSection = idx => {
+  currentSections.splice(idx, 1);
+  renderSectionsBuilder();
+};
+
+window.addSection = type => {
+  currentSections.push({
+    id: "sec_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+    type,
+    title: "",
+    url: "",
+    caption: "",
+    text: "",
+    thumbnail: ""
+  });
+  renderSectionsBuilder();
+};
+
+$("btnAddVideo")?.addEventListener("click", () => window.addSection("video"));
+$("btnAddPhoto")?.addEventListener("click", () => window.addSection("photo"));
+$("btnAddMatter")?.addEventListener("click", () => window.addSection("matter"));
+
+async function load() {
+  try {
+    const cs = await list("courses");
+    window._adminCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
+
+    $("cList").innerHTML = window._adminCourses.map(c => {
+      const isPinned = c.pinned === true || c.pinned === "true";
+      const pinBadge = isPinned ? `<span class="tag" style="background:#fef08a;color:#854d0e;font-weight:700">📌 Pinned #${c.pinOrder || 1}</span>` : "";
+      const secCount = Array.isArray(c.sections) ? c.sections.length : (c.videoUrl ? 1 : 0);
+      const relTime = c.releaseTime ? ` · Release: ${when(c.releaseTime)}` : "";
+      return `
+        <div class="row">
+          <span>
+            <b>${esc(c.title)}</b> 
+            <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
+            <span class="tag">${esc(c.type || 'free')}</span>
+            ${pinBadge}
+            <span class="tag">${esc(c.ageGroup || 'all')}</span>
+            <br><span class="muted">${c.lessons || 0} lessons · ${secCount} content blocks${relTime}</span>
+          </span>
+          <span style="display:flex;gap:8px">
+            <button class="btn ghost sm" data-edit="${c.id}">Edit</button>
+            <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
+              ${c.published !== false ? "Unpublish" : "Publish"}
+            </button>
+            <button class="btn sm" data-del="courses/${c.id}">Delete</button>
+          </span>
+        </div>
+      `;
+    }).join("") || '<p class="muted">No courses yet. Add one above!</p>';
+  } catch (err) {
+    console.error("Courses load error:", err);
+  }
+}
+
+const resetCourseForm = () => {
+  $("cForm").reset();
+  $("cEditId").value = "";
+  $("cPinned").checked = false;
+  $("cReleaseTime").value = "";
+  currentSections = [];
+  renderSectionsBuilder();
+  $("formHeader").textContent = "Add / Edit Course";
+  $("cSubmitBtn").textContent = "Add New Course";
+  $("cCancelBtn").style.display = "none";
+};
+
+$("cCancelBtn").onclick = resetCourseForm;
+
+$("cForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const editId = f.editId;
+  const courseData = {
+    title: f.title,
+    desc: f.desc || "",
+    type: f.type || "free",
+    ageGroup: f.ageGroup || "all",
+    releaseTime: f.releaseTime ? new Date(f.releaseTime).getTime() : 0,
+    pinned: Boolean(f.pinned === "1" || f.pinned === "on" || f.pinned === true),
+    pinOrder: parseInt(f.pinOrder, 10) || 1,
+    lessons: parseInt(f.lessons, 10) || 10,
+    imageUrl: f.imageUrl || "",
+    published: f.published === "1",
+    sections: currentSections
+  };
+
+  const firstVideo = currentSections.find(s => s.type === "video");
+  if (firstVideo && firstVideo.url) {
+    courseData.videoUrl = firstVideo.url;
+  }
+
+  if (editId) {
+    await update(ref(db, "courses/" + editId), courseData);
+  } else {
+    courseData.createdAt = Date.now();
+    await push(ref(db, "courses"), courseData);
+  }
+  resetCourseForm();
+  await load();
+};
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button");
+  const d = b?.dataset;
+  if (!d) return;
+
+  if (d.edit) {
+    const course = (window._adminCourses || []).find(x => x.id === d.edit);
+    if (course) {
+      $("cEditId").value = course.id;
+      $("cTitle").value = course.title || "";
+      $("cDesc").value = course.desc || "";
+      $("cType").value = course.type || "free";
+      $("cAgeGroup").value = course.ageGroup || "all";
+      if (course.releaseTime) {
+        const dt = new Date(course.releaseTime);
+        const pad = n => String(n).padStart(2, '0');
+        $("cReleaseTime").value = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+      } else {
+        $("cReleaseTime").value = "";
+      }
+      $("cPinned").checked = Boolean(course.pinned === true || course.pinned === "true");
+      $("cPinOrder").value = String(course.pinOrder || 1);
+      $("cLessons").value = course.lessons || 10;
+      $("cImage").value = course.imageUrl || "";
+      $("cPublished").value = course.published !== false ? "1" : "0";
+
+      if (Array.isArray(course.sections) && course.sections.length) {
+        currentSections = JSON.parse(JSON.stringify(course.sections));
+      } else {
+        currentSections = [];
+        if (course.videoUrl) {
+          currentSections.push({
+            id: "sec_init_v",
+            type: "video",
+            title: "Introduction Lecture",
+            url: course.videoUrl
+          });
+        }
+        if (course.desc) {
+          currentSections.push({
+            id: "sec_init_m",
+            type: "matter",
+            title: "Course Overview & Notes",
+            text: course.desc
+          });
+        }
+      }
+      renderSectionsBuilder();
+
+      $("formHeader").textContent = `Editing: ${course.title}`;
+      $("cSubmitBtn").textContent = "Update Course";
+      $("cCancelBtn").style.display = "inline-flex";
+      $("cForm").scrollIntoView({ behavior: "smooth" });
+    }
+  } else if (d.pub) {
+    await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });
+    await load();
+  } else if (d.del) {
+    if (!confirm("Are you sure you want to permanently delete this course?")) return;
+    await remove(ref(db, d.del));
+    await load();
+  }
+});
+</script>
+</body>
+</html>
