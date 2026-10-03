@@ -95,9 +95,16 @@ details .cfg-box{margin-top:10px}
 
   <div id="loginForms">
     <div class="stack">
+      <!-- MSG91 Mobile OTP Login -->
+      <button class="btn gold full" id="btnMsg91Otp" type="button" style="font-size:1.02rem;padding:14px;box-shadow:0 6px 18px rgba(217,154,39,0.35);font-weight:700">
+        <span>📱</span> Login with Mobile OTP
+      </button>
+
+      <div class="or-divider">OR QUICK ACCESS</div>
+
       <!-- 1-Click Learner Login -->
-      <button class="btn gold full" id="btnQuickLearner">
-        <span>🚀</span> Continue as Learner (1-Click)
+      <button class="btn ghost full" id="btnQuickLearner">
+        <span>🚀</span> Continue as Learner (1-Click Demo)
       </button>
 
       <!-- Custom Name Form -->
@@ -106,7 +113,7 @@ details .cfg-box{margin-top:10px}
         <button class="btn full">Enter Gurukulam</button>
       </form>
 
-      <div class="or-divider">OR</div>
+      <div class="or-divider">MORE WAYS TO SIGN IN</div>
 
       <!-- Admin Login -->
       <button class="btn ghost full" id="btnQuickAdmin">
@@ -137,6 +144,23 @@ details .cfg-box{margin-top:10px}
   <div id="msg"></div>
 </div>
 
+<!-- MSG91 Secure OTP Widget Integration -->
+<script>
+window.MSG91_OTP_CONFIG = {
+  widgetId: "366a63635436303737343431",
+  tokenAuth: "577606TCx2hboqS6ac07bceP1",
+  success: (data) => {
+    console.log("MSG91 OTP Success:", data);
+    if (window.handleOtpSuccess) window.handleOtpSuccess(data);
+  },
+  failure: (error) => {
+    console.error("MSG91 OTP Error:", error);
+    if (window.handleOtpFailure) window.handleOtpFailure(error);
+  }
+};
+</script>
+<script async src="https://verify.msg91.com/otp-provider.js"></script>
+
 <script type="module">
 import { auth, onAuthStateChanged, logout, setMockUser, signInWithPopup, GoogleAuthProvider, ensureProfile } from "./firebase-init.js";
 
@@ -149,6 +173,108 @@ const showMsg = (txt, isErr) => {
   m.textContent = txt;
   m.className = isErr ? "err" : "succ";
 };
+
+// Expose MSG91 OTP handlers
+window.handleOtpSuccess = async (data) => {
+  let verifiedPhone = "";
+  let verifiedEmail = "";
+
+  if (typeof data === "string" && data.startsWith("eyJ")) {
+    try {
+      const base64Url = data.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(atob(base64).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+      const payload = JSON.parse(jsonPayload);
+      console.log("Verified JWT payload:", payload);
+      verifiedPhone = payload.mobile || payload.identifier || payload.mobileNumber || payload.sub || "";
+      verifiedEmail = payload.email || "";
+    } catch (e) {
+      console.warn("Could not decode JWT payload:", e);
+    }
+  } else if (typeof data === "object" && data !== null) {
+    verifiedPhone = data.mobile || data.identifier || data.phoneNumber || data.message || "";
+    verifiedEmail = data.email || "";
+  }
+
+  const cleanDigits = String(verifiedPhone).replace(/\D/g, "");
+  const uid = cleanDigits ? ("ph_" + cleanDigits) : ("ph_" + Date.now().toString(36));
+  const displayName = cleanDigits ? ("Sadhaka (" + cleanDigits.slice(-4) + ")") : "Verified Sadhaka";
+  const formattedPhone = cleanDigits ? ("+91 " + cleanDigits.slice(-10)) : (verifiedPhone || "Verified Mobile");
+  const email = verifiedEmail || (cleanDigits ? (cleanDigits + "@gurukulam.org") : "learner@gurukulam.org");
+
+  const userObj = {
+    uid,
+    displayName,
+    email,
+    phoneNumber: formattedPhone,
+    role: "learner",
+    authProvider: "msg91_otp"
+  };
+
+  setMockUser(userObj);
+
+  try {
+    await ensureProfile(userObj);
+  } catch (err) {
+    console.warn("ensureProfile fallback:", err);
+  }
+
+  showMsg("Namaste! Mobile OTP verified successfully. Redirecting to Gurukulam...", false);
+  const btn = $("btnMsg91Otp");
+  if (btn) btn.innerHTML = "<span>✅</span> Verified! Redirecting...";
+  setTimeout(() => location.href = redirect, 800);
+};
+
+window.handleOtpFailure = (error) => {
+  console.error("OTP Failure handler:", error);
+  const errMsg = (error && (error.message || error.description)) || "OTP verification was cancelled or failed. Please try again.";
+  showMsg(errMsg, true);
+  const btn = $("btnMsg91Otp");
+  if (btn) btn.innerHTML = "<span>📱</span> Login with Mobile OTP";
+};
+
+// Wire up the MSG91 Login Button
+const btnOtp = $("btnMsg91Otp");
+if (btnOtp) {
+  btnOtp.onclick = () => {
+    btnOtp.innerHTML = '<span>⏳</span> Opening Mobile OTP...';
+    showMsg("Opening secure mobile verification window...", false);
+
+    const triggerWidget = () => {
+      try {
+        if (typeof window.initSendOTP === "function") {
+          window.initSendOTP(window.MSG91_OTP_CONFIG);
+          setTimeout(() => {
+            btnOtp.innerHTML = '<span>📱</span> Login with Mobile OTP';
+          }, 1500);
+        } else {
+          throw new Error("OTP service is still loading, please click again in a moment.");
+        }
+      } catch (err) {
+        console.error(err);
+        showMsg(err.message || "Failed to launch OTP service", true);
+        btnOtp.innerHTML = '<span>📱</span> Login with Mobile OTP';
+      }
+    };
+
+    if (typeof window.initSendOTP === "function") {
+      triggerWidget();
+    } else {
+      let tries = 0;
+      const t = setInterval(() => {
+        tries++;
+        if (typeof window.initSendOTP === "function") {
+          clearInterval(t);
+          triggerWidget();
+        } else if (tries > 20) {
+          clearInterval(t);
+          showMsg("Could not connect to MSG91 OTP service. Please check your internet connection.", true);
+          btnOtp.innerHTML = '<span>📱</span> Login with Mobile OTP';
+        }
+      }, 200);
+    }
+  };
+}
 
 // Check if already signed in
 onAuthStateChanged(auth, async u => {
