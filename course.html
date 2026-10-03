@@ -70,6 +70,11 @@ button{font:inherit;cursor:pointer;border:0}
 .video{aspect-ratio:16/9;width:100%;border:0;border-radius:16px;margin-bottom:24px;box-shadow:var(--shadow)}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .muted{color:var(--muted);font-size:.85rem}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
+.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0}
+.bottom a span{display:block;font-size:1.3rem}
+.bottom a.on{color:var(--gold);font-weight:600}
+@media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
 </style>
 </head>
 <body>
@@ -77,6 +82,7 @@ button{font:inherit;cursor:pointer;border:0}
 <div class="top">
   <b><a href="index.html">Sanathana Gurukulam</a></b>
   <span>
+    <a href="index.html">Home</a>
     <a href="courses.html">Courses</a>
     <a href="live.html">Live</a>
     <a href="community.html">Community</a>
@@ -85,6 +91,7 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <div class="wrap">
+  <div style="margin-bottom:14px"><a href="courses.html" style="font-size:.9rem;color:var(--muted);font-weight:500">← Back to All Courses</a></div>
   <div id="box"><p class="muted" style="text-align:center;padding:40px">Loading course details…</p></div>
 </div>
 
@@ -235,5 +242,12 @@ box.addEventListener("change", async e => {
   await load();
 });
 </script>
+<nav class="bottom" aria-label="App">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a class="on" href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="dashboard.html"><span>👤</span>Dashboard</a>
+</nav>
 </body>
 </html>

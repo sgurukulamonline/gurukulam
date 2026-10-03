@@ -190,55 +190,62 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 .chip.on{background:var(--maroon);color:var(--cream)}
 .course .pic.ph{display:grid;place-items:center;font-size:3.4rem}
 .group{margin-top:26px}
+/* Modal & Toast */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;place-items:center;padding:16px;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:grid}
+.modal-body{background:var(--card);border-radius:20px;max-width:640px;width:100%;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,.5);position:relative;border:1px solid var(--line)}
+.modal-close{position:absolute;top:12px;right:14px;background:#fff;border-radius:50%;width:34px;height:34px;font-size:1.2rem;display:grid;place-items:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.2);border:0}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--brown);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#home" aria-label="Sanathana Gurukulam home">
+    <a class="logo" href="index.html" aria-label="Sanathana Gurukulam home">
       <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="14" r="9" fill="#D99A27"/><path d="M24 4c3 4 3 8 0 12-3-4-3-8 0-12z" fill="#7A2E16"/><path d="M4 22c8-3 14-1 20 4 6-5 12-7 20-4v18c-8-3-14-1-20 4-6-5-12-7-20-4z" fill="#7A2E16"/><path d="M24 26v18" stroke="#F7E8C8" stroke-width="2"/></svg>
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="#paths">Learn</a><a href="live.html">Live Classes</a><a href="courses.html">Courses</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
+      <a href="#paths">Learn</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
     </nav>
-    <label class="search"><span aria-hidden="true">🔍</span><input type="search" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
+    <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="homeSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
-    <a class="avatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
+    <a class="avatar" id="homeAvatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
   </div>
 </header>
 
 <main id="home">
   <div class="hero">
     <div class="wrap in">
-      <h1>Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
-      <p class="te">భారతీయ జీవిత విధానం తరతరాలకు…</p>
+      <h1 id="heroH1">Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
+      <p class="te" id="heroSub">భారతీయ జీవిత విధానం తరతరాలకు…</p>
       <div class="rule"></div>
-      <a class="cta" href="#courses">Explore Courses <span aria-hidden="true">→</span></a>
-      <a class="story" href="#"><i>▶</i>Watch Our Story</a>
+      <a class="cta" href="courses.html">Explore Courses <span aria-hidden="true">→</span></a>
+      <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
     </div>
   </div>
 
   <section id="paths"><div class="wrap">
-    <div class="sec-h"><div><h2>Choose Your Learning Path</h2><p>Select your age group to get a personalized experience</p></div></div>
+    <div class="sec-h"><div><h2 id="pathsH2">Choose Your Learning Path</h2><p id="pathsSub">Select your age group to get a personalized experience</p></div></div>
     <div class="paths">
-      <a class="path p1" href="#"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Bala Gurukulam" loading="lazy"></div><div class="body"><h3>Bala Gurukulam</h3><div class="age">Ages 5 – 12</div><p class="te">సంస్కారం • సంప్రదాయం<br>సంతోషంగా</p></div><span class="go">→</span></a>
-      <a class="path p2" href="#"><div class="pic"><img src="images/Yuva%20Gurukulam.png" alt="Yuva Gurukulam" loading="lazy"></div><div class="body"><h3>Yuva Gurukulam</h3><div class="age">Ages 13 – 25</div><p class="te">జ్ఞానం • నాయకత్వం<br>జీవిత నైపుణ్యాలు</p></div><span class="go">→</span></a>
-      <a class="path p3" href="#"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka Gurukulam" loading="lazy"></div><div class="body"><h3>Sadhaka Gurukulam</h3><div class="age">Ages 26 – 55</div><p class="te">ఆధ్యాత్మికం • కుటుంబం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
-      <a class="path p4" href="#"><div class="pic"><img src="images/Jnana%20Gurukulam.png" alt="Jnana Gurukulam" loading="lazy"></div><div class="body"><h3>Jnana Gurukulam</h3><div class="age">Ages 56+</div><p class="te">భక్తి • ఆధ్యాత్మిక జ్ఞానం<br>సహజమైన జీవితం</p></div><span class="go">→</span></a>
+      <a class="path p1" href="courses.html?path=bala"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Bala Gurukulam" loading="lazy"></div><div class="body"><h3>Bala Gurukulam</h3><div class="age">Ages 5 – 12</div><p class="te">సంస్కారం • సంప్రదాయం<br>సంతోషంగా</p></div><span class="go">→</span></a>
+      <a class="path p2" href="courses.html?path=yuva"><div class="pic"><img src="images/Yuva%20Gurukulam.png" alt="Yuva Gurukulam" loading="lazy"></div><div class="body"><h3>Yuva Gurukulam</h3><div class="age">Ages 13 – 25</div><p class="te">జ్ఞానం • నాయకత్వం<br>జీవిత నైపుణ్యాలు</p></div><span class="go">→</span></a>
+      <a class="path p3" href="courses.html?path=sadhaka"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka Gurukulam" loading="lazy"></div><div class="body"><h3>Sadhaka Gurukulam</h3><div class="age">Ages 26 – 55</div><p class="te">ఆధ్యాత్మికం • కుటుంబం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
+      <a class="path p4" href="courses.html?path=jnana"><div class="pic"><img src="images/Jnana%20Gurukulam.png" alt="Jnana Gurukulam" loading="lazy"></div><div class="body"><h3>Jnana Gurukulam</h3><div class="age">Ages 56+</div><p class="te">భక్తి • ఆధ్యాత్మిక జ్ఞానం<br>సహజమైన జీవితం</p></div><span class="go">→</span></a>
     </div>
   </div></section>
 
   <section id="live"><div class="wrap">
-    <div class="sec-h"><h2>Live Classes</h2><a href="#">View All →</a></div>
+    <div class="sec-h"><h2>Live Classes</h2><a href="live.html">View All →</a></div>
     <div class="live-grid">
       <div class="live-wrap">
         <div class="live-now">
           <span class="badge">● LIVE NOW</span>
           <h3>Bhagavad Gita<br>Chapter 2</h3>
           <small>Acharya Dr. Srinivas Sharma</small>
-          <div class="row"><small>👥 1.2K watching</small><button class="join">Join Class</button></div>
+          <div class="row"><small>👥 1.2K watching</small><button class="join" id="btnJoinLive">Join Class</button></div>
         </div>
         <div class="list">
           <div class="item"><div class="av">🧑‍🏫</div><div><b>Sanskrit Basics</b><small>Today, 6:00 PM</small><small>Acharya Veda Prakash</small></div></div>
@@ -247,52 +254,83 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
         </div>
       </div>
       <div class="wisdom">
-        <h3>🎁 Today's Wisdom <span class="date" id="today">29 Sep</span></h3>
-        <p class="sloka">कर्मण्येवाधिकारस्ते<br>मा फलेषु कदाचन ।</p>
-        <p class="te">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
-        <div class="acts"><button class="listen"><i>▶</i>Listen</button><button class="share">↗ Share</button></div>
+        <h3>🎁 Today's Wisdom <span class="date" id="today"></span></h3>
+        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फलेषु कदाचन ।</p>
+        <p class="te" id="shlokaMeaning">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
+        <div class="acts">
+          <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
+          <button class="share" id="btnShare">↗ Share</button>
+        </div>
       </div>
     </div>
   </div></section>
 
   <section id="courses"><div class="wrap">
     <div class="sec-h"><h2>Popular Courses</h2><a href="courses.html">View All →</a></div>
-    <div class="courses">
-      <a class="course" href="course.html?id=bhagavad-gita"><div class="pic"><img src="images/bhagavth%20gita.png" alt="Bhagavad Gita for Beginners" loading="lazy"></div><div class="body"><h3>Bhagavad Gita for Beginners</h3><div class="tags"><span class="tag free">Free</span><span class="lessons">12 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.2K)</div></div></a>
-      <a class="course" href="course.html?id=sanskrit-basics"><div class="pic"><img src="images/sanskrit%20basics.png" alt="Sanskrit Basics" loading="lazy"></div><div class="body"><h3>Sanskrit Basics</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">24 Lessons</span></div><div class="rate"><b>★</b> 4.7 (980)</div></div></a>
-      <a class="course" href="course.html?id=indian-history"><div class="pic"><img src="images/india%20history.png" alt="Indian History True Perspective" loading="lazy"></div><div class="body"><h3>Indian History True Perspective</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">28 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.5K)</div></div></a>
-      <a class="course" href="course.html?id=ramayanam"><div class="pic"><img src="images/ramayanam.png" alt="Ramayana Deep Study" loading="lazy"></div><div class="body"><h3>Ramayana Deep Study</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">32 Lessons</span></div><div class="rate"><b>★</b> 4.9 (2.1K)</div></div></a>
+    <div class="courses" id="popularCourses">
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:30px">Loading popular courses…</p>
     </div>
   </div></section>
 
-    <section id="quick"><div class="wrap">
+  <section id="quick"><div class="wrap">
     <div class="sec-h"><h2>Quick Access</h2></div>
-    <div class="quick"><a class="q" href="course.html?id=intro-vedas"><span>🕉️</span>Vedas</a><a class="q" href="course.html?id=bhagavad-gita"><span>📖</span>Bhagavad Gita</a><a class="q" href="course.html?id=sanskrit-basics"><span>🪷</span>Sanskrit</a><a class="q" href="course.html?id=yoga-daily"><span>🧘</span>Yoga</a><a class="q" href="courses.html"><span>☸️</span>Dharma</a><a class="q" href="course.html?id=ramayanam"><span>📜</span>Itihasas</a><a class="q" href="courses.html"><span>🎁</span>Free Content</a><a class="q" href="courses.html"><span>📚</span>Books Library</a><a class="q" href="courses.html"><span>🎧</span>Audio Library</a><a class="q" href="live.html"><span>📅</span>Events</a><a class="q" href="dashboard.html"><span>🏅</span>Certificates</a><a class="q" href="more.html"><span>⠿</span>More</a></div>
+    <div class="quick">
+      <a class="q" href="course.html?id=intro-vedas"><span>🕉️</span>Vedas</a>
+      <a class="q" href="course.html?id=bhagavad-gita"><span>📖</span>Bhagavad Gita</a>
+      <a class="q" href="course.html?id=sanskrit-basics"><span>🪷</span>Sanskrit</a>
+      <a class="q" href="course.html?id=yoga-daily"><span>🧘</span>Yoga</a>
+      <a class="q" href="courses.html"><span>☸️</span>Dharma</a>
+      <a class="q" href="course.html?id=ramayanam"><span>📜</span>Itihasas</a>
+      <a class="q" href="courses.html?filter=free"><span>🎁</span>Free Content</a>
+      <a class="q" href="courses.html"><span>📚</span>Books Library</a>
+      <a class="q" href="courses.html"><span>🎧</span>Audio Library</a>
+      <a class="q" href="live.html"><span>📅</span>Events</a>
+      <a class="q" href="dashboard.html"><span>🏅</span>Certificates</a>
+      <a class="q" href="more.html"><span>⠿</span>More</a>
+    </div>
   </div></section>
 
   <section id="community"><div class="wrap">
-    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in your Gurukulam circle</p></div><a href="#">Browse Circles →</a></div>
+    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in your Gurukulam circle</p></div><a href="community.html">Browse Circles →</a></div>
     <div class="community">
       <aside class="rooms" aria-label="Circles">
         <h3>Your Circles</h3>
-        <div class="room on"><span>🪔 Gita Study Circle</span><em>3</em></div>
-        <div class="room"><span>🪷 Sanskrit Learners</span><em>1</em></div>
-        <div class="room"><span>🧘 Daily Yoga</span></div>
-        <div class="room"><span>🛕 Temple Heritage</span></div>
-        <div class="room"><span>👨‍👩‍👧 Parents of Bala</span></div>
+        <div class="room on" data-r="gita"><span>🪔 Gita Study Circle</span><em>3</em></div>
+        <div class="room" data-r="sanskrit"><span>🪷 Sanskrit Learners</span><em>1</em></div>
+        <div class="room" data-r="yoga"><span>🧘 Daily Yoga</span></div>
+        <div class="room" data-r="temple"><span>🛕 Temple Heritage</span></div>
+        <div class="room" data-r="parents"><span>👨‍👩‍👧 Parents of Bala</span></div>
       </aside>
       <div class="chat">
-        <div class="chat-h"><div><b>Gita Study Circle</b><br><small>248 members • 32 online</small></div><span aria-hidden="true">🕉️</span></div>
-        <div class="msgs" id="msgs">
-          <div class="m"><small>Lakshmi Devi</small>Can someone explain Karma Yoga in simple words for my son?</div>
-          <div class="m"><small>Acharya Srinivas</small>Do your duty with full effort, and offer the result to the Divine. Join today's live class for examples. 🙏</div>
-          <div class="m me"><small>You</small>Thank you! I'll join at 6 PM.</div>
+        <div class="chat-h">
+          <div><b id="homeCircleTitle">Gita Study Circle</b><br><small id="homeCircleSub">248 members • 32 online</small></div>
+          <span aria-hidden="true">🕉️</span>
         </div>
-        <form class="compose" id="chatForm"><input id="chatIn" placeholder="Write a message…" aria-label="Message"><button>Send</button></form>
+        <div class="msgs" id="msgs"></div>
+        <form class="compose" id="chatForm">
+          <input id="chatIn" placeholder="Write a message in this circle…" aria-label="Message" required>
+          <button type="submit">Send</button>
+        </form>
       </div>
     </div>
   </div></section>
 </main>
+
+<!-- Story Modal -->
+<div class="modal-overlay" id="storyModal">
+  <div class="modal-body">
+    <button class="modal-close" id="closeStory" aria-label="Close modal">✕</button>
+    <div style="aspect-ratio:16/9;width:100%;background:#000">
+      <iframe id="storyVideo" width="100%" height="100%" src="https://www.youtube.com/embed/2b1z9CgH-Vw" title="Gurukulam Story" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div style="padding:18px 20px">
+      <h3 style="color:var(--maroon);font-size:1.4rem">Sanathana Gurukulam Mission</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:6px">Preserving and sharing sacred wisdom, Sanskrit studies, and timeless Dharma across all generations.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <footer>
   <h3>Sanathana Gurukulam</h3>
@@ -301,41 +339,215 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 </footer>
 
 <nav class="bottom" aria-label="App">
-  <a class="on" href="#home"><span>🏠</span>Home</a><a href="#paths"><span>📖</span>Learn</a>
-  <a href="live.html"><span>🎥</span>Live</a><a href="courses.html"><span>🎧</span>Library</a>
-  <a href="live.html"><span>📅</span>Events</a><a href="community.html"><span>👥</span>Community</a>
-  <a href="dashboard.html"><span>👤</span>Profile</a>
+  <a class="on" href="index.html"><span>🏠</span>Home</a>
+  <a href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="dashboard.html"><span>👤</span>Dashboard</a>
 </nav>
 
-<script>
-  // Today's date in the wisdom card
-  document.getElementById('today').textContent =
-    new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+<script type="module">
+import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc } from "./firebase-init.js";
 
-  // Language toggle (UI state only for now)
-  document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{
-    document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-  });
+// Today date
+document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
-  // Highlight bottom nav on tap
-  document.querySelectorAll('.bottom a').forEach(a=>a.addEventListener('click',()=>{
-    document.querySelectorAll('.bottom a').forEach(x=>x.classList.remove('on'));
-    a.classList.add('on');
-  }));
+// Load dynamic courses
+const popularEl = document.getElementById("popularCourses");
+if (popularEl) loadCourses(popularEl, 4);
 
-  // Demo chat
-  document.getElementById('chatForm').addEventListener('submit',e=>{
+// User auth avatar
+onAuthStateChanged(auth, u => {
+  const av = document.getElementById("homeAvatar");
+  if (av && u) {
+    av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
+    av.title = "Signed in as " + (u.displayName || u.email || "Learner");
+  }
+});
+
+// Search input redirect
+const searchIn = document.getElementById("homeSearch");
+searchIn?.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
     e.preventDefault();
-    const i=document.getElementById('chatIn'), t=i.value.trim();
-    if(!t) return;
-    const d=document.createElement('div');
-    d.className='m me';
-    d.innerHTML='<small>You</small>';
-    d.append(document.createTextNode(t));
-    const box=document.getElementById('msgs');
-    box.appendChild(d); box.scrollTop=box.scrollHeight; i.value='';
+    const q = searchIn.value.trim();
+    if (q) location.href = "courses.html?q=" + encodeURIComponent(q);
+  }
+});
+
+// Live class join button
+document.getElementById("btnJoinLive")?.addEventListener("click", () => {
+  window.open("https://meet.google.com/gurukulam-live", "_blank");
+});
+
+// Toast notification helper
+const showToast = msg => {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+};
+
+// Story modal
+const storyModal = document.getElementById("storyModal");
+document.getElementById("btnStory")?.addEventListener("click", () => {
+  storyModal.classList.add("open");
+});
+document.getElementById("closeStory")?.addEventListener("click", () => {
+  storyModal.classList.remove("open");
+});
+storyModal?.addEventListener("click", e => {
+  if (e.target === storyModal) storyModal.classList.remove("open");
+});
+
+// Shloka Listen / Speech Synthesis
+let isPlaying = false;
+const btnListen = document.getElementById("btnListen");
+btnListen?.addEventListener("click", () => {
+  if (!('speechSynthesis' in window)) {
+    showToast("Speech synthesis not supported on this browser.");
+    return;
+  }
+  if (isPlaying) {
+    window.speechSynthesis.cancel();
+    isPlaying = false;
+    btnListen.querySelector("span").textContent = "Listen";
+    btnListen.querySelector("i").textContent = "▶";
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const text = "कर्मण्येवाधिकारस्ते मा फలేషు कदाచన। You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.";
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.85;
+  utter.onend = () => {
+    isPlaying = false;
+    btnListen.querySelector("span").textContent = "Listen";
+    btnListen.querySelector("i").textContent = "▶";
+  };
+  utter.onerror = () => {
+    isPlaying = false;
+    btnListen.querySelector("span").textContent = "Listen";
+    btnListen.querySelector("i").textContent = "▶";
+  };
+  window.speechSynthesis.speak(utter);
+  isPlaying = true;
+  btnListen.querySelector("span").textContent = "Stop";
+  btnListen.querySelector("i").textContent = "⏹";
+});
+
+// Shloka Share
+document.getElementById("btnShare")?.addEventListener("click", async () => {
+  const shareText = "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\n- Bhagavad Gita, Chapter 2, Verse 47\nLearn at Sanathana Gurukulam: " + location.href;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Today's Wisdom – Sanathana Gurukulam", text: shareText, url: location.href });
+      return;
+    } catch (e) {}
+  }
+  try {
+    await navigator.clipboard.writeText(shareText);
+    showToast("✨ Shloka copied to clipboard!");
+  } catch (err) {
+    showToast("Unable to copy to clipboard.");
+  }
+});
+
+// Community circle selector on homepage
+const circleMeta = {
+  gita: { title: "Gita Study Circle", sub: "248 members • 32 online" },
+  sanskrit: { title: "Sanskrit Learners", sub: "180 members • 21 online" },
+  yoga: { title: "Daily Yoga", sub: "135 members • 15 online" },
+  temple: { title: "Temple Heritage", sub: "98 members • 12 online" },
+  parents: { title: "Parents of Bala", sub: "76 members • 9 online" }
+};
+let activeRoom = "gita";
+let unlistenChat = null;
+
+function loadRoom(room) {
+  activeRoom = room;
+  document.getElementById("homeCircleTitle").textContent = circleMeta[room]?.title || "Circle";
+  document.getElementById("homeCircleSub").textContent = circleMeta[room]?.sub || "Active members";
+  document.querySelectorAll(".rooms .room").forEach(r => r.classList.toggle("on", r.dataset.r === room));
+  
+  if (unlistenChat) unlistenChat();
+  unlistenChat = onValue(ref(db, "community/" + room), snap => {
+    const v = snap.val() || {};
+    const entries = Object.entries(v);
+    const box = document.getElementById("msgs");
+    if (!entries.length) {
+      box.innerHTML = '<p class="muted" style="text-align:center;padding:20px">No messages in this circle yet. Start the conversation!</p>';
+      return;
+    }
+    const curUid = auth.currentUser?.uid;
+    box.innerHTML = entries.slice(-10).map(([k, m]) => `
+      <div class="m ${m.uid === curUid ? 'me' : ''}">
+        <small>${esc(m.name || "Learner")}</small>
+        ${esc(m.text || "")}
+      </div>
+    `).join("");
+    box.scrollTop = box.scrollHeight;
   });
+}
+
+document.querySelectorAll(".rooms .room").forEach(r => {
+  r.style.cursor = "pointer";
+  r.addEventListener("click", () => loadRoom(r.dataset.r));
+});
+loadRoom("gita");
+
+// Chat submit
+document.getElementById("chatForm")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const input = document.getElementById("chatIn");
+  const txt = input.value.trim();
+  if (!txt) return;
+  const user = auth.currentUser;
+  const senderName = user?.displayName || "You";
+  const uid = user?.uid || "u_guest";
+  
+  await push(ref(db, "community/" + activeRoom), {
+    uid,
+    name: senderName,
+    text: txt,
+    at: Date.now()
+  });
+  input.value = "";
+});
+
+// Language switcher
+const homeI18n = {
+  te: {
+    heroH1: "ప్రాచీన జ్ఞానం<br>ఆధునిక అభ్యాసం<br>శాశ్వత విలువలు",
+    heroSub: "భారతీయ జీవిత విధానం తరతరాలకు…",
+    pathsH2: "మీ అభ్యాస మార్గాన్ని ఎంచుకోండి",
+    pathsSub: "వ్యక్తిగత అనుభవాన్ని పొందడానికి మీ వయస్సు వర్గాన్ని ఎంచుకోండి"
+  },
+  en: {
+    heroH1: "Ancient Wisdom<br>Modern Learning<br>Timeless Values",
+    heroSub: "Indian way of life for generations…",
+    pathsH2: "Choose Your Learning Path",
+    pathsSub: "Select your age group to get a personalized experience"
+  }
+};
+document.querySelectorAll(".lang button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".lang button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    const l = b.dataset.l;
+    localStorage.setItem("sg_lang", l);
+    if (homeI18n[l]) {
+      document.getElementById("heroH1").innerHTML = homeI18n[l].heroH1;
+      document.getElementById("heroSub").textContent = homeI18n[l].heroSub;
+      document.getElementById("pathsH2").textContent = homeI18n[l].pathsH2;
+      document.getElementById("pathsSub").textContent = homeI18n[l].pathsSub;
+    }
+  };
+});
+const savedLang = localStorage.getItem("sg_lang");
+if (savedLang) {
+  const btn = document.querySelector(`.lang button[data-l="${savedLang}"]`);
+  if (btn) btn.click();
+}
 </script>
 </body>
 </html>

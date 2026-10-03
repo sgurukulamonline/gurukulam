@@ -87,20 +87,24 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   <div class="panel">
     <h2>Manage Courses</h2>
     <form class="form" id="cForm">
-      <input name="title" placeholder="Course Title (e.g. Upanishads Intro)" required>
-      <input name="desc" placeholder="Brief Course Description">
-      <select name="type">
+      <input type="hidden" name="editId" id="cEditId">
+      <input name="title" id="cTitle" placeholder="Course Title (e.g. Upanishads Intro)" required>
+      <input name="desc" id="cDesc" placeholder="Brief Course Description">
+      <select name="type" id="cType">
         <option value="free">Free Course</option>
         <option value="paid">Paid Course</option>
       </select>
-      <input name="lessons" type="number" min="1" placeholder="Number of Lessons" required value="10">
-      <input name="imageUrl" placeholder="Image Path (e.g. images/yoga.png)">
-      <input name="videoUrl" placeholder="YouTube Video URL (optional)">
-      <select name="published">
+      <input name="lessons" id="cLessons" type="number" min="1" placeholder="Number of Lessons" required value="10">
+      <input name="imageUrl" id="cImage" placeholder="Image Path (e.g. images/yoga.png)">
+      <input name="videoUrl" id="cVideo" placeholder="YouTube Video URL (optional)">
+      <select name="published" id="cPublished">
         <option value="1">Published</option>
         <option value="0">Draft</option>
       </select>
-      <button class="btn" style="grid-column:1/-1">Add New Course</button>
+      <div style="grid-column:1/-1;display:flex;gap:10px">
+        <button class="btn" id="cSubmitBtn" style="flex:1">Add New Course</button>
+        <button type="button" class="btn ghost" id="cCancelBtn" style="display:none">Cancel Edit</button>
+      </div>
     </form>
     <div id="cList"></div>
   </div>
@@ -174,6 +178,7 @@ async function load() {
     $("sL").textContent = ls.length;
     $("sE").textContent = totalEnr;
 
+    let currentCourses = cs;
     $("cList").innerHTML = cs.map(c => `
       <div class="row">
         <span>
@@ -183,6 +188,7 @@ async function load() {
           <br><span class="muted">${c.lessons || 0} lessons · Created: ${c.createdAt ? when(c.createdAt) : 'Initial'}</span>
         </span>
         <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-edit="${c.id}">Edit</button>
           <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
             ${c.published !== false ? "Unpublish" : "Publish"}
           </button>
@@ -191,10 +197,13 @@ async function load() {
       </div>
     `).join("") || '<p class="muted">No courses yet. Add one above!</p>';
 
+    // Store courses in memory for edit population
+    window._adminCourses = cs;
+
     $("lList").innerHTML = (ls || []).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
       <div class="row">
         <span>
-          <b>${esc(c.title)}</b>
+          <b>${esc(c.title)}</b> 
           <br><span class="muted">${esc(c.teacher || "Acharya")} · ${when(c.startsAt)}</span>
         </span>
         <button class="btn sm" data-del="liveClasses/${c.id}">Cancel / Delete</button>
@@ -221,20 +230,36 @@ async function load() {
   }
 }
 
+const resetCourseForm = () => {
+  $("cForm").reset();
+  $("cEditId").value = "";
+  $("cSubmitBtn").textContent = "Add New Course";
+  $("cCancelBtn").style.display = "none";
+};
+
+$("cCancelBtn").onclick = resetCourseForm;
+
 $("cForm").onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
-  await push(ref(db, "courses"), {
+  const editId = f.editId;
+  const courseData = {
     title: f.title,
     desc: f.desc || "",
     type: f.type,
     lessons: parseInt(f.lessons, 10) || 10,
     imageUrl: f.imageUrl || "",
     videoUrl: f.videoUrl || "",
-    published: f.published === "1",
-    createdAt: Date.now()
-  });
-  e.target.reset();
+    published: f.published === "1"
+  };
+
+  if (editId) {
+    await update(ref(db, "courses/" + editId), courseData);
+  } else {
+    courseData.createdAt = Date.now();
+    await push(ref(db, "courses"), courseData);
+  }
+  resetCourseForm();
   await load();
 };
 
@@ -257,17 +282,32 @@ document.addEventListener("click", async e => {
   const d = b?.dataset;
   if (!d) return;
 
-  if (d.pub) {
+  if (d.edit) {
+    const course = (window._adminCourses || []).find(x => x.id === d.edit);
+    if (course) {
+      $("cEditId").value = course.id;
+      $("cTitle").value = course.title || "";
+      $("cDesc").value = course.desc || "";
+      $("cType").value = course.type || "free";
+      $("cLessons").value = course.lessons || 10;
+      $("cImage").value = course.imageUrl || "";
+      $("cVideo").value = course.videoUrl || "";
+      $("cPublished").value = course.published !== false ? "1" : "0";
+      $("cSubmitBtn").textContent = "Update Course";
+      $("cCancelBtn").style.display = "inline-flex";
+      $("cForm").scrollIntoView({ behavior: "smooth" });
+    }
+  } else if (d.pub) {
     await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });
+    await load();
   } else if (d.role) {
     await update(ref(db, "users/" + d.role), { role: d.v === "admin" ? "learner" : "admin" });
+    await load();
   } else if (d.del) {
     if (!confirm("Are you sure you want to permanently delete this item?")) return;
     await remove(ref(db, d.del));
-  } else {
-    return;
+    await load();
   }
-  await load();
 });
 </script>
 </body>

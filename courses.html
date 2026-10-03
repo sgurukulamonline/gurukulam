@@ -194,26 +194,28 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="index.html#paths">Learn</a><a href="live.html">Live Classes</a><a href="courses.html">Courses</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
+      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a>
     </nav>
-    <label class="search"><span aria-hidden="true">🔍</span><input type="search" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
+    <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="courseSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
-    <a class="avatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
+    <a class="avatar" id="userAvatar" href="dashboard.html" aria-label="Dashboard / Profile">👤</a>
   </div>
 </header>
 <main><div class="wrap">
-  <div class="page-h"><h1>All Courses</h1><p>Learn at your own pace from experienced acharyas</p>
-  <div class="chips"><button class="chip on" data-f="all">All</button><button class="chip" data-f="free">Free</button><button class="chip" data-f="paid">Paid</button></div></div>
-  <section><div class="courses">
-<a class="course" data-t="free" href="course.html?id=bhagavad-gita"><div class="pic"><img src="images/bhagavth%20gita.png" alt="Bhagavad Gita for Beginners" loading="lazy"></div><div class="body"><h3>Bhagavad Gita for Beginners</h3><div class="tags"><span class="tag free">Free</span><span class="lessons">12 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.2K)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=sanskrit-basics"><div class="pic"><img src="images/sanskrit%20basics.png" alt="Sanskrit Basics" loading="lazy"></div><div class="body"><h3>Sanskrit Basics</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">24 Lessons</span></div><div class="rate"><b>★</b> 4.7 (980)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=indian-history"><div class="pic"><img src="images/india%20history.png" alt="Indian History" loading="lazy"></div><div class="body"><h3>Indian History True Perspective</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">28 Lessons</span></div><div class="rate"><b>★</b> 4.8 (1.5K)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=ramayanam"><div class="pic"><img src="images/ramayanam.png" alt="Ramayana" loading="lazy"></div><div class="body"><h3>Ramayana Deep Study</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">32 Lessons</span></div><div class="rate"><b>★</b> 4.9 (2.1K)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=yoga-daily"><div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">🧘</div><div class="body"><h3>Yoga for Daily Life</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">20 Lessons</span></div><div class="rate"><b>★</b> 4.6 (740)</div></div></a>
-<a class="course" data-t="free" href="course.html?id=vishnu-sahasranamam"><div class="pic ph" style="background:linear-gradient(135deg,#f6c26b,#c9803f)">🪔</div><div class="body"><h3>Vishnu Sahasranamam</h3><div class="tags"><span class="tag free">Free</span><span class="lessons">10 Lessons</span></div><div class="rate"><b>★</b> 4.9 (1.8K)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=intro-vedas"><div class="pic ph" style="background:linear-gradient(135deg,#c9803f,#6b2d12)">🕉️</div><div class="body"><h3>Introduction to the Vedas</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">18 Lessons</span></div><div class="rate"><b>★</b> 4.7 (650)</div></div></a>
-<a class="course" data-t="paid" href="course.html?id=temple-culture"><div class="pic ph" style="background:linear-gradient(135deg,#d98a3d,#7a3b14)">🛕</div><div class="body"><h3>Temple Culture & Architecture</h3><div class="tags"><span class="tag paid">Paid</span><span class="lessons">16 Lessons</span></div><div class="rate"><b>★</b> 4.6 (520)</div></div></a>
-  </div></section>
+  <div class="page-h">
+    <h1 id="pageTitle">All Courses</h1>
+    <p id="pageSub">Learn at your own pace from experienced acharyas</p>
+    <div class="chips" id="chipsBox">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="free">Free</button>
+      <button class="chip" data-f="paid">Paid</button>
+    </div>
+  </div>
+  <section>
+    <div class="courses" id="coursesGrid">
+      <p class="muted" style="grid-column:1/-1;text-align:center;padding:40px">Loading courses from Gurukulam…</p>
+    </div>
+  </section>
 </div></main>
 <footer>
   <h3>Sanathana Gurukulam</h3>
@@ -221,15 +223,145 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <p>© 2026 Sanathana Gurukulam. All rights reserved.</p>
 </footer>
 <nav class="bottom" aria-label="App">
-  <a href="index.html"><span>🏠</span>Home</a><a href="index.html#paths"><span>📖</span>Learn</a>
-  <a href="live.html"><span>🎥</span>Live</a><a class="on" href="courses.html"><span>🎧</span>Library</a>
-  <a href="live.html"><span>📅</span>Events</a><a href="community.html"><span>👥</span>Community</a>
-  <a href="dashboard.html"><span>👤</span>Profile</a>
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a class="on" href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="dashboard.html"><span>👤</span>Dashboard</a>
 </nav>
-<script>
-document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  document.querySelectorAll('.course').forEach(c=>c.style.display=(b.dataset.f==='all'||c.dataset.t===b.dataset.f)?'':'none');
+<script type="module">
+import { list, esc, getCourseIcon, DEFAULT_COURSES, auth, onAuthStateChanged } from "./firebase-init.js";
+
+const params = new URLSearchParams(location.search);
+const initialQuery = params.get("q") || "";
+const initialFilter = params.get("type") || params.get("filter") || "all";
+const initialPath = params.get("path") || "";
+
+let allCourses = [];
+let activeFilter = initialFilter;
+const searchInput = document.getElementById("courseSearch");
+const grid = document.getElementById("coursesGrid");
+
+if (initialQuery && searchInput) {
+  searchInput.value = initialQuery;
+}
+
+// Track user auth for top avatar
+onAuthStateChanged(auth, u => {
+  const av = document.getElementById("userAvatar");
+  if (av && u) {
+    av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
+    av.title = "Signed in as " + (u.displayName || u.email || "Learner");
+  }
 });
+
+// Render courses matching filter & search
+function render() {
+  const q = (searchInput?.value || "").trim().toLowerCase();
+  let filtered = allCourses.filter(c => {
+    if (c.published === false) return false;
+    if (activeFilter === "free" && c.type !== "free") return false;
+    if (activeFilter === "paid" && c.type !== "paid") return false;
+    if (initialPath) {
+      const id = (c.id || "").toLowerCase();
+      if (initialPath === "bala" && !id.includes("sanskrit") && !id.includes("story")) return true;
+      if (initialPath === "yuva" && !id.includes("history") && !id.includes("temple")) return true;
+    }
+    if (q) {
+      const matchTitle = (c.title || "").toLowerCase().includes(q);
+      const matchDesc = (c.desc || "").toLowerCase().includes(q);
+      if (!matchTitle && !matchDesc) return false;
+    }
+    return true;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:50px 20px;background:var(--card);border-radius:18px;border:1px solid var(--line)">
+      <div style="font-size:2.5rem;margin-bottom:8px">🔍</div>
+      <h3 style="color:var(--maroon)">No courses found</h3>
+      <p class="muted" style="margin:8px 0 16px">No results match your search or filter.</p>
+      <button class="btn sm" id="resetBtn">View All Courses</button>
+    </div>`;
+    document.getElementById("resetBtn")?.addEventListener("click", () => {
+      activeFilter = "all";
+      if (searchInput) searchInput.value = "";
+      document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
+      render();
+    });
+    return;
+  }
+
+  grid.innerHTML = filtered.map(c => {
+    const k = c.type === "free" ? "free" : "paid";
+    const icon = getCourseIcon(c.id);
+    return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
+      ${c.imageUrl 
+        ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` 
+        : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`
+      }
+      <div class="body">
+        <h3>${esc(c.title)}</h3>
+        <div class="tags">
+          <span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span>
+          <span class="lessons">${c.lessons || 0} Lessons</span>
+        </div>
+        <div class="rate"><b>★</b> ${c.rating || "4.8"}</div>
+      </div>
+    </a>`;
+  }).join("");
+}
+
+// Load data
+(async () => {
+  try {
+    const cs = await list("courses");
+    allCourses = cs && cs.length ? cs : [...DEFAULT_COURSES];
+  } catch (err) {
+    allCourses = [...DEFAULT_COURSES];
+  }
+  render();
+})();
+
+// Search listener
+searchInput?.addEventListener("input", render);
+
+// Filter chips
+document.querySelectorAll(".chip").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".chip").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    activeFilter = b.dataset.f;
+    render();
+  };
+});
+
+// Language switcher
+const i18n = {
+  te: {
+    title: "అన్ని కోర్సులు",
+    sub: "అనుభవజ్ఞులైన ఆచార్యుల నుండి మీ స్వంత వేగంతో నేర్చుకోండి"
+  },
+  en: {
+    title: "All Courses",
+    sub: "Learn at your own pace from experienced acharyas"
+  }
+};
+document.querySelectorAll(".lang button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".lang button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    const l = b.dataset.l;
+    localStorage.setItem("sg_lang", l);
+    if (i18n[l]) {
+      document.getElementById("pageTitle").textContent = i18n[l].title;
+      document.getElementById("pageSub").textContent = i18n[l].sub;
+    }
+  };
+});
+const savedLang = localStorage.getItem("sg_lang");
+if (savedLang) {
+  const btn = document.querySelector(`.lang button[data-l="${savedLang}"]`);
+  if (btn) btn.click();
+}
 </script>
 </body></html>

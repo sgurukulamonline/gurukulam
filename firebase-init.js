@@ -212,6 +212,20 @@ function initMockDB() {
 
 let mockDB = initMockDB();
 
+// Ensure mock live classes have upcoming dates for testing
+if (mockDB && mockDB.liveClasses) {
+  const now = Date.now();
+  const allPast = Object.values(mockDB.liveClasses).every(l => (l.startsAt || 0) < now - 3600000);
+  if (allPast) {
+    let offsetHours = 2;
+    Object.values(mockDB.liveClasses).forEach(l => {
+      l.startsAt = now + offsetHours * 3600 * 1000;
+      offsetHours += 3;
+    });
+    localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
+  }
+}
+
 function saveMockDB() {
   localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
   notifyListeners();
@@ -498,6 +512,19 @@ export const ytEmbed = u => {
   return m ? "https://www.youtube.com/embed/" + m[1] : "";
 };
 
+export const getCourseIcon = id => {
+  const s = String(id || "").toLowerCase();
+  if (s.includes("gita")) return "📖";
+  if (s.includes("sanskrit")) return "🪷";
+  if (s.includes("history")) return "📜";
+  if (s.includes("ramayan")) return "🏹";
+  if (s.includes("yoga")) return "🧘";
+  if (s.includes("vishnu")) return "🪔";
+  if (s.includes("veda")) return "🕉️";
+  if (s.includes("temple")) return "🛕";
+  return "🕉️";
+};
+
 // Fill a container with published courses
 export async function loadCourses(el, limit) {
   try {
@@ -507,11 +534,13 @@ export async function loadCourses(el, limit) {
     if (!cs.length || !el) return;
     el.innerHTML = cs.map(c => {
       const k = c.type === "free" ? "free" : "paid";
+      const icon = getCourseIcon(c.id);
       return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
-      ${c.imageUrl ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy"></div>` : '<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">🕉️</div>'}
-      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${c.lessons || 0} Lessons</span></div></div></a>`;
+      ${c.imageUrl ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`}
+      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${c.lessons || 0} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
     }).join("");
   } catch (e) {
     console.warn("Using built-in course list:", e.code || e);
   }
 }
+

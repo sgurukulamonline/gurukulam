@@ -90,12 +90,28 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <script type="module">
-import { requireUser, db, ref, get, esc, DEFAULT_COURSES } from "./firebase-init.js";
+import { auth, onAuthStateChanged, db, ref, get, esc, DEFAULT_COURSES } from "./firebase-init.js";
 
 const box = document.getElementById("box");
-const id = new URLSearchParams(location.search).get("id");
+const params = new URLSearchParams(location.search);
+const id = params.get("id");
+const targetUid = params.get("uid");
 
-requireUser(async (u, p) => {
+// Toast helper
+const showToast = msg => {
+  let t = document.getElementById("toast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "toast";
+    t.style = "position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#4A1F0E;color:#F7E8C8;padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:99";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 2600);
+};
+
+async function verifyAndRender(targetUserId, recipientName) {
   if (!id) {
     box.innerHTML = `<div style="text-align:center;padding:40px">
       <h2>No Course Specified</h2>
@@ -105,20 +121,23 @@ requireUser(async (u, p) => {
     return;
   }
 
-  const [c, e] = await Promise.all([
+  const [c, e, u] = await Promise.all([
     get(ref(db, "courses/" + id)),
-    get(ref(db, `enrollments/${u.uid}/${id}`))
+    get(ref(db, `enrollments/${targetUserId}/${id}`)),
+    get(ref(db, "users/" + targetUserId))
   ]);
 
   const course = c.val() || DEFAULT_COURSES.find(x => x.id === id);
   const enr = e.val();
+  const userProfile = u.val();
+  const studentName = recipientName || userProfile?.name || "Sadhaka";
 
   if (!course || !enr || (enr.progress || 0) < 100) {
     const pr = enr?.progress || 0;
     box.innerHTML = `<div style="text-align:center;padding:40px;background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)">
       <div style="font-size:3rem;margin-bottom:10px">🔒</div>
       <h2>Certificate Not Yet Unlocked</h2>
-      <p style="color:var(--muted);margin:10px 0 16px">You have completed <b>${pr}%</b> of <b>${esc(course ? course.title : "this course")}</b>. Complete all lessons to unlock your official Gurukulam certificate!</p>
+      <p style="color:var(--muted);margin:10px 0 16px">Progress: <b>${pr}%</b> for <b>${esc(course ? course.title : "this course")}</b>. Complete all lessons to confer official Gurukulam certificate!</p>
       <div style="display:flex;justify-content:center;gap:12px">
         <a class="btn" href="course.html?id=${encodeURIComponent(id)}">Continue Course</a>
         <a class="btn ghost" href="dashboard.html">Return to Dashboard</a>
@@ -131,8 +150,14 @@ requireUser(async (u, p) => {
     day: "numeric", month: "long", year: "numeric"
   });
 
+  const certId = "SG-" + id.slice(0, 4).toUpperCase() + "-" + targetUserId.slice(-6).toUpperCase();
+  const shareUrl = location.origin + location.pathname + "?id=" + encodeURIComponent(id) + "&uid=" + encodeURIComponent(targetUserId);
+
   box.innerHTML = `
     <div class="cert">
+      <div style="position:absolute;top:18px;right:22px;background:#dcfce7;color:#166534;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:600;border:1px solid #86efac">
+        ✓ Verified Credential
+      </div>
       <div class="logo-mark">🕉️</div>
       <div class="inst">Sanathana Gurukulam</div>
       <p class="tagline">Ancient Wisdom • Modern Learning • Timeless Values</p>
@@ -140,12 +165,12 @@ requireUser(async (u, p) => {
       <h1>Certificate of Completion</h1>
       <p style="color:var(--muted)">This is proudly awarded to</p>
 
-      <div class="recipient">${esc(p.name || u.displayName || "Sadhaka")}</div>
+      <div class="recipient">${esc(studentName)}</div>
 
       <p style="color:var(--muted)">for successfully mastering all modules and fulfilling all requirements of</p>
       <h2 class="c-title">${esc(course.title)}</h2>
 
-      <p class="date">Conferred on <b>${d}</b></p>
+      <p class="date">Conferred on <b>${d}</b> · <span style="font-family:monospace;font-size:.85rem;color:var(--muted)">ID: ${certId}</span></p>
 
       <div class="cert-footer">
         <div>
@@ -164,11 +189,35 @@ requireUser(async (u, p) => {
     </div>
 
     <div class="actions noprint">
-      <button class="btn gold" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn gold" id="btnPrint">🖨️ Print / Save as PDF</button>
+      <button class="btn ghost" id="btnShareCert">🔗 Copy Shareable Link</button>
       <a class="btn ghost" href="dashboard.html">← Back to Dashboard</a>
     </div>
   `;
-});
+
+  document.getElementById("btnPrint")?.addEventListener("click", () => window.print());
+  document.getElementById("btnShareCert")?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      showToast("🔗 Public verification link copied to clipboard!");
+    } catch (e) {
+      prompt("Copy certificate verification link:", shareUrl);
+    }
+  });
+}
+
+// If public uid parameter provided, verify directly without requiring viewer login
+if (targetUid) {
+  verifyAndRender(targetUid);
+} else {
+  onAuthStateChanged(auth, async u => {
+    if (!u) {
+      location.href = "login.html?redirect=" + encodeURIComponent("certificate.html?id=" + id);
+      return;
+    }
+    verifyAndRender(u.uid, u.displayName);
+  });
+}
 </script>
 </body>
 </html>

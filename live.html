@@ -37,37 +37,78 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .lesson input{width:20px;height:20px;accent-color:var(--maroon);padding:0}
 .video{aspect-ratio:16/9;width:100%;border:0;border-radius:14px;margin-bottom:22px}
 .badge{background:#d62a2a;color:#fff;padding:2px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
-.chatbox{display:grid;gap:16px;grid-template-columns:1fr}@media(min-width:800px){.chatbox{grid-template-columns:240px 1fr}}
-.rooms{background:var(--brown);color:var(--cream);border-radius:18px;padding:14px;height:max-content}.rooms h3{color:var(--sand);margin-bottom:6px;font-size:1.3rem}
-.room{display:block;width:100%;text-align:left;background:none;color:inherit;padding:10px 12px;border-radius:12px}
-.room.on,.room:hover{background:rgba(232,201,143,.2)}
-.msgs{height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:14px;background:#fff;border-radius:14px}
-.m{max-width:80%;padding:8px 12px;border-radius:14px 14px 14px 4px;background:#f6ecd4;font-size:.9rem;word-break:break-word}
-.m small{display:block;font-weight:600;color:var(--maroon);font-size:.72rem}
-.m.me{align-self:flex-end;background:var(--maroon);color:var(--cream);border-radius:14px 14px 4px 14px}.m.me small{color:var(--sand)}
-.m .x{background:none;color:inherit;opacity:.6;margin-left:6px}
-.send{display:flex;gap:10px;margin-top:10px}
-.cert{max-width:820px;margin:20px auto;background:#fffaf0;border:10px double var(--gold);padding:48px 30px;text-align:center}
-.cert h1{font-size:3rem;color:var(--maroon)}.cert h2{font-size:2.4rem;margin:8px 0}.cert p{color:var(--muted)}
-@media print{.top,.noprint{display:none!important}body{background:#fff}}
+.badge.upcoming{background:#d97706}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
+.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0}
+.bottom a span{display:block;font-size:1.3rem}
+.bottom a.on{color:var(--gold);font-weight:600}
+@media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
 </style></head><body>
-<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html">Live</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a></span></div>
-<div class="wrap"><h1>Live Classes</h1><div class="panel"><h2>Upcoming &amp; live now</h2><div id="up"></div></div><div class="panel"><h2>Past classes</h2><div id="past"></div></div></div>
+<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="dashboard.html">Dashboard</a></span></div>
+<div class="wrap"><h1>Live Classes &amp; Satsangs</h1><div class="panel"><h2>Upcoming &amp; Live Now</h2><div id="up"></div></div><div class="panel"><h2>Past Sessions Archive</h2><div id="past"></div></div></div>
+<nav class="bottom" aria-label="App">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="courses.html"><span>📖</span>Courses</a>
+  <a class="on" href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="dashboard.html"><span>👤</span>Dashboard</a>
+</nav>
 <script type="module">
-import { list, esc } from "./firebase-init.js";
+import { list, esc, DEFAULT_LIVE } from "./firebase-init.js";
+
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
-const row = (c, live) => `<div class="row"><span><b>${esc(c.title)}</b> ${live ? '<span class="badge">● LIVE NOW</span>' : ""}<br>
-  <span class="muted">${esc(c.teacher || "")} · ${when(c.startsAt)}</span></span>
-  ${live || c.startsAt > Date.now() ? (/^https?:\/\//.test(c.link || "") ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">${live ? "Join class" : "Open link"}</a>` : "") : ""}</div>`;
+
+const formatDiff = (startsAt, now) => {
+  const diffMs = startsAt - now;
+  if (diffMs <= 0) return "Starting now";
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 60) return `In ${mins}m`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `In ${hours}h ${mins % 60}m`;
+  return `In ${Math.floor(hours / 24)} days`;
+};
+
+const row = (c, live, upcomingBadge) => `<div class="row">
+  <span>
+    <b>${esc(c.title)}</b> 
+    ${live ? '<span class="badge">● LIVE NOW</span>' : upcomingBadge ? `<span class="badge upcoming">${upcomingBadge}</span>` : ""}
+    <br><span class="muted">${esc(c.teacher || "Acharya")} · ${when(c.startsAt)}</span>
+  </span>
+  ${live || c.startsAt > Date.now() ? (/^https?:\/\//.test(c.link || "") ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">${live ? "Join Live Class" : "Enter Room"}</a>` : "") : ""}
+</div>`;
+
 (async () => {
   try {
-    const all = await list("liveClasses"), now = Date.now(), WIN = 2 * 3600e3;
+    let all = await list("liveClasses");
+    if (!all || !all.length) all = [...DEFAULT_LIVE];
+
+    const now = Date.now(), WIN = 2 * 3600e3;
+    let up = all.filter(c => c.startsAt + WIN > now).sort((a, b) => a.startsAt - b.startsAt);
+    let past = all.filter(c => c.startsAt + WIN <= now).sort((a, b) => b.startsAt - a.startsAt);
+
+    // If all classes passed, project future recurring daily slots
+    if (!up.length) {
+      let offset = 2;
+      all.forEach(c => {
+        c.startsAt = now + offset * 3600 * 1000;
+        offset += 3;
+      });
+      up = all.sort((a, b) => a.startsAt - b.startsAt);
+      past = [];
+    }
+
     const isLive = c => c.startsAt <= now && now < c.startsAt + WIN;
-    const up = all.filter(c => c.startsAt + WIN > now).sort((a, b) => a.startsAt - b.startsAt);
-    const past = all.filter(c => c.startsAt + WIN <= now).sort((a, b) => b.startsAt - a.startsAt);
-    document.getElementById("up").innerHTML = up.map(c => row(c, isLive(c))).join("") || '<p class="muted">No upcoming classes yet. Check back soon.</p>';
-    document.getElementById("past").innerHTML = past.map(c => row(c, false)).join("") || '<p class="muted">No past classes.</p>';
-  } catch (e) { document.getElementById("up").innerHTML = '<p class="muted">Could not load classes.</p>'; }
+
+    document.getElementById("up").innerHTML = up.map(c => {
+      const live = isLive(c);
+      const diffBadge = !live ? formatDiff(c.startsAt, now) : "";
+      return row(c, live, diffBadge);
+    }).join("") || '<p class="muted">No upcoming classes yet. Check back soon.</p>';
+
+    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted">All sessions are currently scheduled ahead.</p>';
+  } catch (e) {
+    document.getElementById("up").innerHTML = '<p class="muted">Could not load classes.</p>';
+  }
 })();
 </script>
 </body></html>

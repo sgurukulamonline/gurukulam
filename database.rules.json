@@ -3,10 +3,10 @@
     "users": {
       ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
       "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && ((auth.uid === $uid && !data.exists()) || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".read": true,
+        ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
         "role": {
-          ".validate": "newData.val() === 'learner' || (newData.val() === 'admin' && root.child('users').child(auth.uid).child('role').val() === 'admin')"
+          ".validate": "newData.val() === data.val() || root.child('users').child(auth.uid).child('role').val() === 'admin' || (!data.exists() && newData.val() === 'learner')"
         }
       }
     },
@@ -21,15 +21,15 @@
     "enrollments": {
       ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'",
       "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
+        ".read": true,
         ".write": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('role').val() === 'admin')"
       }
     },
     "community": {
       "$room": {
-        ".read": "auth != null",
+        ".read": true,
         "$msg": {
-          ".write": "auth != null && $room.matches(/^(gita|sanskrit|yoga|temple|parents)$/) && ((!data.exists() && newData.exists()) || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+          ".write": "auth != null && $room.matches(/^(gita|sanskrit|yoga|temple|parents)$/) && ((!data.exists() && newData.exists()) || (data.exists() && !newData.exists() && (data.child('uid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')))",
           ".validate": "newData.hasChildren(['uid','name','text','at']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500"
         }
       }
