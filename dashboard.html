@@ -40,6 +40,34 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
 .top a:hover{color:var(--gold)}
 
+/* Notification Bell */
+.notif-btn{
+  background:none;border:0;color:var(--cream);font-size:1.3rem;cursor:pointer;
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  padding:4px 8px;border-radius:10px;transition:background .2s;
+}
+.notif-btn:hover{background:rgba(255,255,255,.1)}
+.notif-badge{
+  position:absolute;top:0;right:2px;background:#e11d48;color:#fff;
+  font-size:.65rem;font-weight:700;padding:1px 5px;border-radius:10px;
+  line-height:1.1;border:1.5px solid var(--brown);
+}
+.notif-drawer-card{
+  background:#fff;border-radius:14px;padding:14px 16px;border:1px solid var(--line);
+  display:flex;gap:12px;align-items:flex-start;position:relative;transition:box-shadow .2s;
+}
+.notif-drawer-card.unread{
+  border-left:4px solid var(--gold);background:#FFFDF7;
+}
+.notif-drawer-card .n-icon{
+  width:40px;height:40px;border-radius:50%;background:rgba(217,154,39,.12);
+  display:grid;place-items:center;font-size:1.35rem;flex-shrink:0;
+}
+.notif-drawer-card .n-body{flex:1}
+.notif-drawer-card .n-title{font-size:.96rem;font-weight:600;color:var(--maroon);margin-bottom:2px}
+.notif-drawer-card .n-msg{font-size:.84rem;color:var(--brown);line-height:1.4;margin-bottom:6px}
+.notif-drawer-card .n-time{font-size:.72rem;color:var(--muted)}
+
 .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 80px}
 
 /* Professional Sadhaka Profile Hero */
@@ -98,6 +126,12 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   font-size:.78rem;font-weight:600;color:var(--maroon);text-transform:uppercase;letter-spacing:.5px;
 }
 .sankalpa-text{font-style:italic;font-size:.9rem;color:var(--brown);line-height:1.4}
+
+/* Announcements Banner */
+.notif-announcement-panel{
+  background:linear-gradient(135deg,#FFFDF7,#FEF6E4);border:1.5px solid var(--gold);
+  border-radius:18px;padding:18px 22px;margin-bottom:26px;box-shadow:var(--shadow);
+}
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px}
@@ -202,6 +236,10 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <a href="live.html">Live</a>
     <a href="community.html">Community</a>
     <a href="admin.html" id="adminLink" hidden>Admin</a>
+    <button class="notif-btn" id="btnNotif" title="Notifications" aria-label="Notifications">
+      <span>🔔</span>
+      <span class="notif-badge" id="notifBadge" style="display:none">0</span>
+    </button>
     <button class="btn gold sm" id="out">Logout</button>
   </span>
 </div>
@@ -251,6 +289,18 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
       </div>
       <p class="sankalpa-text" id="pSankalpa">“अथातो ब्रह्मजिज्ञासा — Living in alignment with Dharma, daily Gita adhyayana, and Samskrita swadhyaya.”</p>
     </div>
+  </div>
+
+  <!-- Announcements & Notifications Banner -->
+  <div class="notif-announcement-panel" id="announcementsPanel" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:1.3rem">📢</span>
+        <h3 style="font-size:1.35rem;color:var(--maroon)">Gurukulam Announcements</h3>
+      </div>
+      <button class="btn sm ghost" id="btnViewAllNotifs" style="font-size:.76rem;padding:4px 10px">View All</button>
+    </div>
+    <div id="latestAnnouncement"></div>
   </div>
 
   <!-- Learning Metrics -->
@@ -357,6 +407,19 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   </div>
 </div>
 
+<!-- Notifications Drawer / Modal -->
+<div class="modal-overlay" id="notifModal">
+  <div class="modal-box" style="max-width:500px">
+    <button class="modal-close" id="closeNotifModal" type="button">✕</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding-right:24px">
+      <h3 class="modal-title" style="font-size:1.6rem">🔔 Notifications</h3>
+      <button id="btnMarkAllRead" style="background:none;color:var(--maroon);font-size:.78rem;font-weight:600;cursor:pointer;border:0;text-decoration:underline">Mark all as read</button>
+    </div>
+    <p class="muted" style="font-size:.84rem;margin-bottom:16px">Official notices and spiritual alerts broadcast from the Acharyas</p>
+    <div id="notifItemsContainer" style="display:grid;gap:10px;max-height:420px;overflow-y:auto;padding-right:4px"></div>
+  </div>
+</div>
+
 <!-- Floating Feedback Toast -->
 <div id="toast">
   <span id="toastIcon">✅</span>
@@ -373,12 +436,12 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 </nav>
 
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, set, update, list, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser } from "./firebase-init.js";
+import { db, requireUser, logout, esc, ref, get, set, update, list, onValue, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
-let me, userProfile = {}, courses = [], enr = {};
+let me, userProfile = {}, courses = [], enr = {}, notifications = [];
 let selectedEmblem = "🕉️";
 
 function toast(msg, icon = "✅") {
@@ -422,6 +485,7 @@ requireUser(async (u, p) => {
   userProfile = p || {};
   renderProfile();
   await load();
+  initNotificationListener();
 });
 
 function renderProfile() {
@@ -534,6 +598,98 @@ $("profileForm").onsubmit = async e => {
   modal.style.display = "none";
   toast("Profile updated successfully! 🙏", "🕉️");
 };
+
+// -------------------------------------------------------------
+// NOTIFICATIONS SYSTEM (Real-time sync with Firebase)
+// -------------------------------------------------------------
+function getReadIds() {
+  try { return JSON.parse(localStorage.getItem("sg_read_notifs") || "[]"); } catch (e) { return []; }
+}
+function setReadIds(ids) {
+  localStorage.setItem("sg_read_notifs", JSON.stringify(ids));
+}
+
+function updateNotifUI() {
+  const readIds = getReadIds();
+  const unreadCount = notifications.filter(n => !readIds.includes(n.id)).length;
+  
+  const badge = $("notifBadge");
+  if (unreadCount > 0) {
+    badge.textContent = unreadCount > 9 ? "9+" : unreadCount;
+    badge.style.display = "inline-block";
+  } else {
+    badge.style.display = "none";
+  }
+
+  // Render modal items
+  const sorted = [...notifications].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  if (!sorted.length) {
+    $("notifItemsContainer").innerHTML = '<p class="muted" style="text-align:center;padding:24px 0">No notifications at the moment. All caught up! 🙏</p>';
+  } else {
+    $("notifItemsContainer").innerHTML = sorted.map(n => {
+      const isUnread = !readIds.includes(n.id);
+      return `
+        <div class="notif-drawer-card ${isUnread ? 'unread' : ''}">
+          <div class="n-icon">${esc(n.icon || "📢")}</div>
+          <div class="n-body">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+              <div class="n-title">${esc(n.title)}</div>
+              ${isUnread ? '<span style="width:8px;height:8px;border-radius:50%;background:#e11d48;display:inline-block;flex-shrink:0;margin-top:4px" title="Unread"></span>' : ''}
+            </div>
+            <div class="n-msg">${esc(n.message)}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px">
+              <span class="n-time">${n.createdAt ? when(n.createdAt) : "Recently"}</span>
+              ${n.link ? `<a class="btn sm gold" href="${esc(n.link)}" style="padding:3px 10px;font-size:.75rem">Open Link →</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // Render announcement banner on dashboard
+  const banner = $("announcementsPanel");
+  if (sorted.length > 0) {
+    const latest = sorted[0];
+    banner.style.display = "block";
+    $("latestAnnouncement").innerHTML = `
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:2.2rem">${esc(latest.icon || "📢")}</span>
+        <div style="flex:1;min-width:240px">
+          <b style="font-size:1.05rem;color:var(--maroon)">${esc(latest.title)}</b>
+          <p style="font-size:.86rem;color:var(--brown);margin-top:2px">${esc(latest.message)}</p>
+          <small class="muted">${latest.createdAt ? when(latest.createdAt) : "Recently"}</small>
+        </div>
+        ${latest.link ? `<a class="btn sm gold" href="${esc(latest.link)}">Action →</a>` : ''}
+      </div>
+    `;
+  } else {
+    banner.style.display = "none";
+  }
+}
+
+function initNotificationListener() {
+  onValue(ref(db, "notifications"), snap => {
+    const v = snap.val() || {};
+    notifications = Object.entries(v).map(([id, d]) => ({ id, ...d }));
+    updateNotifUI();
+  });
+}
+
+// Mark all as read handler
+$("btnMarkAllRead").onclick = () => {
+  const allIds = notifications.map(n => n.id);
+  setReadIds(allIds);
+  updateNotifUI();
+  toast("All notifications marked as read", "✓");
+};
+
+// Open/close modal
+const notifModal = $("notifModal");
+$("btnNotif").onclick = () => { notifModal.style.display = "flex"; };
+$("closeNotifModal").onclick = () => { notifModal.style.display = "none"; };
+notifModal.onclick = e => { if (e.target === notifModal) notifModal.style.display = "none"; };
+if ($("btnViewAllNotifs")) $("btnViewAllNotifs").onclick = () => { notifModal.style.display = "flex"; };
 
 const card = (c, extra) => `
 <div class="card">

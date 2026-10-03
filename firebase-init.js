@@ -179,6 +179,27 @@ export const DEFAULT_COMMUNITY = {
   }
 };
 
+export const DEFAULT_NOTIFICATIONS = [
+  {
+    id: "n_welcome",
+    title: "Welcome to Sanathana Gurukulam 🙏",
+    message: "Begin your sacred journey with the Bhagavad Gita for Beginners course.",
+    type: "announcement",
+    icon: "🕉️",
+    link: "course.html?id=bhagavad-gita",
+    createdAt: Date.now() - 3600000 * 4
+  },
+  {
+    id: "n_live_class",
+    title: "Upcoming Live Sanskrit Session",
+    message: "Acharya Veda Prakash is hosting a live chanting and pronunciation session. All sadhakas are welcome.",
+    type: "live",
+    icon: "🎥",
+    link: "live.html",
+    createdAt: Date.now() - 3600000
+  }
+];
+
 // -------------------------------------------------------------
 // LOCAL / MOCK ENGINE (used if Firebase not configured or offline)
 // -------------------------------------------------------------
@@ -193,6 +214,7 @@ function initMockDB() {
   const initial = {
     courses: {},
     liveClasses: {},
+    notifications: {},
     community: DEFAULT_COMMUNITY,
     users: {
       "learner-1": { name: "Learner", email: "learner@gurukulam.org", role: "learner", createdAt: Date.now() },
@@ -206,11 +228,19 @@ function initMockDB() {
   };
   DEFAULT_COURSES.forEach(c => { initial.courses[c.id] = c; });
   DEFAULT_LIVE.forEach(l => { initial.liveClasses[l.id] = l; });
+  DEFAULT_NOTIFICATIONS.forEach(n => { initial.notifications[n.id] = n; });
   localStorage.setItem(LS_DB_KEY, JSON.stringify(initial));
   return initial;
 }
 
 let mockDB = initMockDB();
+
+// Ensure mock notifications exist in existing localStorage
+if (mockDB && (!mockDB.notifications || !Object.keys(mockDB.notifications).length)) {
+  mockDB.notifications = {};
+  DEFAULT_NOTIFICATIONS.forEach(n => { mockDB.notifications[n.id] = n; });
+  localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
+}
 
 // Ensure mock live classes have upcoming dates for testing
 if (mockDB && mockDB.liveClasses) {
@@ -463,6 +493,7 @@ export async function list(path) {
     console.warn(`list(${path}) error:`, err);
     if (path === "courses") return [...DEFAULT_COURSES];
     if (path === "liveClasses") return [...DEFAULT_LIVE];
+    if (path === "notifications") return [...DEFAULT_NOTIFICATIONS];
     return [];
   }
 }
