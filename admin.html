@@ -135,7 +135,7 @@ button{font:inherit;cursor:pointer;border:0}
 <body>
 
 <div class="top">
-  <b><a href="admin.html">Sanathana Gurukulam · Admin Peetham</a></b>
+  <b><a href="admin.html">Sanathana Gurukulam · Admin Dashboard</a></b>
   <span>
     <a href="dashboard.html">Learner Portal</a>
     <a href="admin-age-groups.html">Age Groups</a>
@@ -149,7 +149,7 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <div class="wrap" id="wrap" hidden>
-  <h1>Acharya Admin Dashboard</h1>
+  <h1>Admin Dashboard</h1>
   <p class="muted" style="margin-bottom:20px">Click on any management box below to open its dedicated page, add content, and configure live updates.</p>
 
   <div class="stats">
@@ -193,7 +193,7 @@ button{font:inherit;cursor:pointer;border:0}
       <div class="admin-card-icon">🎥</div>
       <div>
         <h2>3. Live Classes</h2>
-        <p>Schedule Acharya live chanting, recitation sessions, set start dates &amp; times, and manage Google Meet join links.</p>
+        <p>Schedule live chanting, recitation sessions, set start dates &amp; times, and manage Google Meet join links.</p>
       </div>
       <div class="admin-card-footer">
         <span class="admin-badge" id="bLive">0 Live Classes</span>
@@ -243,7 +243,7 @@ const $ = id => document.getElementById(id);
 let me;
 $("out").onclick = adminLogout;
 
-// Strict Acharya authentication guard
+// Strict Admin authentication guard
 requireAdmin((u, p) => {
   me = u;
   $("wrap").hidden = false;
@@ -292,7 +292,7 @@ async function load() {
           <span class="muted">${esc(u.email || u.phone || "No contact")}</span> 
           <span class="tag ${u.role === 'admin' ? 'admin' : ''}">${esc(u.role || "learner")}</span>
         </span>
-        ${u.id === me.uid ? '<span class="muted">(Current Acharya)</span>' : `
+        ${u.id === me.uid ? '<span class="muted">(Current Admin)</span>' : `
           <button class="btn ghost sm" data-role="${u.id}" data-v="${u.role || 'learner'}">
             ${u.role === "admin" ? "Demote to Learner" : "Make Admin"}
           </button>

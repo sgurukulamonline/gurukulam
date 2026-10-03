@@ -317,7 +317,7 @@ function initMockDB() {
     community: DEFAULT_COMMUNITY,
     users: {
       "learner-1": { name: "Learner", email: "learner@gurukulam.org", role: "learner", createdAt: Date.now() },
-      "admin-1": { name: "Acharya (Admin)", email: "admin@gurukulam.org", role: "admin", createdAt: Date.now() }
+      "admin-1": { name: "Admin", email: "admin@gurukulam.org", role: "admin", createdAt: Date.now() }
     },
     enrollments: {
       "learner-1": {
@@ -849,7 +849,7 @@ export async function signInAdminWithEmail(emailOrUser, password) {
         const adminUser = {
           uid: "admin_" + btoa(cleanInput.toLowerCase()).replace(/[^a-zA-Z0-9]/g, "").slice(0, 12),
           email: emailToTry,
-          displayName: cleanInput.toLowerCase().includes("reshwanth") ? "Reshwanth Reddy" : "Acharya Admin",
+          displayName: cleanInput.toLowerCase().includes("reshwanth") ? "Reshwanth Reddy" : "Admin",
           role: "admin"
         };
         setMockUser(adminUser);
@@ -871,7 +871,7 @@ export async function signInAdminWithEmail(emailOrUser, password) {
     const adminUser = {
       uid: "admin_" + btoa(cleanInput.toLowerCase()).replace(/[^a-zA-Z0-9]/g, "").slice(0, 12),
       email: emailToTry,
-      displayName: cleanInput.toLowerCase().includes("reshwanth") ? "Reshwanth Reddy" : "Acharya Admin",
+      displayName: cleanInput.toLowerCase().includes("reshwanth") ? "Reshwanth Reddy" : "Admin",
       role: "admin"
     };
     setMockUser(adminUser);
@@ -947,7 +947,7 @@ export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = 
         <a class="course more-card" href="courses.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 18px;background:linear-gradient(135deg,#fcf5e5,#f1dcb0);border:2px dashed var(--maroon);border-radius:16px;min-height:220px;text-decoration:none;transition:transform .25s,box-shadow .25s;">
           <div style="width:58px;height:58px;border-radius:50%;background:var(--maroon);color:var(--cream);display:grid;place-items:center;font-size:1.7rem;margin-bottom:12px;box-shadow:0 4px 12px rgba(122,46,22,.25);">📚</div>
           <h3 style="font-size:1.35rem;color:var(--maroon);margin-bottom:6px;">More Courses</h3>
-          <p style="font-size:.82rem;color:var(--brown);margin-bottom:14px;line-height:1.4">Explore our complete sacred curriculum &amp; acharya-guided lectures</p>
+          <p style="font-size:.82rem;color:var(--brown);margin-bottom:14px;line-height:1.4">Explore our complete sacred curriculum &amp; divine wisdom lectures</p>
           <span style="font-weight:600;font-size:.86rem;color:var(--maroon);background:rgba(255,255,255,.6);padding:6px 16px;border-radius:20px;border:1px solid var(--maroon)">View All Courses →</span>
         </a>
       `;

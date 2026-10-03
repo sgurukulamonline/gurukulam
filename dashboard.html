@@ -415,7 +415,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
       <h3 class="modal-title" style="font-size:1.6rem">🔔 Notifications</h3>
       <button id="btnMarkAllRead" style="background:none;color:var(--maroon);font-size:.78rem;font-weight:600;cursor:pointer;border:0;text-decoration:underline">Mark all as read</button>
     </div>
-    <p class="muted" style="font-size:.84rem;margin-bottom:16px">Official notices and spiritual alerts broadcast from the Acharyas</p>
+    <p class="muted" style="font-size:.84rem;margin-bottom:16px">Official notices and spiritual alerts broadcast in real time</p>
     <div id="notifItemsContainer" style="display:grid;gap:10px;max-height:420px;overflow-y:auto;padding-right:4px"></div>
   </div>
 </div>
@@ -508,12 +508,12 @@ function renderProfile() {
   }
 
   $("pName").textContent = name;
-  $("userRole").textContent = role === "admin" ? "Acharya (Admin)" : "Sadhaka (Learner)";
+  $("userRole").textContent = role === "admin" ? "Administrator" : "Learner";
   if (role === "admin") {
     $("userRole").classList.add("admin");
     $("adminLink").hidden = false;
   }
-  $("pSubTitle").textContent = (role === "admin" ? "Acharya · Spiritual Guide" : "Sadhaka · Vedic Learner") + " · Sanathana Gurukulam";
+  $("pSubTitle").textContent = (role === "admin" ? "Administrator" : "Learner") + " · Sanathana Gurukulam";
   
   // Phone display: show ONLY if real verified/entered phone exists and is not fake fallback
   const isFakePhone = !rawPhone || rawPhone === "+91 98765 43210" || rawPhone.toLowerCase() === "pending";
@@ -816,7 +816,7 @@ async function load() {
       <div class="row">
         <span>
           <b>${esc(c.title)}</b> ${c.startsAt <= now + 3600000 && c.startsAt >= now - 3600000 ? '<span class="tag" style="background:#ef4444;color:#fff">● LIVE</span>' : ''}
-          <br><span class="muted">${esc(c.teacher || "Acharya")} · ${when(c.startsAt)}</span>
+          <br><span class="muted">${esc(c.teacher || "Instructor")} · ${when(c.startsAt)}</span>
         </span>
         ${c.link ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">Join Class →</a>` : ''}
       </div>

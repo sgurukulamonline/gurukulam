@@ -70,7 +70,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
       <h1 style="font-size:2.4rem;color:var(--maroon)">🎥 Live Classes Scheduling</h1>
-      <p class="muted">Schedule Acharya live satsangs, recitation lectures, and manage Google Meet join links.</p>
+      <p class="muted">Schedule live satsangs, recitation lectures, and manage Google Meet join links.</p>
     </div>
   </div>
 
@@ -78,12 +78,12 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
     <h2>Schedule a New Live Class</h2>
     <form class="form" id="lForm">
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Class Title</label>
-        <input name="title" placeholder="e.g. Bhagavad Gita Ch 2 Live Recitation" required>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Teacher / Instructor Name</label>
+        <input name="teacher" placeholder="e.g. Dr. Srinivas Sharma" required>
       </div>
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Teacher / Acharya Name</label>
-        <input name="teacher" placeholder="e.g. Acharya Dr. Srinivas Sharma" required>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Class Title</label>
+        <input name="title" placeholder="e.g. Bhagavad Gita Ch 2 Live Recitation" required>
       </div>
       <div>
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Starts At (Date &amp; Time)</label>
@@ -122,7 +122,7 @@ async function load() {
       <div class="row">
         <span>
           <b>${esc(c.title)}</b> 
-          <br><span class="muted">${esc(c.teacher || "Acharya")} · 🕒 ${when(c.startsAt)}</span>
+          <br><span class="muted">${esc(c.teacher || "Instructor")} · 🕒 ${when(c.startsAt)}</span>
           ${c.link ? `<br><a href="${esc(c.link)}" target="_blank" style="color:var(--maroon);font-size:.82rem;font-weight:600;text-decoration:underline">Meeting Link: ${esc(c.link)}</a>` : ''}
         </span>
         <button class="btn sm" data-del="liveClasses/${c.id}">Cancel / Delete</button>

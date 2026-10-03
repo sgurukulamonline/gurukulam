@@ -248,7 +248,7 @@ onAuthStateChanged(auth, async u => {
     $("alreadyIn").style.display = "block";
     $("loginForms").style.display = "none";
     $("loggedName").textContent = "Signed in as: " + (prof.name || u.displayName || "Learner");
-    $("loggedRole").textContent = "Role: " + (prof.role === "admin" ? "Acharya (Admin)" : "Learner");
+    $("loggedRole").textContent = "Role: " + (prof.role === "admin" ? "Admin" : "Learner");
     $("goDash").href = redirect;
   } else {
     $("alreadyIn").style.display = "none";
