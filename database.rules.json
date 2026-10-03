@@ -33,6 +33,10 @@
           ".validate": "newData.hasChildren(['uid','name','text','at']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 500"
         }
       }
+    },
+    "notifications": {
+      ".read": true,
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
     }
   }
 }
