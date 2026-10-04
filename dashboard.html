@@ -436,7 +436,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 </nav>
 
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, set, update, list, onValue, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser } from "./firebase-init.js";
+import { db, requireUser, logout, esc, ref, get, set, update, list, onValue, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser, getCourseLessonCount } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
@@ -732,7 +732,7 @@ const card = (c, extra) => `
   <p class="muted" style="min-height:36px;font-size:.82rem">${esc(c.desc || "")}</p>
   <div>
     <span class="tag">${c.type === "free" ? "Free" : "Paid"}</span>
-    <span class="muted">${c.lessons || 0} lessons</span>
+    <span class="muted">${getCourseLessonCount(c)} lessons</span>
   </div>
   ${extra}
 </div>`;
@@ -849,7 +849,7 @@ document.addEventListener("click", async e => {
   } else if (stepId) {
     b.disabled = true;
     const c = courses.find(x => x.id === stepId) || DEFAULT_COURSES.find(x => x.id === stepId);
-    const totalLessons = c?.lessons || 10;
+    const totalLessons = getCourseLessonCount(c);
     const doneObj = { ...(enr[stepId]?.done || {}) };
     
     // Find next uncompleted lesson

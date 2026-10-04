@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Courses Curriculum & Content Builder – Sanathana Gurukulam</title>
+<title>Courses Curriculum &amp; Lessons Builder – Sanathana Gurukulam</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -37,7 +37,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 }
 .top b{font-family:'Cormorant Garamond';font-size:1.5rem}
 .top b a{color:inherit}
-.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem;flex-wrap:wrap}
 .top a:hover{color:var(--gold)}
 
 .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
@@ -52,6 +52,24 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .tag.draft{background:#fee2e2;color:#991b1b}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
+
+/* Lesson Cards Styling */
+.lesson-card{
+  background:#fffdf9;border:1.5px solid var(--line);border-radius:16px;
+  padding:18px;margin-bottom:16px;box-shadow:0 3px 12px rgba(122,46,22,.06);
+}
+.lesson-card-header{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px;
+}
+.lesson-badge{
+  background:var(--maroon);color:var(--cream);font-size:.78rem;font-weight:700;
+  padding:4px 12px;border-radius:20px;letter-spacing:.3px;
+}
+.lesson-blocks-box{
+  background:#faf5ea;border:1px dashed var(--line);border-radius:12px;
+  padding:14px;margin-top:12px;
+}
 </style>
 </head>
 <body>
@@ -63,6 +81,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <a href="admin-age-groups.html">Age Groups</a>
     <a href="admin-live.html">Live</a>
     <a href="admin-community.html">Community</a>
+    <a href="admin-notifications.html">Notifications</a>
     <button class="btn gold sm" id="out">Logout</button>
   </span>
 </div>
@@ -71,10 +90,12 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
-      <h1 style="font-size:2.4rem;color:var(--maroon)">📖 Courses Curriculum &amp; Content Builder</h1>
-      <p class="muted">Add courses, arrange content blocks (video, photos, matter) in any order, set release times, and pin top courses.</p>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">📖 Courses Curriculum &amp; Lessons Builder</h1>
+      <p class="muted">Structure any course into sequential lessons. For each lesson, add videos, photos, and study matter blocks.</p>
     </div>
   </div>
+
+  <div id="dbSyncNotice" style="display:none;margin-bottom:18px;padding:14px 18px;border-radius:14px;font-size:.88rem"></div>
 
   <div class="panel">
     <h2 id="formHeader">Add / Edit Course</h2>
@@ -91,6 +112,8 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           <option value="paid">Paid Course</option>
         </select>
       </div>
+
+      <!-- Target Age Groups Checklist -->
       <div style="grid-column:1/-1;background:#fff8ea;padding:14px;border-radius:12px;border:1px solid var(--line)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px">
           <label style="font-size:.84rem;font-weight:700;color:var(--maroon)">🎯 Target Age Groups Checklist (Select 1, 2, or Any)</label>
@@ -99,7 +122,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
             <button type="button" class="btn ghost sm" id="btnClearAllAges" style="padding:2px 8px;font-size:.74rem">Clear All</button>
           </div>
         </div>
-        <p class="muted" style="font-size:.78rem;margin-bottom:10px">Check the sections this course should be published to:</p>
+        <p class="muted" style="font-size:.78rem;margin-bottom:10px">Check the fixed sections this course should be published to:</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
           <label style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;font-size:.85rem">
             <input type="checkbox" name="courseAges" value="bala" class="course-age-cb" checked style="width:auto">
@@ -119,6 +142,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           </label>
         </div>
       </div>
+
       <div>
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Release Date &amp; Time (optional)</label>
         <input name="releaseTime" id="cReleaseTime" type="datetime-local">
@@ -133,10 +157,6 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           <option value="2">Pin Slot 2</option>
           <option value="3">Pin Slot 3</option>
         </select>
-      </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Number of Lessons</label>
-        <input name="lessons" id="cLessons" type="number" min="1" placeholder="10" required value="10">
       </div>
       <div>
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Cover Image URL / Path</label>
@@ -154,175 +174,49 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
         <textarea name="desc" id="cDesc" rows="2" placeholder="Brief summary of the course..."></textarea>
       </div>
 
-      <!-- Dynamic Course Content Sequence Builder -->
+      <!-- Course Lessons Builder Section -->
       <div style="grid-column:1/-1;margin-top:10px;border-top:1px solid var(--line);padding-top:16px">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
           <div>
-            <b style="font-size:1.05rem;color:var(--maroon)">Course Content Sequence (Videos, Photos &amp; Matter)</b>
-            <p class="muted">Add and arrange sections in any order. The student will see them sequentially in the course player.</p>
+            <b style="font-size:1.15rem;color:var(--maroon)">📚 Course Lessons Curriculum (<span id="cLessonCount">0 Lessons</span>)</b>
+            <p class="muted">Add lessons for this course. In each lesson, you can keep video, photo, and matter blocks in any sequence.</p>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button type="button" class="btn sm gold" id="btnAddVideo">+ 🎥 Add Video</button>
-            <button type="button" class="btn sm gold" id="btnAddPhoto">+ 🖼️ Add Photo</button>
-            <button type="button" class="btn sm gold" id="btnAddMatter">+ 📝 Add Matter</button>
-          </div>
+          <button type="button" class="btn sm gold" id="btnAddLesson">➕ Add New Lesson</button>
         </div>
-        <div id="cSectionsList" style="display:grid;gap:10px"></div>
+
+        <div id="cLessonsContainer" style="display:grid;gap:14px"></div>
       </div>
 
-      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:8px">
-        <button class="btn" id="cSubmitBtn" style="flex:1">Add New Course</button>
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:12px">
+        <button class="btn" id="cSubmitBtn" style="flex:1">Save Course &amp; Lessons</button>
         <button type="button" class="btn ghost" id="cCancelBtn" style="display:none">Cancel Edit</button>
       </div>
     </form>
   </div>
 
   <div class="panel">
-    <h2>All Gurukulam Courses</h2>
+    <h2>All Gurukulam Courses &amp; Lessons</h2>
     <div id="cList"><p class="muted">Loading courses…</p></div>
   </div>
 </div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES, checkDatabaseStatus } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 $("out").onclick = adminLogout;
 
-let currentSections = [];
+let currentLessons = [];
 window._adminCourses = [];
 
 requireAdmin((u, p) => {
   $("wrap").hidden = false;
-  renderSectionsBuilder();
+  renderLessonsBuilder();
   load();
 });
 
-function renderSectionsBuilder() {
-  const container = $("cSectionsList");
-  if (!container) return;
-
-  if (!currentSections.length) {
-    container.innerHTML = `
-      <div style="text-align:center;padding:16px;border:1.5px dashed var(--line);border-radius:12px;background:#faf6ee;color:var(--muted);font-size:.85rem">
-        No content blocks added yet. Click <b>+ 🎥 Add Video</b>, <b>+ 🖼️ Add Photo</b>, or <b>+ 📝 Add Matter</b> to sequence this course!
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = currentSections.map((sec, idx) => {
-    const isFirst = idx === 0;
-    const isLast = idx === currentSections.length - 1;
-    let typeBadge = "";
-    let contentInputs = "";
-
-    if (sec.type === "video") {
-      typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🎥 Video Block #${idx + 1}</span>`;
-      const yt = parseYouTube(sec.url);
-      contentInputs = `
-        <div style="display:grid;gap:8px;margin-top:8px">
-          <input type="text" placeholder="Video Title (e.g. Chapter 2 Discourse)" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
-          <input type="text" placeholder="YouTube Video URL (e.g. https://www.youtube.com/watch?v=...)" value="${esc(sec.url || "")}" oninput="window.updateSecVideoUrl(${idx}, this.value)">
-          ${yt ? `
-            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
-              <img src="${yt.thumbnailUrl}" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Preview">
-              <span style="font-size:.78rem;color:var(--muted)">YouTube ID: <b>${yt.videoId}</b> · Plays in custom Gurukulam player (no YouTube branding)</span>
-            </div>
-          ` : '<small class="muted">Paste any YouTube URL or Shorts link — our custom player will play it without YouTube branding.</small>'}
-        </div>
-      `;
-    } else if (sec.type === "photo" || sec.type === "image") {
-      typeBadge = `<span style="background:#e0f2fe;color:#0369a1;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">🖼️ Photo Block #${idx + 1}</span>`;
-      contentInputs = `
-        <div style="display:grid;gap:8px;margin-top:8px">
-          <input type="text" placeholder="Photo Title or Heading" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
-          <input type="text" placeholder="Image URL (e.g. images/bhagavth gita.png or https://...)" value="${esc(sec.url || "")}" oninput="window.updateSecField(${idx}, 'url', this.value)">
-          <input type="text" placeholder="Photo Caption / Description" value="${esc(sec.caption || "")}" onchange="window.updateSecField(${idx}, 'caption', this.value)">
-          ${sec.url ? `
-            <div style="display:flex;gap:12px;align-items:center;background:#fff;padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
-              <img src="${esc(sec.url)}" style="width:72px;height:48px;object-fit:cover;border-radius:6px" alt="Photo" onerror="this.style.display='none'">
-              <span style="font-size:.78rem;color:var(--muted)">Photo preview loaded</span>
-            </div>
-          ` : ''}
-        </div>
-      `;
-    } else {
-      typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:600">📝 Matter / Text Block #${idx + 1}</span>`;
-      contentInputs = `
-        <div style="display:grid;gap:8px;margin-top:8px">
-          <input type="text" placeholder="Section Heading / Title" value="${esc(sec.title || "")}" onchange="window.updateSecField(${idx}, 'title', this.value)">
-          <textarea rows="3" placeholder="Enter spiritual matter, shloka, Telugu meaning, or study guide text here..." style="font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;width:100%" onchange="window.updateSecField(${idx}, 'text', this.value)">${esc(sec.text || "")}</textarea>
-        </div>
-      `;
-    }
-
-    return `
-      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          ${typeBadge}
-          <div style="display:flex;gap:6px">
-            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, -1)" ${isFirst ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Up">⬆️</button>
-            <button type="button" class="btn ghost sm" onclick="window.moveSection(${idx}, 1)" ${isLast ? 'disabled style="opacity:.4;cursor:not-allowed"' : ''} title="Move Down">⬇️</button>
-            <button type="button" class="btn sm" style="background:#fee2e2;color:#991b1b" onclick="window.removeSection(${idx})" title="Delete">🗑️</button>
-          </div>
-        </div>
-        ${contentInputs}
-      </div>
-    `;
-  }).join("");
-}
-
-window.updateSecField = (idx, field, val) => {
-  if (currentSections[idx]) {
-    currentSections[idx][field] = val;
-  }
-};
-
-window.updateSecVideoUrl = (idx, val) => {
-  if (currentSections[idx]) {
-    currentSections[idx].url = val;
-    const yt = parseYouTube(val);
-    if (yt) {
-      currentSections[idx].thumbnail = yt.thumbnailUrl;
-      currentSections[idx].videoId = yt.videoId;
-    }
-    renderSectionsBuilder();
-  }
-};
-
-window.moveSection = (idx, dir) => {
-  const target = idx + dir;
-  if (target < 0 || target >= currentSections.length) return;
-  const temp = currentSections[idx];
-  currentSections[idx] = currentSections[target];
-  currentSections[target] = temp;
-  renderSectionsBuilder();
-};
-
-window.removeSection = idx => {
-  currentSections.splice(idx, 1);
-  renderSectionsBuilder();
-};
-
-window.addSection = type => {
-  currentSections.push({
-    id: "sec_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
-    type,
-    title: "",
-    url: "",
-    caption: "",
-    text: "",
-    thumbnail: ""
-  });
-  renderSectionsBuilder();
-};
-
-$("btnAddVideo")?.addEventListener("click", () => window.addSection("video"));
-$("btnAddPhoto")?.addEventListener("click", () => window.addSection("photo"));
-$("btnAddMatter")?.addEventListener("click", () => window.addSection("matter"));
-
+// Setup Select All / Clear All age group checklist
 $("btnSelectAllAges")?.addEventListener("click", () => {
   document.querySelectorAll(".course-age-cb").forEach(cb => cb.checked = true);
 });
@@ -330,20 +224,259 @@ $("btnClearAllAges")?.addEventListener("click", () => {
   document.querySelectorAll(".course-age-cb").forEach(cb => cb.checked = false);
 });
 
+// Add a new lesson
+$("btnAddLesson")?.addEventListener("click", () => {
+  const newNum = currentLessons.length + 1;
+  currentLessons.push({
+    id: "les_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+    title: `Lesson ${newNum}: `,
+    summary: "",
+    duration: "15 mins",
+    blocks: []
+  });
+  renderLessonsBuilder();
+});
+
+// Window helper functions for inline event handling
+window.moveLesson = (lesIdx, dir) => {
+  const target = lesIdx + dir;
+  if (target < 0 || target >= currentLessons.length) return;
+  const temp = currentLessons[lesIdx];
+  currentLessons[lesIdx] = currentLessons[target];
+  currentLessons[target] = temp;
+  renderLessonsBuilder();
+};
+
+window.removeLesson = (lesIdx) => {
+  if (!confirm(`Are you sure you want to remove Lesson #${lesIdx + 1}?`)) return;
+  currentLessons.splice(lesIdx, 1);
+  renderLessonsBuilder();
+};
+
+window.updateLessonField = (lesIdx, field, val) => {
+  if (currentLessons[lesIdx]) {
+    currentLessons[lesIdx][field] = val;
+  }
+};
+
+window.addBlockToLesson = (lesIdx, type) => {
+  if (!currentLessons[lesIdx]) return;
+  if (!Array.isArray(currentLessons[lesIdx].blocks)) currentLessons[lesIdx].blocks = [];
+  
+  currentLessons[lesIdx].blocks.push({
+    id: "blk_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+    type,
+    title: "",
+    url: "",
+    caption: "",
+    text: "",
+    thumbnail: ""
+  });
+  renderLessonsBuilder();
+};
+
+window.moveLessonBlock = (lesIdx, blkIdx, dir) => {
+  const blocks = currentLessons[lesIdx]?.blocks;
+  if (!blocks) return;
+  const target = blkIdx + dir;
+  if (target < 0 || target >= blocks.length) return;
+  const temp = blocks[blkIdx];
+  blocks[blkIdx] = blocks[target];
+  blocks[target] = temp;
+  renderLessonsBuilder();
+};
+
+window.removeLessonBlock = (lesIdx, blkIdx) => {
+  if (currentLessons[lesIdx]?.blocks) {
+    currentLessons[lesIdx].blocks.splice(blkIdx, 1);
+    renderLessonsBuilder();
+  }
+};
+
+window.updateLessonBlockField = (lesIdx, blkIdx, field, val) => {
+  const blk = currentLessons[lesIdx]?.blocks?.[blkIdx];
+  if (blk) {
+    blk[field] = val;
+  }
+};
+
+window.updateLessonBlockVideo = (lesIdx, blkIdx, val) => {
+  const blk = currentLessons[lesIdx]?.blocks?.[blkIdx];
+  if (blk) {
+    blk.url = val;
+    const yt = parseYouTube(val);
+    if (yt) {
+      blk.thumbnail = yt.thumbnailUrl;
+      blk.videoId = yt.videoId;
+    }
+    renderLessonsBuilder();
+  }
+};
+
+// Render full lesson list with content blocks
+function renderLessonsBuilder() {
+  const container = $("cLessonsContainer");
+  if (!container) return;
+
+  $("cLessonCount").textContent = `${currentLessons.length} Lesson${currentLessons.length === 1 ? '' : 's'}`;
+
+  if (!currentLessons.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:24px;border:1.5px dashed var(--line);border-radius:14px;background:#faf6ee;color:var(--muted);font-size:.88rem">
+        No lessons added to this course yet. Click <b>➕ Add New Lesson</b> above to start building the curriculum!
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = currentLessons.map((les, lesIdx) => {
+    const isFirstLes = lesIdx === 0;
+    const isLastLes = lesIdx === currentLessons.length - 1;
+    const blocks = Array.isArray(les.blocks) ? les.blocks : [];
+
+    const blocksHtml = blocks.length ? blocks.map((blk, blkIdx) => {
+      const isFirstBlk = blkIdx === 0;
+      const isLastBlk = blkIdx === blocks.length - 1;
+      let typeBadge = "";
+      let blockInputs = "";
+
+      if (blk.type === "video") {
+        typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 Video Block #${blkIdx + 1}</span>`;
+        const yt = parseYouTube(blk.url);
+        blockInputs = `
+          <div style="display:grid;gap:6px;margin-top:6px">
+            <input type="text" placeholder="Video Title (e.g. Discourse &amp; Chanting)" value="${esc(blk.title || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'title', this.value)">
+            <input type="text" placeholder="YouTube URL (e.g. https://www.youtube.com/watch?v=...)" value="${esc(blk.url || "")}" oninput="window.updateLessonBlockVideo(${lesIdx}, ${blkIdx}, this.value)">
+            ${yt ? `
+              <div style="display:flex;gap:10px;align-items:center;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line)">
+                <img src="${yt.thumbnailUrl}" style="width:64px;height:40px;object-fit:cover;border-radius:6px" alt="Thumb">
+                <span style="font-size:.75rem;color:var(--muted)">YouTube ID: <b>${yt.videoId}</b> · Plays in custom player without YouTube branding</span>
+              </div>
+            ` : '<small class="muted">Paste any YouTube URL — our custom player will play it without YouTube branding.</small>'}
+          </div>
+        `;
+      } else if (blk.type === "photo" || blk.type === "image") {
+        typeBadge = `<span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🖼️ Photo Block #${blkIdx + 1}</span>`;
+        blockInputs = `
+          <div style="display:grid;gap:6px;margin-top:6px">
+            <input type="text" placeholder="Photo Title or Heading" value="${esc(blk.title || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'title', this.value)">
+            <input type="text" placeholder="Image URL / Path (e.g. images/bhagavth gita.png)" value="${esc(blk.url || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'url', this.value)">
+            <input type="text" placeholder="Photo Caption / Explanation" value="${esc(blk.caption || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'caption', this.value)">
+            ${blk.url ? `
+              <div style="display:flex;gap:10px;align-items:center;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line)">
+                <img src="${esc(blk.url)}" style="width:64px;height:40px;object-fit:cover;border-radius:6px" alt="Preview" onerror="this.style.display='none'">
+                <span style="font-size:.75rem;color:var(--muted)">Photo preview loaded</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">📝 Matter / Text Block #${blkIdx + 1}</span>`;
+        blockInputs = `
+          <div style="display:grid;gap:6px;margin-top:6px">
+            <input type="text" placeholder="Matter Section Heading" value="${esc(blk.title || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'title', this.value)">
+            <textarea rows="3" placeholder="Enter spiritual matter, shloka, Telugu meaning, or study guide text..." style="font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;width:100%" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'text', this.value)">${esc(blk.text || "")}</textarea>
+          </div>
+        `;
+      }
+
+      return `
+        <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            ${typeBadge}
+            <div style="display:flex;gap:4px">
+              <button type="button" class="btn ghost sm" style="padding:2px 6px" onclick="window.moveLessonBlock(${lesIdx}, ${blkIdx}, -1)" ${isFirstBlk ? 'disabled style="opacity:.4"' : ''} title="Move Up">⬆️</button>
+              <button type="button" class="btn ghost sm" style="padding:2px 6px" onclick="window.moveLessonBlock(${lesIdx}, ${blkIdx}, 1)" ${isLastBlk ? 'disabled style="opacity:.4"' : ''} title="Move Down">⬇️</button>
+              <button type="button" class="btn sm" style="background:#fee2e2;color:#991b1b;padding:2px 8px" onclick="window.removeLessonBlock(${lesIdx}, ${blkIdx})" title="Delete">🗑️</button>
+            </div>
+          </div>
+          ${blockInputs}
+        </div>
+      `;
+    }).join("") : `
+      <div style="text-align:center;padding:12px;color:var(--muted);font-size:.8rem">
+        No content blocks in this lesson yet. Use buttons above to add videos, photos, or matter.
+      </div>
+    `;
+
+    return `
+      <div class="lesson-card">
+        <div class="lesson-card-header">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="lesson-badge">Lesson #${lesIdx + 1}</span>
+            <div style="display:flex;gap:4px">
+              <button type="button" class="btn ghost sm" style="padding:3px 8px" onclick="window.moveLesson(${lesIdx}, -1)" ${isFirstLes ? 'disabled style="opacity:.4"' : ''} title="Move Lesson Up">⬆️</button>
+              <button type="button" class="btn ghost sm" style="padding:3px 8px" onclick="window.moveLesson(${lesIdx}, 1)" ${isLastLes ? 'disabled style="opacity:.4"' : ''} title="Move Lesson Down">⬇️</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn sm" style="background:#fee2e2;color:#991b1b;padding:4px 10px" onclick="window.removeLesson(${lesIdx})">🗑️ Delete Lesson</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:12px">
+          <div>
+            <label style="font-size:.76rem;font-weight:600;color:var(--muted)">Lesson Title</label>
+            <input type="text" placeholder="e.g. Lesson ${lesIdx + 1}: Introduction to Gita" value="${esc(les.title || '')}" onchange="window.updateLessonField(${lesIdx}, 'title', this.value)">
+          </div>
+          <div>
+            <label style="font-size:.76rem;font-weight:600;color:var(--muted)">Duration / Subtitle (optional)</label>
+            <input type="text" placeholder="e.g. 15 mins • Shloka chanting" value="${esc(les.duration || les.summary || '')}" onchange="window.updateLessonField(${lesIdx}, 'duration', this.value)">
+          </div>
+        </div>
+
+        <!-- Blocks Inside this Lesson -->
+        <div class="lesson-blocks-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+            <b style="font-size:.86rem;color:var(--maroon)">Content Inside Lesson #${lesIdx + 1} (${blocks.length} blocks):</b>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn sm gold" style="padding:3px 8px;font-size:.76rem" onclick="window.addBlockToLesson(${lesIdx}, 'video')">+ 🎥 Video</button>
+              <button type="button" class="btn sm gold" style="padding:3px 8px;font-size:.76rem" onclick="window.addBlockToLesson(${lesIdx}, 'photo')">+ 🖼️ Photo</button>
+              <button type="button" class="btn sm gold" style="padding:3px 8px;font-size:.76rem" onclick="window.addBlockToLesson(${lesIdx}, 'matter')">+ 📝 Matter</button>
+            </div>
+          </div>
+          ${blocksHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 async function load() {
   try {
+    const status = await checkDatabaseStatus();
+    const notice = $("dbSyncNotice");
+    if (notice) {
+      notice.style.display = "block";
+      if (status.ok) {
+        notice.style.background = "#dcfce7";
+        notice.style.border = "1.5px solid #86efac";
+        notice.style.color = "#166534";
+        notice.innerHTML = `🟢 <b>Cloud Database Connected (Firebase Realtime Database):</b> Live sync is active. Any courses added or edited here will instantly update on the main website across all devices.`;
+      } else {
+        notice.style.background = "#fef2f2";
+        notice.style.border = "1.5px solid #fca5a5";
+        notice.style.color = "#991b1b";
+        notice.innerHTML = `⚠️ <b>Realtime Database Sync Warning:</b> <code>${esc(status.error || status.code || status.reason || "Permission Denied")}</code>.<br>Your edits are currently saved locally on this browser only because Realtime Database rules in Firebase Console require updating.`;
+      }
+    }
+
     const cs = await list("courses");
     window._adminCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
 
     $("cList").innerHTML = window._adminCourses.map(c => {
       const isPinned = c.pinned === true || c.pinned === "true";
       const pinBadge = isPinned ? `<span class="tag" style="background:#fef08a;color:#854d0e;font-weight:700">📌 Pinned #${c.pinOrder || 1}</span>` : "";
-      const secCount = Array.isArray(c.sections) ? c.sections.length : (c.videoUrl ? 1 : 0);
+      
+      const lesCount = Array.isArray(c.lessons) ? c.lessons.length : (typeof c.lessons === "number" ? c.lessons : 1);
       const relTime = c.releaseTime ? ` · Release: ${when(c.releaseTime)}` : "";
       const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
         ? c.ageGroups
         : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
       const ageLabels = ages.map(a => a.charAt(0).toUpperCase() + a.slice(1)).join(", ");
+
+      const lessonsSummary = Array.isArray(c.lessons) && c.lessons.length
+        ? c.lessons.map(l => l.title || 'Lesson').slice(0, 3).join(" • ") + (c.lessons.length > 3 ? "..." : "")
+        : "";
 
       return `
         <div class="row">
@@ -353,10 +486,10 @@ async function load() {
             <span class="tag">${esc(c.type || 'free')}</span>
             ${pinBadge}
             <span class="tag" style="background:#fef3c7;color:#92400e">🎯 ${esc(ageLabels)}</span>
-            <br><span class="muted">${c.lessons || 0} lessons · ${secCount} content blocks${relTime}</span>
+            <br><span class="muted"><b>${lesCount} Lessons</b>${lessonsSummary ? ` (${esc(lessonsSummary)})` : ''}${relTime}</span>
           </span>
           <span style="display:flex;gap:8px">
-            <button class="btn ghost sm" data-edit="${c.id}">Edit</button>
+            <button class="btn ghost sm" data-edit="${c.id}">Edit Lessons &amp; Details</button>
             <button class="btn ghost sm" data-pub="${c.id}" data-v="${c.published !== false}">
               ${c.published !== false ? "Unpublish" : "Publish"}
             </button>
@@ -378,8 +511,8 @@ const resetCourseForm = () => {
   document.querySelectorAll(".course-age-cb").forEach(cb => {
     cb.checked = (cb.value === "bala");
   });
-  currentSections = [];
-  renderSectionsBuilder();
+  currentLessons = [];
+  renderLessonsBuilder();
   $("formHeader").textContent = "Add / Edit Course";
   $("cSubmitBtn").textContent = "Add New Course";
   $("cCancelBtn").style.display = "none";
@@ -395,34 +528,63 @@ $("cForm").onsubmit = async e => {
   const checkedAges = Array.from(document.querySelectorAll('.course-age-cb:checked')).map(cb => cb.value);
   const selectedAgeGroups = checkedAges.length ? checkedAges : ["bala", "yuva", "sadhaka", "jnana"];
 
+  // Flatten all lesson blocks for legacy fallback
+  const flatBlocks = [];
+  currentLessons.forEach(les => {
+    if (Array.isArray(les.blocks)) {
+      les.blocks.forEach(b => flatBlocks.push(b));
+    }
+  });
+
   const courseData = {
-    title: f.title,
-    desc: f.desc || "",
+    title: f.title.trim(),
+    desc: (f.desc || "").trim(),
     type: f.type || "free",
     ageGroups: selectedAgeGroups,
     ageGroup: selectedAgeGroups.join(","),
     releaseTime: f.releaseTime ? new Date(f.releaseTime).getTime() : 0,
     pinned: Boolean(f.pinned === "1" || f.pinned === "on" || f.pinned === true),
     pinOrder: parseInt(f.pinOrder, 10) || 1,
-    lessons: parseInt(f.lessons, 10) || 10,
-    imageUrl: f.imageUrl || "",
+    imageUrl: (f.imageUrl || "").trim(),
     published: f.published === "1",
-    sections: currentSections
+    lessons: currentLessons,
+    lessonCount: currentLessons.length,
+    sections: flatBlocks
   };
 
-  const firstVideo = currentSections.find(s => s.type === "video");
-  if (firstVideo && firstVideo.url) {
-    courseData.videoUrl = firstVideo.url;
+  // Find first video in any lesson for cover videoUrl
+  for (const les of currentLessons) {
+    const v = (les.blocks || []).find(b => b.type === "video" && b.url);
+    if (v) {
+      courseData.videoUrl = v.url;
+      break;
+    }
   }
 
-  if (editId) {
-    await update(ref(db, "courses/" + editId), courseData);
-  } else {
-    courseData.createdAt = Date.now();
-    await push(ref(db, "courses"), courseData);
+  const submitBtn = $("cSubmitBtn");
+  const prevBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Saving to Firebase...";
+
+  try {
+    if (editId) {
+      await update(ref(db, "courses/" + editId), courseData);
+    } else {
+      courseData.createdAt = Date.now();
+      await push(ref(db, "courses"), courseData);
+    }
+    alert("✅ Course & lessons successfully saved to Firebase Realtime Database! Live across all devices.");
+    resetCourseForm();
+    await load();
+  } catch (err) {
+    console.error("Save course error:", err);
+    alert("⚠️ Firebase Realtime Database rejected the save: " + (err.message || err.code || err) + "\n\nPlease ensure you have updated the security rules under Realtime Database in your Firebase Console.");
+    resetCourseForm();
+    await load();
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = prevBtnText;
   }
-  resetCourseForm();
-  await load();
 };
 
 document.addEventListener("click", async e => {
@@ -454,40 +616,49 @@ document.addEventListener("click", async e => {
       }
       $("cPinned").checked = Boolean(course.pinned === true || course.pinned === "true");
       $("cPinOrder").value = String(course.pinOrder || 1);
-      $("cLessons").value = course.lessons || 10;
       $("cImage").value = course.imageUrl || "";
       $("cPublished").value = course.published !== false ? "1" : "0";
 
-      if (Array.isArray(course.sections) && course.sections.length) {
-        currentSections = JSON.parse(JSON.stringify(course.sections));
+      // Load lessons
+      if (Array.isArray(course.lessons) && course.lessons.length) {
+        currentLessons = JSON.parse(JSON.stringify(course.lessons));
+      } else if (Array.isArray(course.sections) && course.sections.length) {
+        // Migrate legacy sections to Lesson 1
+        currentLessons = [{
+          id: "les_1",
+          title: "Lesson 1: " + (course.title || "Introduction"),
+          summary: course.desc || "Complete lesson study content",
+          duration: "20 mins",
+          blocks: JSON.parse(JSON.stringify(course.sections))
+        }];
       } else {
-        currentSections = [];
-        if (course.videoUrl) {
-          currentSections.push({
-            id: "sec_init_v",
-            type: "video",
-            title: "Introduction Lecture",
-            url: course.videoUrl
-          });
-        }
-        if (course.desc) {
-          currentSections.push({
-            id: "sec_init_m",
-            type: "matter",
-            title: "Course Overview & Notes",
-            text: course.desc
+        const n = typeof course.lessons === "number" ? course.lessons : 1;
+        currentLessons = [];
+        for (let i = 1; i <= n; i++) {
+          currentLessons.push({
+            id: "les_" + i,
+            title: `Lesson ${i}: ${course.title} – Part ${i}`,
+            summary: "Audio lecture and shloka contemplation",
+            duration: "15 mins",
+            blocks: (i === 1 && course.videoUrl) ? [{
+              id: "blk_v1",
+              type: "video",
+              title: "Lesson Video",
+              url: course.videoUrl
+            }] : []
           });
         }
       }
-      renderSectionsBuilder();
+      renderLessonsBuilder();
 
       $("formHeader").textContent = `Editing: ${course.title}`;
-      $("cSubmitBtn").textContent = "Update Course";
+      $("cSubmitBtn").textContent = "Update Course & Lessons";
       $("cCancelBtn").style.display = "inline-flex";
       $("cForm").scrollIntoView({ behavior: "smooth" });
     }
   } else if (d.pub) {
-    await update(ref(db, "courses/" + d.pub), { published: d.v !== "true" });
+    const isPub = d.v === "true";
+    await update(ref(db, "courses/" + d.pub), { published: !isPub });
     await load();
   } else if (d.del) {
     if (!confirm("Are you sure you want to permanently delete this course?")) return;

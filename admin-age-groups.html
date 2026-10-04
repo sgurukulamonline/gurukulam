@@ -465,7 +465,7 @@ function renderContentList() {
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
               <b style="font-size:1.15rem;color:var(--maroon)">${esc(c.title)}</b>
               <span class="tag ${c.type === 'free' ? '' : 'admin'}">${c.type === 'free' ? 'Free' : 'Paid'}</span>
-              <span class="muted" style="font-size:.78rem">· ${c.lessons || 10} lessons</span>
+              <span class="muted" style="font-size:.78rem">· ${Array.isArray(c.lessons) ? c.lessons.length : (typeof c.lessons === 'number' ? c.lessons : (c.lessonCount || 10))} lessons</span>
             </div>
             
             <p class="muted" style="margin:5px 0 10px;font-size:.85rem;line-height:1.4">${esc(c.desc || "No description provided.")}</p>
@@ -562,13 +562,18 @@ $("ageContentForm").onsubmit = async e => {
     }
   }
 
-  if (editId) {
-    await update(ref(db, "courses/" + editId), courseData);
-    showToast("✓ Content updated across selected sections!");
-  } else {
-    courseData.createdAt = Date.now();
-    await push(ref(db, "courses"), courseData);
-    showToast("✓ New content added across selected sections!");
+  try {
+    if (editId) {
+      await update(ref(db, "courses/" + editId), courseData);
+      showToast("✓ Content updated across selected sections!");
+    } else {
+      courseData.createdAt = Date.now();
+      await push(ref(db, "courses"), courseData);
+      showToast("✓ New content added across selected sections!");
+    }
+  } catch (err) {
+    console.error("Age group save error:", err);
+    alert("⚠️ Firebase Realtime Database rejected the save: " + (err.message || err.code || err) + "\n\nPlease ensure your Realtime Database Security Rules are published in Firebase Console.");
   }
 
   resetContentForm();

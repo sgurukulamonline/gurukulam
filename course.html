@@ -59,14 +59,80 @@ button{font:inherit;cursor:pointer;border:0}
 .panel{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
 .panel h2{font-size:1.7rem;color:var(--maroon);margin-bottom:14px}
 
-.lesson{
-  display:flex;gap:14px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);
-  cursor:pointer;border-radius:10px;transition:background .2s;
+.course-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 10px;
 }
-.lesson:hover{background:rgba(232,201,143,.2)}
-.lesson:last-child{border-bottom:0}
-.lesson input{width:22px;height:22px;accent-color:var(--maroon);cursor:pointer}
-.lesson.completed{color:var(--muted);text-decoration:line-through}
+@media(min-width: 960px) {
+  .course-layout {
+    grid-template-columns: 1fr 370px;
+    align-items: start;
+  }
+  .sidebar-sticky {
+    position: sticky;
+    top: 20px;
+  }
+}
+
+.lesson-card-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.lesson-card-item:hover {
+  background: rgba(232,201,143,.25);
+  border-color: var(--gold);
+}
+.lesson-card-item.active {
+  background: #fdf5e2;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 14px rgba(217,154,39,.22);
+}
+.lesson-card-item.completed {
+  opacity: .88;
+}
+.lesson-card-item.completed .lesson-title-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.lesson-num-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sand);
+  color: var(--brown);
+  display: grid;
+  place-items: center;
+  font-size: .8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.lesson-card-item.active .lesson-num-badge {
+  background: var(--maroon);
+  color: var(--cream);
+}
+.lesson-card-item.completed .lesson-num-badge {
+  background: #dcfce7;
+  color: #166534;
+}
+.lesson-cb {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--maroon);
+  cursor: pointer;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
 
 /* Custom Gurukulam Video Player */
 .gk-video-player {
@@ -278,11 +344,12 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <script type="module">
-import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
+import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, parseYouTube, DEFAULT_COURSES, getCourseLessonCount } from "./firebase-init.js";
 
 const box = document.getElementById("box");
 const id = new URLSearchParams(location.search).get("id");
 let user, course, enr;
+let activeLessonIdx = 0;
 const path = () => `enrollments/${user.uid}/${id}`;
 
 const activePlayers = {};
@@ -319,6 +386,71 @@ const getCourseIcon = id => {
   return "🕉️";
 };
 
+function getLessonTitle(courseId, num) {
+  const titles = {
+    "bhagavad-gita": ["Arjuna Vishada Yoga", "Sankhya Yoga & Immortality", "Karma Yoga & Selfless Action", "Jnana Karma Sannyasa Yoga", "Karma Sannyasa Yoga", "Dhyana Yoga & Meditation", "Jnana Vijnana Yoga", "Akshara Brahma Yoga", "Raja Vidya Raja Guhya", "Vibhuti Yoga", "Vishwaroopa Darshana", "Bhakti Yoga & Beyond"],
+    "sanskrit-basics": ["Varnamala (Vowels & Consonants)", "Pronunciation & Sthana", "Basic Nouns & Pronouns", "Simple Verbs in Present Tense", "Sandhi Foundations", "Shloka Chanting Metres", "Everyday Gurukulam Conversation", "Subhashitas Recitation"]
+  };
+  const list = titles[courseId];
+  return (list && list[num - 1]) || `Module ${num} - Core Concept & Practice`;
+}
+
+function getCourseLessons(c) {
+  if (!c) return [];
+  if (Array.isArray(c.lessons) && c.lessons.length) {
+    return c.lessons.map((les, idx) => ({
+      id: les.id || ("les_" + (idx + 1)),
+      title: les.title || `Lesson ${idx + 1}`,
+      duration: les.duration || "15 mins",
+      summary: les.summary || "",
+      blocks: Array.isArray(les.blocks) ? les.blocks : []
+    }));
+  }
+
+  // Fallback: migrate legacy flat sections into Lesson 1
+  if (Array.isArray(c.sections) && c.sections.length) {
+    return [{
+      id: "les_1",
+      title: "Lesson 1: " + (c.title || "Foundations & Lecture"),
+      duration: "20 mins",
+      summary: c.desc || "Complete sacred study material",
+      blocks: c.sections
+    }];
+  }
+
+  // Fallback: generate default lesson syllabus
+  const n = typeof c.lessons === "number" ? c.lessons : (c.lessonCount || 8);
+  const list = [];
+  for (let i = 1; i <= n; i++) {
+    const title = getLessonTitle(c.id, i);
+    const blocks = [];
+    if (i === 1 && c.videoUrl) {
+      blocks.push({
+        id: "blk_v1",
+        type: "video",
+        title: "Introductory Lecture",
+        url: c.videoUrl
+      });
+    }
+    if (i === 1 && c.desc) {
+      blocks.push({
+        id: "blk_m1",
+        type: "matter",
+        title: "Course Overview & Guidance",
+        text: c.desc
+      });
+    }
+    list.push({
+      id: "les_" + i,
+      title: `Lesson ${i}: ${title}`,
+      duration: "15 mins",
+      summary: "Audio lecture, guided contemplation & shloka study",
+      blocks
+    });
+  }
+  return list;
+}
+
 async function load() {
   if (!id) {
     box.innerHTML = `<div style="text-align:center;padding:40px">
@@ -342,6 +474,15 @@ async function load() {
   }
 
   enr = user ? (await get(ref(db, path()))).val() : getGuestEnrollment(id);
+
+  const lessons = getCourseLessons(course);
+  if (enr && enr.done) {
+    const firstUndone = lessons.findIndex((_, idx) => !enr.done["L" + (idx + 1)]);
+    if (firstUndone !== -1) {
+      activeLessonIdx = firstUndone;
+    }
+  }
+
   render();
 }
 
@@ -460,7 +601,7 @@ function setupPlayerControls(player, idx) {
   }, 250);
 }
 
-async function initPlayers(sections) {
+async function initPlayers(blocks) {
   Object.keys(activeIntervals).forEach(k => clearInterval(activeIntervals[k]));
   Object.keys(activePlayers).forEach(k => {
     try { activePlayers[k].destroy(); } catch(e) {}
@@ -468,7 +609,7 @@ async function initPlayers(sections) {
 
   await ensureYTApi();
 
-  sections.forEach((sec, idx) => {
+  blocks.forEach((sec, idx) => {
     if (sec.type !== "video") return;
     const yt = parseYouTube(sec.url);
     if (!yt || !yt.videoId) return;
@@ -515,10 +656,14 @@ async function initPlayers(sections) {
 }
 
 function render() {
-  const n = course.lessons || 10;
+  const lessons = getCourseLessons(course);
+  const n = lessons.length;
+  if (activeLessonIdx < 0 || activeLessonIdx >= n) activeLessonIdx = 0;
+  const activeLesson = lessons[activeLessonIdx] || lessons[0] || { title: "Introduction", blocks: [] };
+
   const done = enr?.done || {};
-  const completedCount = Object.keys(done).length;
-  const pr = enr ? Math.min(100, Math.round(completedCount / n * 100)) : 0;
+  const completedCount = Object.keys(done).filter(k => done[k]).length;
+  const pr = enr && n > 0 ? Math.min(100, Math.round(completedCount / n * 100)) : 0;
 
   const loginRedirect = "login.html?redirect=" + encodeURIComponent("course.html?id=" + id);
   const act = !enr
@@ -531,50 +676,17 @@ function render() {
       </div>
     `;
 
-  let lessonsHtml = "";
-  for (let i = 1; i <= n; i++) {
-    const isChecked = Boolean(done["L" + i]);
-    lessonsHtml += `
-      <label class="lesson ${isChecked ? 'completed' : ''}">
-        ${enr ? `<input type="checkbox" data-l="${i}" ${isChecked ? "checked" : ""}>` : `<span style="font-size:1.2rem">🔒</span>`}
-        <div>
-          <b>Lesson ${i}: ${getLessonTitle(course.id, i)}</b>
-          <div class="muted">Audio lecture, guided reading & shloka study</div>
-        </div>
-      </label>
-    `;
-  }
-
   const guestSyncBanner = (!user && enr) ? `
-    <div style="margin-top:18px;padding:12px 16px;background:rgba(232,201,143,.25);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <span style="font-size:.86rem;color:var(--brown)">✨ <b>Progress active:</b> Your work is saved on this device. Sign in anytime to sync to the cloud!</span>
-      <a class="btn sm gold" href="${loginRedirect}">Sign in to Sync →</a>
+    <div style="margin-top:16px;padding:12px 14px;background:rgba(232,201,143,.25);border:1px solid var(--line);border-radius:12px;font-size:.82rem;line-height:1.4">
+      <div style="font-weight:600;color:var(--brown);margin-bottom:4px">✨ Progress Saved Locally</div>
+      <span style="color:var(--muted)">Sign in anytime to sync to the cloud across all your devices.</span>
+      <div style="margin-top:8px"><a class="btn sm gold" style="font-size:.78rem;padding:4px 10px" href="${loginRedirect}">Sign in to Sync →</a></div>
     </div>
   ` : "";
 
-  // Prepare dynamic sections (video, photo, matter sequence)
-  let sections = Array.isArray(course.sections) && course.sections.length ? course.sections : [];
-  if (!sections.length) {
-    if (course.videoUrl) {
-      sections.push({
-        id: "sec_init_v",
-        type: "video",
-        title: "Introduction Lecture",
-        url: course.videoUrl
-      });
-    }
-    if (course.desc) {
-      sections.push({
-        id: "sec_init_m",
-        type: "matter",
-        title: "Course Overview & Study Guide",
-        text: course.desc
-      });
-    }
-  }
-
-  // Render sequential sections in order
-  const sectionsHtml = sections.map((sec, idx) => {
+  // Active Lesson Content Blocks
+  const activeBlocks = Array.isArray(activeLesson.blocks) ? activeLesson.blocks : [];
+  const blocksHtml = activeBlocks.length ? activeBlocks.map((sec, idx) => {
     if (sec.type === "video") {
       const yt = parseYouTube(sec.url);
       const vid = yt ? yt.videoId : "";
@@ -631,7 +743,63 @@ function render() {
         </div>
       `;
     }
+  }).join("") : `
+    <div style="background:var(--card);border-radius:18px;padding:36px 24px;text-align:center;border:1px dashed var(--line);margin-bottom:24px">
+      <div style="font-size:3rem;margin-bottom:10px">🪷</div>
+      <h3 style="color:var(--maroon);font-size:1.45rem;margin-bottom:8px">Lesson Study &amp; Contemplation</h3>
+      <p class="muted" style="max-width:540px;margin:0 auto 18px;font-size:.95rem;line-height:1.6">
+        Contemplate the teachings of <b>${esc(activeLesson.title)}</b>. Practice svadhyaya (self-study) and reflection in accordance with traditional Gurukulam discipline.
+      </p>
+      ${enr ? `<button class="btn gold sm" id="btnMarkCurDone" data-l="${activeLessonIdx + 1}">${done["L" + (activeLessonIdx + 1)] ? '✓ Completed (Tap to undo)' : '✓ Mark Lesson as Done'}</button>` : ''}
+    </div>
+  `;
+
+  // Syllabus list
+  const syllabusHtml = lessons.map((les, idx) => {
+    const isCompleted = Boolean(done["L" + (idx + 1)]);
+    const isActive = (idx === activeLessonIdx);
+    return `
+      <div class="lesson-card-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" data-lesson-idx="${idx}">
+        ${enr ? `
+          <input type="checkbox" class="lesson-cb" data-l="${idx + 1}" ${isCompleted ? 'checked' : ''} title="Mark lesson complete">
+        ` : `
+          <span style="font-size:1.1rem;margin-top:4px" title="Enroll to unlock">🔒</span>
+        `}
+        <div class="lesson-num-badge">${isCompleted ? '✓' : (idx + 1)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+            <b class="lesson-title-text" style="font-size:.92rem;color:var(--brown)">${esc(les.title)}</b>
+            ${isActive ? '<span class="tag gold" style="font-size:.65rem;flex-shrink:0">Studying</span>' : ''}
+          </div>
+          <div class="muted" style="font-size:.78rem;margin-top:2px">
+            <span>⏱️ ${esc(les.duration || '15 mins')}</span>
+            ${les.summary ? ` · ${esc(les.summary)}` : ''}
+          </div>
+        </div>
+      </div>
+    `;
   }).join("");
+
+  const isCurDone = Boolean(done["L" + (activeLessonIdx + 1)]);
+  const navHtml = `
+    <div class="lesson-nav-bar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:var(--card);border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)">
+      <button class="btn ghost sm" id="btnPrevLesson" ${activeLessonIdx <= 0 ? 'disabled style="opacity:.35;cursor:not-allowed"' : ''}>
+        ← Prev Lesson
+      </button>
+      <div style="display:flex;gap:8px;align-items:center">
+        ${enr ? `
+          <button class="btn sm ${isCurDone ? 'ghost' : 'gold'}" id="btnToggleLessonDone" data-l="${activeLessonIdx + 1}">
+            ${isCurDone ? '✓ Completed (Mark Incomplete)' : '✓ Mark Lesson as Done'}
+          </button>
+        ` : `
+          <button class="btn sm gold" id="enrollFromNav">Enroll to Track Progress</button>
+        `}
+      </div>
+      <button class="btn sm" id="btnNextLesson" ${activeLessonIdx >= n - 1 ? 'disabled style="opacity:.35;cursor:not-allowed"' : ''}>
+        Next Lesson →
+      </button>
+    </div>
+  `;
 
   box.innerHTML = `
     <div class="hero2">
@@ -641,7 +809,7 @@ function render() {
       <div>
         <div style="margin-bottom:8px">
           <span class="tag">${course.type === "free" ? "Free" : "Paid"}</span>
-          <span class="muted" style="margin-left:8px">${n} lessons</span>
+          <span class="muted" style="margin-left:8px"><b>${n} Lessons</b></span>
         </div>
         <h1>${esc(course.title)}</h1>
         <p class="muted" style="margin:10px 0 18px;font-size:.95rem">${esc(course.desc || "")}</p>
@@ -649,57 +817,82 @@ function render() {
       </div>
     </div>
 
-    <!-- Course Dynamic Content Sequence (Custom Video Player, Photos, and Matter) -->
-    <div style="margin-bottom:28px">
-      ${sectionsHtml}
-    </div>
+    <!-- Responsive Course Learning Layout -->
+    <div class="course-layout">
+      <!-- Active Lesson Viewer -->
+      <div class="active-lesson-viewer">
+        <div class="panel" style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+            <span class="tag gold" style="font-weight:700">Lesson ${activeLessonIdx + 1} of ${n}</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span class="muted" style="font-size:.85rem">⏱️ ${esc(activeLesson.duration || "15 mins")}</span>
+              ${isCurDone ? '<span class="tag" style="background:#dcfce7;color:#166534;font-weight:700">✓ Completed</span>' : '<span class="tag" style="background:#fef3c7;color:#92400e;font-weight:700">⏳ In Progress</span>'}
+            </div>
+          </div>
+          <h2 style="font-size:1.85rem;color:var(--maroon);line-height:1.2;margin-bottom:6px">${esc(activeLesson.title)}</h2>
+          ${activeLesson.summary ? `<p class="muted" style="font-size:.92rem;margin-bottom:4px">${esc(activeLesson.summary)}</p>` : ''}
+        </div>
 
-    <div class="panel">
-      <h2>Course Modules & Lessons</h2>
-      ${lessonsHtml}
-      ${guestSyncBanner}
-      ${enr ? '' : '<p class="muted" style="margin-top:16px">Click Enroll &amp; Start Learning to track your daily progress and unlock lesson checkboxes.</p>'}
+        <!-- Active Lesson Content Blocks -->
+        <div style="margin-bottom:20px">
+          ${blocksHtml}
+        </div>
+
+        <!-- Lesson Navigation Bar -->
+        ${navHtml}
+      </div>
+
+      <!-- Syllabus Sidebar -->
+      <div class="sidebar-sticky">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <h2 style="font-size:1.35rem;color:var(--maroon);margin:0">Course Syllabus</h2>
+            <span class="muted" style="font-size:.82rem"><b>${completedCount}/${n}</b> done</span>
+          </div>
+          <div class="bar" style="margin:6px 0 14px"><i style="width:${pr}%"></i></div>
+          <p class="muted" style="font-size:.8rem;margin-bottom:14px">Select any lesson to study its materials:</p>
+
+          <div class="syllabus-list" style="max-height:560px;overflow-y:auto;padding-right:4px">
+            ${syllabusHtml}
+          </div>
+
+          ${guestSyncBanner}
+          ${!enr ? '<div style="margin-top:16px;text-align:center"><button class="btn gold sm" id="enrollSide">Enroll &amp; Start Learning</button></div>' : ''}
+        </div>
+      </div>
     </div>
   `;
 
-  // Initialize YouTube API players with custom controls
-  initPlayers(sections);
+  // Initialize YouTube API players with custom controls for the active lesson
+  initPlayers(activeBlocks);
 }
 
-function getLessonTitle(courseId, num) {
-  const titles = {
-    "bhagavad-gita": ["Arjuna Vishada Yoga", "Sankhya Yoga & Immortality", "Karma Yoga & Selfless Action", "Jnana Karma Sannyasa Yoga", "Karma Sannyasa Yoga", "Dhyana Yoga & Meditation", "Jnana Vijnana Yoga", "Akshara Brahma Yoga", "Raja Vidya Raja Guhya", "Vibhuti Yoga", "Vishwaroopa Darshana", "Bhakti Yoga & Beyond"],
-    "sanskrit-basics": ["Varnamala (Vowels & Consonants)", "Pronunciation & Sthana", "Basic Nouns & Pronouns", "Simple Verbs in Present Tense", "Sandhi Foundations", "Shloka Chanting Metres", "Everyday Gurukulam Conversation", "Subhashitas Recitation"]
-  };
-  const list = titles[courseId];
-  return (list && list[num - 1]) || `Module ${num} - Core Concept & Practice`;
-}
-
-box.addEventListener("click", async e => {
-  if (e.target.id !== "enroll") return;
-  e.target.disabled = true;
-  e.target.textContent = "Starting Course...";
-
+async function startEnrollment() {
   if (user) {
     await set(ref(db, path()), { progress: 0, enrolledAt: Date.now(), done: {} });
   } else {
     saveGuestEnrollment(id, { progress: 0, enrolledAt: Date.now(), done: {} });
   }
   await load();
-});
+}
 
-box.addEventListener("change", async e => {
-  const i = e.target.dataset.l;
-  if (!i) return;
+async function toggleLessonStatus(lessonNum, targetState = null) {
+  const num = parseInt(lessonNum, 10);
+  if (!num) return;
+
+  const currentDone = Boolean(enr?.done && enr.done["L" + num]);
+  const newState = targetState !== null ? targetState : !currentDone;
+
+  const lessons = getCourseLessons(course);
+  const total = lessons.length || 1;
 
   if (user) {
-    const r = ref(db, `${path()}/done/L${i}`);
-    if (e.target.checked) await set(r, true);
+    const r = ref(db, `${path()}/done/L${num}`);
+    if (newState) await set(r, true);
     else await remove(r);
 
     enr = (await get(ref(db, path()))).val() || {};
-    const total = course.lessons || 10;
-    const count = Object.keys(enr.done || {}).length;
+    const count = Object.keys(enr.done || {}).filter(k => enr.done[k]).length;
     const pr = Math.min(100, Math.round(count / total * 100));
 
     await update(ref(db, path()), {
@@ -707,19 +900,76 @@ box.addEventListener("change", async e => {
       ...(pr >= 100 && !enr.completedAt ? { completedAt: Date.now() } : {})
     });
   } else {
-    // Offline/guest progress on this device
     if (!enr) enr = { progress: 0, enrolledAt: Date.now(), done: {} };
     if (!enr.done) enr.done = {};
-    if (e.target.checked) enr.done["L" + i] = true;
-    else delete enr.done["L" + i];
+    if (newState) enr.done["L" + num] = true;
+    else delete enr.done["L" + num];
 
-    const total = course.lessons || 10;
-    const count = Object.keys(enr.done).length;
+    const count = Object.keys(enr.done).filter(k => enr.done[k]).length;
     enr.progress = Math.min(100, Math.round(count / total * 100));
     if (enr.progress >= 100 && !enr.completedAt) enr.completedAt = Date.now();
     saveGuestEnrollment(id, enr);
   }
-  await load();
+  render();
+}
+
+box.addEventListener("click", async e => {
+  // Enroll buttons
+  if (e.target.id === "enroll" || e.target.id === "enrollSide" || e.target.id === "enrollFromNav") {
+    e.target.disabled = true;
+    e.target.textContent = "Starting Course...";
+    await startEnrollment();
+    return;
+  }
+
+  // Toggle lesson complete button
+  const toggleBtn = e.target.closest("#btnToggleLessonDone") || e.target.closest("#btnMarkCurDone");
+  if (toggleBtn) {
+    const lNum = toggleBtn.dataset.l;
+    await toggleLessonStatus(lNum);
+    return;
+  }
+
+  // Prev lesson
+  if (e.target.closest("#btnPrevLesson")) {
+    if (activeLessonIdx > 0) {
+      activeLessonIdx--;
+      render();
+      window.scrollTo({ top: document.querySelector('.active-lesson-viewer')?.offsetTop - 80 || 0, behavior: 'smooth' });
+    }
+    return;
+  }
+
+  // Next lesson
+  if (e.target.closest("#btnNextLesson")) {
+    const lessons = getCourseLessons(course);
+    if (activeLessonIdx < lessons.length - 1) {
+      activeLessonIdx++;
+      render();
+      window.scrollTo({ top: document.querySelector('.active-lesson-viewer')?.offsetTop - 80 || 0, behavior: 'smooth' });
+    }
+    return;
+  }
+
+  // Syllabus lesson card click
+  const card = e.target.closest(".lesson-card-item");
+  if (card) {
+    if (e.target.classList.contains("lesson-cb")) {
+      // Direct checkbox toggle
+      const lNum = e.target.dataset.l;
+      await toggleLessonStatus(lNum, e.target.checked);
+      return;
+    }
+    const idx = parseInt(card.dataset.lessonIdx, 10);
+    if (!isNaN(idx) && idx !== activeLessonIdx) {
+      activeLessonIdx = idx;
+      render();
+      if (window.innerWidth < 960) {
+        window.scrollTo({ top: document.querySelector('.active-lesson-viewer')?.offsetTop - 80 || 0, behavior: 'smooth' });
+      }
+    }
+    return;
+  }
 });
 </script>
 <nav class="bottom" aria-label="App">

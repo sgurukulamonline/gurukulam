@@ -548,7 +548,14 @@ export async function get(refObj) {
 
 export async function set(refObj, value) {
   if (refObj && !refObj._mockPath && realDb) {
-    try { return await fbSet(refObj, value); } catch (e) { console.warn("Firebase set error, falling back to local:", e); }
+    try {
+      return await fbSet(refObj, value);
+    } catch (e) {
+      console.warn("Firebase set error, falling back to local:", e);
+      const path = refObj?._mockPath || "";
+      setMockValue(path, value);
+      throw e;
+    }
   }
   const path = refObj?._mockPath || "";
   setMockValue(path, value);
@@ -557,7 +564,14 @@ export async function set(refObj, value) {
 export async function push(refObj, value) {
   const newId = "id_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   if (refObj && !refObj._mockPath && realDb) {
-    try { return await fbPush(refObj, value); } catch (e) { console.warn("Firebase push error, falling back to local:", e); }
+    try {
+      return await fbPush(refObj, value);
+    } catch (e) {
+      console.warn("Firebase push error, falling back to local:", e);
+      const path = (refObj?._mockPath || "") + "/" + newId;
+      setMockValue(path, value);
+      throw e;
+    }
   }
   const path = (refObj?._mockPath || "") + "/" + newId;
   setMockValue(path, value);
@@ -566,7 +580,14 @@ export async function push(refObj, value) {
 
 export async function update(refObj, updates) {
   if (refObj && !refObj._mockPath && realDb) {
-    try { return await fbUpdate(refObj, updates); } catch (e) { console.warn("Firebase update error, falling back to local:", e); }
+    try {
+      return await fbUpdate(refObj, updates);
+    } catch (e) {
+      console.warn("Firebase update error, falling back to local:", e);
+      const path = refObj?._mockPath || "";
+      updateMockValue(path, updates);
+      throw e;
+    }
   }
   const path = refObj?._mockPath || "";
   updateMockValue(path, updates);
@@ -574,7 +595,14 @@ export async function update(refObj, updates) {
 
 export async function remove(refObj) {
   if (refObj && !refObj._mockPath && realDb) {
-    try { return await fbRemove(refObj); } catch (e) { console.warn("Firebase remove error, falling back to local:", e); }
+    try {
+      return await fbRemove(refObj);
+    } catch (e) {
+      console.warn("Firebase remove error, falling back to local:", e);
+      const path = refObj?._mockPath || "";
+      removeMockValue(path);
+      throw e;
+    }
   }
   const path = refObj?._mockPath || "";
   removeMockValue(path);
@@ -615,6 +643,17 @@ export async function signInWithPopup(authInstance, provider) {
     return await fbSignInWithPopup(realAuth, provider);
   }
   throw new Error("Firebase Auth not configured. Use Quick Learner or Admin login.");
+}
+
+// Live diagnostics to check whether cloud database rules allow read/write
+export async function checkDatabaseStatus() {
+  if (!realDb) return { ok: false, reason: "Local mode (No real Firebase connected)" };
+  try {
+    const snap = await fbGet(fbRef(realDb, "courses"));
+    return { ok: true, count: snap.exists() ? Object.keys(snap.val() || {}).length : 0 };
+  } catch (err) {
+    return { ok: false, error: err.message, code: err.code || "PERMISSION_DENIED" };
+  }
 }
 
 // Escape text before putting it into innerHTML
@@ -675,7 +714,7 @@ export async function syncLocalProgressToCloud(user) {
       // Union of completed lessons
       const mergedDone = { ...(localData.done || {}), ...(cloudData.done || {}) };
       const courseObj = DEFAULT_COURSES.find(c => c.id === cid) || {};
-      const totalLessons = courseObj.lessons || 10;
+      const totalLessons = getCourseLessonCount(courseObj);
       const count = Object.keys(mergedDone).length;
       const mergedProgress = Math.max(localData.progress || 0, cloudData.progress || 0, Math.min(100, Math.round(count / totalLessons * 100)));
 
@@ -914,6 +953,15 @@ export const getCourseIcon = id => {
   return "🕉️";
 };
 
+// Calculate accurate lesson count whether lessons is an array, number, or lessonCount field
+export function getCourseLessonCount(c) {
+  if (!c) return 0;
+  if (Array.isArray(c.lessons)) return c.lessons.length;
+  if (typeof c.lessons === "number") return c.lessons;
+  if (c.lessonCount) return Number(c.lessonCount);
+  return 10;
+}
+
 // Fill a container with published courses (can optionally prioritize pinned courses for home)
 export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = false) {
   try {
@@ -937,9 +985,10 @@ export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = 
     let html = cs.map(c => {
       const k = c.type === "free" ? "free" : "paid";
       const icon = getCourseIcon(c.id);
+      const lesCount = getCourseLessonCount(c);
       return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
       ${c.imageUrl ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`}
-      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${c.lessons || 0} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
+      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${lesCount} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
     }).join("");
 
     if (showMoreCard) {
