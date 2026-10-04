@@ -344,7 +344,7 @@ button{font:inherit;cursor:pointer;border:0}
 </div>
 
 <script type="module">
-import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, parseYouTube, DEFAULT_COURSES, getCourseLessonCount } from "./firebase-init.js";
+import { auth, db, onAuthStateChanged, ref, get, set, update, remove, esc, parseYouTube, parseVideoSource, DEFAULT_COURSES, getCourseLessonCount } from "./firebase-init.js";
 
 const box = document.getElementById("box");
 const id = new URLSearchParams(location.search).get("id");
@@ -607,19 +607,27 @@ async function initPlayers(blocks) {
     try { activePlayers[k].destroy(); } catch(e) {}
   });
 
+  // Only initialize YT API if there are actual YouTube video blocks
+  const hasYT = blocks.some(sec => {
+    if (sec.type !== "video") return false;
+    const vSrc = parseVideoSource(sec.url);
+    return vSrc && vSrc.provider === "youtube" && vSrc.videoId;
+  });
+  if (!hasYT) return;
+
   await ensureYTApi();
 
   blocks.forEach((sec, idx) => {
     if (sec.type !== "video") return;
-    const yt = parseYouTube(sec.url);
-    if (!yt || !yt.videoId) return;
+    const vSrc = parseVideoSource(sec.url);
+    if (!vSrc || vSrc.provider !== "youtube" || !vSrc.videoId) return;
 
     const elId = `yt_player_${idx}`;
     if (!document.getElementById(elId)) return;
 
     try {
       const player = new YT.Player(elId, {
-        videoId: yt.videoId,
+        videoId: vSrc.videoId,
         playerVars: {
           controls: 0,
           modestbranding: 1,
@@ -688,13 +696,45 @@ function render() {
   const activeBlocks = Array.isArray(activeLesson.blocks) ? activeLesson.blocks : [];
   const blocksHtml = activeBlocks.length ? activeBlocks.map((sec, idx) => {
     if (sec.type === "video") {
-      const yt = parseYouTube(sec.url);
-      const vid = yt ? yt.videoId : "";
+      const vSrc = parseVideoSource(sec.url);
+
+      // 1. Bunny.net Stream (Protected domain-locked HD player)
+      if (vSrc && vSrc.provider === "bunny") {
+        return `
+          <div class="section-block video-block" id="block_${idx}">
+            ${sec.title ? `<h3 class="section-title">🎥 ${esc(sec.title)} <span style="font-size:.72rem;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:600;vertical-align:middle;margin-left:6px">🔒 Protected Stream</span></h3>` : ''}
+            <div style="position:relative;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#0d0603;box-shadow:0 10px 30px rgba(0,0,0,.35);border:1px solid rgba(217,154,39,.3);margin-bottom:24px">
+              <iframe
+                src="${esc(vSrc.embedUrl)}?autoplay=false&preload=true&responsive=true"
+                loading="lazy"
+                style="border:0;position:absolute;top:0;left:0;height:100%;width:100%;"
+                allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+                allowfullscreen="true">
+              </iframe>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. Direct Video File (.mp4, .webm, .m3u8)
+      if (vSrc && vSrc.provider === "direct") {
+        return `
+          <div class="section-block video-block" id="block_${idx}">
+            ${sec.title ? `<h3 class="section-title">🎥 ${esc(sec.title)}</h3>` : ''}
+            <div style="position:relative;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#0d0603;box-shadow:0 10px 30px rgba(0,0,0,.35);border:1px solid rgba(217,154,39,.3);margin-bottom:24px">
+              <video src="${esc(vSrc.embedUrl)}" controls playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:18px"></video>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. YouTube (Custom Gurukulam Player without YouTube branding)
+      const ytVid = (vSrc && vSrc.provider === "youtube") ? vSrc.videoId : "";
       return `
         <div class="section-block video-block" id="block_${idx}">
           ${sec.title ? `<h3 class="section-title">🎥 ${esc(sec.title)}</h3>` : ''}
           <div class="gk-video-player" id="playerWrap_${idx}">
-            <div id="yt_player_${idx}" data-videoid="${vid}"></div>
+            <div id="yt_player_${idx}" data-videoid="${esc(ytVid)}"></div>
             <div class="gk-click-overlay" id="clickOverlay_${idx}"></div>
             <div class="gk-play-overlay" id="playOverlay_${idx}">
               <div class="gk-big-play-btn">▶</div>

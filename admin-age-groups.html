@@ -255,11 +255,11 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           <input name="imageUrl" id="cImg" placeholder="e.g. images/Bala%20Gurukulam.png or https://...">
         </div>
         <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">YouTube Video URL (optional - auto-extracts preview thumbnail &amp; custom video stream)</label>
-          <input name="videoUrl" id="cVideo" placeholder="e.g. https://www.youtube.com/watch?v=...">
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Video URL (YouTube or Bunny.net Stream Embed / &lt;iframe&gt;)</label>
+          <input name="videoUrl" id="cVideo" placeholder="e.g. YouTube URL or Bunny.net Stream URL">
           <div id="ytPreview" style="display:none;margin-top:8px;background:#fff8ea;padding:8px 12px;border-radius:10px;border:1px solid var(--line);align-items:center;gap:12px">
             <img id="ytThumb" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Thumb">
-            <span style="font-size:.8rem;color:var(--muted)">YouTube Video detected. Plays in custom Gurukulam player with full timeline scrub.</span>
+            <span id="ytPreviewText" style="font-size:.8rem;color:var(--muted)">Video detected.</span>
           </div>
         </div>
         <div style="grid-column:1/-1">
@@ -302,7 +302,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 <div id="toast">✅ Action completed</div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, parseVideoSource, DEFAULT_COURSES } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 $("out").onclick = adminLogout;
@@ -362,15 +362,31 @@ $("btnClearAll").onclick = () => {
   });
 };
 
-// YouTube URL auto preview in content form
+// Video URL auto preview in content form (YouTube & Bunny.net)
 $("cVideo").addEventListener("input", e => {
   const val = e.target.value.trim();
-  const yt = parseYouTube(val);
-  if (yt) {
-    $("ytThumb").src = yt.thumbnailUrl;
-    $("ytPreview").style.display = "flex";
-    if (!$("cImg").value) {
-      $("cImg").value = yt.thumbnailUrl;
+  const vSrc = parseVideoSource(val);
+  if (vSrc) {
+    if (vSrc.provider === "bunny") {
+      $("ytThumb").style.display = "none";
+      $("ytPreviewText").innerHTML = `<b>🐰 Bunny.net Protected Stream detected</b><br><small style="color:var(--muted)">🔒 Domain-locked for your website. Anti-piracy enabled, no YouTube branding.</small>`;
+      $("ytPreview").style.display = "flex";
+      $("ytPreview").style.background = "#fffdfa";
+      $("ytPreview").style.borderColor = "#fcd34d";
+    } else if (vSrc.provider === "youtube") {
+      $("ytThumb").src = vSrc.thumbnailUrl;
+      $("ytThumb").style.display = "block";
+      $("ytPreviewText").innerHTML = `<b>🎥 YouTube Video detected</b> (ID: ${esc(vSrc.videoId)})<br><small style="color:var(--muted)">Plays in custom Gurukulam player without YouTube branding.</small>`;
+      $("ytPreview").style.display = "flex";
+      $("ytPreview").style.background = "#fff8ea";
+      $("ytPreview").style.borderColor = "var(--line)";
+      if (!$("cImg").value && vSrc.thumbnailUrl) {
+        $("cImg").value = vSrc.thumbnailUrl;
+      }
+    } else {
+      $("ytThumb").style.display = "none";
+      $("ytPreviewText").textContent = `${vSrc.title} detected.`;
+      $("ytPreview").style.display = "flex";
     }
   } else {
     $("ytPreview").style.display = "none";
@@ -455,7 +471,8 @@ function renderContentList() {
     const hasSadhaka = ages.includes("sadhaka");
     const hasJnana = ages.includes("jnana");
 
-    const img = c.imageUrl || (c.videoUrl ? parseYouTube(c.videoUrl)?.thumbnailUrl : "images/Bala%20Gurukulam.png");
+    const vSrc = c.videoUrl ? parseVideoSource(c.videoUrl) : null;
+    const img = c.imageUrl || (vSrc?.thumbnailUrl ? vSrc.thumbnailUrl : "images/Bala%20Gurukulam.png");
 
     return `
       <div class="row" style="background:#fff;padding:16px;border-radius:14px;border:1px solid var(--line);margin-bottom:12px;box-shadow:0 2px 8px rgba(122,46,22,.05)">
@@ -553,12 +570,12 @@ $("ageContentForm").onsubmit = async e => {
     updatedAt: Date.now()
   };
 
-  const videoUrl = (f.videoUrl || "").trim();
-  if (videoUrl) {
-    courseData.videoUrl = videoUrl;
-    const yt = parseYouTube(videoUrl);
-    if (yt && !courseData.imageUrl) {
-      courseData.imageUrl = yt.thumbnailUrl;
+  const rawVideo = (f.videoUrl || "").trim();
+  if (rawVideo) {
+    const vSrc = parseVideoSource(rawVideo);
+    courseData.videoUrl = vSrc ? vSrc.embedUrl : rawVideo;
+    if (vSrc && vSrc.thumbnailUrl && !courseData.imageUrl) {
+      courseData.imageUrl = vSrc.thumbnailUrl;
     }
   }
 
@@ -615,10 +632,22 @@ document.addEventListener("click", async e => {
       $("cVideo").value = course.videoUrl || "";
 
       if (course.videoUrl) {
-        const yt = parseYouTube(course.videoUrl);
-        if (yt) {
-          $("ytThumb").src = yt.thumbnailUrl;
-          $("ytPreview").style.display = "flex";
+        const vSrc = parseVideoSource(course.videoUrl);
+        if (vSrc) {
+          if (vSrc.provider === "bunny") {
+            $("ytThumb").style.display = "none";
+            $("ytPreviewText").innerHTML = `<b>🐰 Bunny.net Protected Stream</b> (ID: ${esc(vSrc.videoId || 'Active')})`;
+            $("ytPreview").style.display = "flex";
+            $("ytPreview").style.background = "#fffdfa";
+            $("ytPreview").style.borderColor = "#fcd34d";
+          } else if (vSrc.provider === "youtube") {
+            $("ytThumb").src = vSrc.thumbnailUrl;
+            $("ytThumb").style.display = "block";
+            $("ytPreviewText").innerHTML = `<b>🎥 YouTube Video</b> (ID: ${esc(vSrc.videoId)})`;
+            $("ytPreview").style.display = "flex";
+            $("ytPreview").style.background = "#fff8ea";
+            $("ytPreview").style.borderColor = "var(--line)";
+          }
         }
       }
 

@@ -201,7 +201,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 </div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, DEFAULT_COURSES, checkDatabaseStatus } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, update, remove, list, parseYouTube, parseVideoSource, DEFAULT_COURSES, checkDatabaseStatus } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
@@ -303,11 +303,18 @@ window.updateLessonBlockField = (lesIdx, blkIdx, field, val) => {
 window.updateLessonBlockVideo = (lesIdx, blkIdx, val) => {
   const blk = currentLessons[lesIdx]?.blocks?.[blkIdx];
   if (blk) {
-    blk.url = val;
-    const yt = parseYouTube(val);
-    if (yt) {
-      blk.thumbnail = yt.thumbnailUrl;
-      blk.videoId = yt.videoId;
+    const raw = String(val || "").trim();
+    const vSrc = parseVideoSource(raw);
+    if (vSrc) {
+      blk.url = vSrc.embedUrl || raw;
+      blk.thumbnail = vSrc.thumbnailUrl || "";
+      blk.videoId = vSrc.videoId || "";
+      blk.provider = vSrc.provider;
+    } else {
+      blk.url = raw;
+      blk.thumbnail = "";
+      blk.videoId = "";
+      blk.provider = "";
     }
     renderLessonsBuilder();
   }
@@ -341,18 +348,49 @@ function renderLessonsBuilder() {
       let blockInputs = "";
 
       if (blk.type === "video") {
-        typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 Video Block #${blkIdx + 1}</span>`;
-        const yt = parseYouTube(blk.url);
+        const vSrc = parseVideoSource(blk.url);
+        let previewInfo = "";
+
+        if (vSrc?.provider === "bunny") {
+          typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🐰 Bunny.net Protected Video #${blkIdx + 1}</span>`;
+          previewInfo = `
+            <div style="display:flex;gap:10px;align-items:center;background:#fffdfa;padding:8px 12px;border-radius:8px;border:1px solid #fcd34d">
+              <span style="font-size:1.5rem">🐰</span>
+              <div style="font-size:.76rem;line-height:1.4">
+                <b style="color:#b45309">Bunny.net Stream (Domain-Locked):</b><br>
+                <span>ID: <code>${esc(vSrc.videoId || 'Custom Stream')}</code> · 🔒 Whitelisted for website only. Anti-piracy enabled, no external sharing.</span>
+              </div>
+            </div>
+          `;
+        } else if (vSrc?.provider === "youtube") {
+          typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 YouTube Video Block #${blkIdx + 1}</span>`;
+          previewInfo = `
+            <div style="display:flex;gap:10px;align-items:center;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line)">
+              ${vSrc.thumbnailUrl ? `<img src="${vSrc.thumbnailUrl}" style="width:64px;height:40px;object-fit:cover;border-radius:6px" alt="Thumb">` : ''}
+              <span style="font-size:.75rem;color:var(--muted)">YouTube ID: <b>${vSrc.videoId}</b> · Plays in custom player without YouTube branding</span>
+            </div>
+          `;
+        } else if (vSrc?.provider === "direct") {
+          typeBadge = `<span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">📹 Direct Video Block #${blkIdx + 1}</span>`;
+          previewInfo = `
+            <div style="background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-size:.75rem;color:var(--muted)">
+              Direct Video File (.mp4/.m3u8) · Plays in native HTML5 player
+            </div>
+          `;
+        } else {
+          typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 Video Block #${blkIdx + 1}</span>`;
+          previewInfo = `
+            <small class="muted" style="line-height:1.4;display:block">
+              Paste <b>YouTube URL</b> (for free lessons) or <b>Bunny.net Stream embed URL / &lt;iframe&gt; code</b> (for protected paid lessons).
+            </small>
+          `;
+        }
+
         blockInputs = `
           <div style="display:grid;gap:6px;margin-top:6px">
             <input type="text" placeholder="Video Title (e.g. Discourse &amp; Chanting)" value="${esc(blk.title || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'title', this.value)">
-            <input type="text" placeholder="YouTube URL (e.g. https://www.youtube.com/watch?v=...)" value="${esc(blk.url || "")}" oninput="window.updateLessonBlockVideo(${lesIdx}, ${blkIdx}, this.value)">
-            ${yt ? `
-              <div style="display:flex;gap:10px;align-items:center;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line)">
-                <img src="${yt.thumbnailUrl}" style="width:64px;height:40px;object-fit:cover;border-radius:6px" alt="Thumb">
-                <span style="font-size:.75rem;color:var(--muted)">YouTube ID: <b>${yt.videoId}</b> · Plays in custom player without YouTube branding</span>
-              </div>
-            ` : '<small class="muted">Paste any YouTube URL — our custom player will play it without YouTube branding.</small>'}
+            <input type="text" placeholder="YouTube URL or Bunny Stream Embed URL / <iframe>" value="${esc(blk.url || "")}" oninput="window.updateLessonBlockVideo(${lesIdx}, ${blkIdx}, this.value)">
+            ${previewInfo}
           </div>
         `;
       } else if (blk.type === "photo" || blk.type === "image") {
@@ -557,6 +595,10 @@ $("cForm").onsubmit = async e => {
     const v = (les.blocks || []).find(b => b.type === "video" && b.url);
     if (v) {
       courseData.videoUrl = v.url;
+      if (!courseData.imageUrl) {
+        const vSrc = parseVideoSource(v.url);
+        if (vSrc?.thumbnailUrl) courseData.imageUrl = vSrc.thumbnailUrl;
+      }
       break;
     }
   }

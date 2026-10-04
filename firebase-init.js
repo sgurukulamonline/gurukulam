@@ -934,6 +934,80 @@ export const parseYouTube = u => {
   };
 };
 
+// Universal Video Source Parser (YouTube, Bunny.net Stream, Direct Video)
+export const parseVideoSource = u => {
+  let s = String(u || "").trim();
+  if (!s) return null;
+
+  // If user pasted an iframe tag, extract the src URL
+  if (s.startsWith("<iframe") || s.includes("src=")) {
+    const srcMatch = s.match(/src=["']([^"']+)["']/i);
+    if (srcMatch && srcMatch[1]) s = srcMatch[1];
+  }
+
+  // 1. YouTube
+  const yt = parseYouTube(s);
+  if (yt) {
+    return {
+      provider: "youtube",
+      videoId: yt.videoId,
+      embedUrl: yt.embedUrl,
+      thumbnailUrl: yt.thumbnailUrl,
+      title: "YouTube Video"
+    };
+  }
+
+  // 2. Bunny.net Stream (Protected domain-locked video)
+  // Format: https://iframe.mediadelivery.net/embed/LIBRARY_ID/VIDEO_ID or similar
+  const bunnyMatch = s.match(/(?:iframe\.mediadelivery\.net\/(?:embed|play)|video\.bunnycdn\.com\/play)\/([^\/?#]+)\/([^\/?#]+)/i);
+  if (bunnyMatch) {
+    const libraryId = bunnyMatch[1];
+    const videoId = bunnyMatch[2];
+    return {
+      provider: "bunny",
+      libraryId,
+      videoId,
+      embedUrl: `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}`,
+      thumbnailUrl: `https://vz-${libraryId}.b-cdn.net/${videoId}/thumbnail.jpg`,
+      title: "Bunny.net Protected Stream"
+    };
+  }
+
+  // Fallback for any other mediadelivery.net / bunnycdn URL
+  if (s.includes("mediadelivery.net") || s.includes("b-cdn.net") || s.includes("bunnycdn.com")) {
+    let embedUrl = s;
+    if (!embedUrl.startsWith("http")) embedUrl = "https://" + embedUrl;
+    return {
+      provider: "bunny",
+      embedUrl,
+      thumbnailUrl: "",
+      title: "Bunny.net Stream"
+    };
+  }
+
+  // 3. Direct video file (.mp4, .webm, .m3u8)
+  if (s.match(/\.(mp4|webm|ogv|m3u8)(\?.*)?$/i)) {
+    return {
+      provider: "direct",
+      embedUrl: s,
+      thumbnailUrl: "",
+      title: "Direct Video Stream"
+    };
+  }
+
+  // 4. Generic iframe embed
+  if (s.startsWith("http://") || s.startsWith("https://")) {
+    return {
+      provider: "iframe",
+      embedUrl: s,
+      thumbnailUrl: "",
+      title: "Web Video Embed"
+    };
+  }
+
+  return null;
+};
+
 // Turn a YouTube link into an embed URL ("" if it is not a YouTube link)
 export const ytEmbed = u => {
   const p = parseYouTube(u);
