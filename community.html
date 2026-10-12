@@ -55,6 +55,12 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .bottom a span{display:block;font-size:1.3rem}
 .bottom a.on{color:var(--gold);font-weight:600}
 @media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
+@media(max-width:768px){
+  .top span a{display:none}
+  .wrap{padding:18px 14px calc(85px + env(safe-area-inset-bottom, 0px))}
+  .wrap>h1{font-size:1.8rem}
+  .chatbox{grid-template-columns:1fr}
+}
 </style></head><body>
 <div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html">Live</a><a href="community.html" style="color:var(--gold)">Community</a><button class="btn gold sm" id="out">Logout</button></span></div>
 <div class="wrap"><h1>Community Circles</h1>

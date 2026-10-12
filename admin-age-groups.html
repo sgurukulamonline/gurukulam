@@ -110,6 +110,14 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   padding:12px 20px;border-radius:12px;font-size:.88rem;box-shadow:var(--shadow);
   display:none;z-index:999;align-items:center;gap:8px;border-left:4px solid var(--gold);
 }
+@media(max-width:600px){
+  .top{padding:12px 14px}
+  .top span{font-size:.8rem;gap:8px}
+  .wrap{padding:16px 12px 60px}
+  .panel{padding:16px}
+  .age-check-wrapper{padding:14px}
+  .fixed-paths-preview{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -235,16 +243,10 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 
       <!-- Content Meta Form -->
       <div class="form">
+        <input type="hidden" name="type" id="cType" value="free">
         <div>
           <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Content / Course Title</label>
           <input name="title" id="cTitle" placeholder="e.g. Sanskrit Shlokas &amp; Ramayana Moral Stories" required>
-        </div>
-        <div>
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Content Access Type</label>
-          <select name="type" id="cType">
-            <option value="free">Free for All Sadhakas</option>
-            <option value="paid">Paid Sacred Course</option>
-          </select>
         </div>
         <div>
           <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Number of Lessons / Modules</label>
@@ -255,8 +257,8 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           <input name="imageUrl" id="cImg" placeholder="e.g. images/Bala%20Gurukulam.png or https://...">
         </div>
         <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Video URL (YouTube or Bunny.net Stream Embed / &lt;iframe&gt;)</label>
-          <input name="videoUrl" id="cVideo" placeholder="e.g. YouTube URL or Bunny.net Stream URL">
+          <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Video URL (Paste YouTube URL — plays in responsive player with YouTube controls)</label>
+          <input name="videoUrl" id="cVideo" placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...">
           <div id="ytPreview" style="display:none;margin-top:8px;background:#fff8ea;padding:8px 12px;border-radius:10px;border:1px solid var(--line);align-items:center;gap:12px">
             <img id="ytThumb" style="width:72px;height:45px;object-fit:cover;border-radius:6px" alt="Thumb">
             <span id="ytPreviewText" style="font-size:.8rem;color:var(--muted)">Video detected.</span>
@@ -376,7 +378,7 @@ $("cVideo").addEventListener("input", e => {
     } else if (vSrc.provider === "youtube") {
       $("ytThumb").src = vSrc.thumbnailUrl;
       $("ytThumb").style.display = "block";
-      $("ytPreviewText").innerHTML = `<b>🎥 YouTube Video detected</b> (ID: ${esc(vSrc.videoId)})<br><small style="color:var(--muted)">Plays in custom Gurukulam player without YouTube branding.</small>`;
+      $("ytPreviewText").innerHTML = `<b>🎥 YouTube Video detected</b> (ID: ${esc(vSrc.videoId)})<br><small style="color:var(--muted)">Plays on website with native YouTube player controls.</small>`;
       $("ytPreview").style.display = "flex";
       $("ytPreview").style.background = "#fff8ea";
       $("ytPreview").style.borderColor = "var(--line)";
@@ -481,7 +483,6 @@ function renderContentList() {
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
               <b style="font-size:1.15rem;color:var(--maroon)">${esc(c.title)}</b>
-              <span class="tag ${c.type === 'free' ? '' : 'admin'}">${c.type === 'free' ? 'Free' : 'Paid'}</span>
               <span class="muted" style="font-size:.78rem">· ${Array.isArray(c.lessons) ? c.lessons.length : (typeof c.lessons === 'number' ? c.lessons : (c.lessonCount || 10))} lessons</span>
             </div>
             

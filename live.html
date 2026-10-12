@@ -43,6 +43,11 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .bottom a span{display:block;font-size:1.3rem}
 .bottom a.on{color:var(--gold);font-weight:600}
 @media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
+@media(max-width:768px){
+  .top span{display:none}
+  .wrap{padding:18px 14px calc(85px + env(safe-area-inset-bottom, 0px))}
+  .wrap>h1{font-size:1.8rem}
+}
 </style></head><body>
 <div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a></span></div>
 <div class="wrap"><h1>Live Classes &amp; Satsangs</h1><div class="panel"><h2>Upcoming &amp; Live Now</h2><div id="up"></div></div><div class="panel"><h2>Past Sessions Archive</h2><div id="past"></div></div></div>

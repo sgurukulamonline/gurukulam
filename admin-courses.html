@@ -70,6 +70,13 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   background:#faf5ea;border:1px dashed var(--line);border-radius:12px;
   padding:14px;margin-top:12px;
 }
+@media(max-width:600px){
+  .top{padding:12px 14px}
+  .top span{font-size:.8rem;gap:8px}
+  .wrap{padding:16px 12px 60px}
+  .panel{padding:16px}
+  .lesson-card{padding:14px}
+}
 </style>
 </head>
 <body>
@@ -101,16 +108,10 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <h2 id="formHeader">Add / Edit Course</h2>
     <form class="form" id="cForm">
       <input type="hidden" name="editId" id="cEditId">
+      <input type="hidden" name="type" id="cType" value="free">
       <div>
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Course Title</label>
         <input name="title" id="cTitle" placeholder="e.g. Bhagavad Gita Deep Study" required>
-      </div>
-      <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Course Type</label>
-        <select name="type" id="cType">
-          <option value="free">Free Course</option>
-          <option value="paid">Paid Course</option>
-        </select>
       </div>
 
       <!-- Target Age Groups Checklist -->
@@ -352,13 +353,13 @@ function renderLessonsBuilder() {
         let previewInfo = "";
 
         if (vSrc?.provider === "bunny") {
-          typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🐰 Bunny.net Protected Video #${blkIdx + 1}</span>`;
+          typeBadge = `<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🐰 Bunny Stream Video #${blkIdx + 1}</span>`;
           previewInfo = `
             <div style="display:flex;gap:10px;align-items:center;background:#fffdfa;padding:8px 12px;border-radius:8px;border:1px solid #fcd34d">
               <span style="font-size:1.5rem">🐰</span>
               <div style="font-size:.76rem;line-height:1.4">
-                <b style="color:#b45309">Bunny.net Stream (Domain-Locked):</b><br>
-                <span>ID: <code>${esc(vSrc.videoId || 'Custom Stream')}</code> · 🔒 Whitelisted for website only. Anti-piracy enabled, no external sharing.</span>
+                <b style="color:#b45309">Bunny Stream:</b><br>
+                <span>ID: <code>${esc(vSrc.videoId || 'Stream')}</code></span>
               </div>
             </div>
           `;
@@ -367,7 +368,7 @@ function renderLessonsBuilder() {
           previewInfo = `
             <div style="display:flex;gap:10px;align-items:center;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--line)">
               ${vSrc.thumbnailUrl ? `<img src="${vSrc.thumbnailUrl}" style="width:64px;height:40px;object-fit:cover;border-radius:6px" alt="Thumb">` : ''}
-              <span style="font-size:.75rem;color:var(--muted)">YouTube ID: <b>${vSrc.videoId}</b> · Plays in custom player without YouTube branding</span>
+              <span style="font-size:.75rem;color:var(--muted)">YouTube ID: <b>${vSrc.videoId}</b> · Plays in website with native YouTube player controls</span>
             </div>
           `;
         } else if (vSrc?.provider === "direct") {
@@ -378,10 +379,10 @@ function renderLessonsBuilder() {
             </div>
           `;
         } else {
-          typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 Video Block #${blkIdx + 1}</span>`;
+          typeBadge = `<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700">🎥 YouTube Video Block #${blkIdx + 1}</span>`;
           previewInfo = `
             <small class="muted" style="line-height:1.4;display:block">
-              Paste <b>YouTube URL</b> (for free lessons) or <b>Bunny.net Stream embed URL / &lt;iframe&gt; code</b> (for protected paid lessons).
+              Paste <b>YouTube URL</b> (e.g. <code>https://www.youtube.com/watch?v=...</code> or <code>https://youtu.be/...</code>). Plays in website with native YouTube controls.
             </small>
           `;
         }
@@ -389,7 +390,7 @@ function renderLessonsBuilder() {
         blockInputs = `
           <div style="display:grid;gap:6px;margin-top:6px">
             <input type="text" placeholder="Video Title (e.g. Discourse &amp; Chanting)" value="${esc(blk.title || "")}" onchange="window.updateLessonBlockField(${lesIdx}, ${blkIdx}, 'title', this.value)">
-            <input type="text" placeholder="YouTube URL or Bunny Stream Embed URL / <iframe>" value="${esc(blk.url || "")}" oninput="window.updateLessonBlockVideo(${lesIdx}, ${blkIdx}, this.value)">
+            <input type="text" placeholder="Paste YouTube URL (e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...)" value="${esc(blk.url || "")}" oninput="window.updateLessonBlockVideo(${lesIdx}, ${blkIdx}, this.value)">
             ${previewInfo}
           </div>
         `;
@@ -521,7 +522,6 @@ async function load() {
           <span>
             <b>${esc(c.title)}</b> 
             <span class="tag ${c.published !== false ? 'published' : 'draft'}">${c.published !== false ? 'Published' : 'Draft'}</span>
-            <span class="tag">${esc(c.type || 'free')}</span>
             ${pinBadge}
             <span class="tag" style="background:#fef3c7;color:#92400e">🎯 ${esc(ageLabels)}</span>
             <br><span class="muted"><b>${lesCount} Lessons</b>${lessonsSummary ? ` (${esc(lessonsSummary)})` : ''}${relTime}</span>

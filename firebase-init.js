@@ -73,7 +73,7 @@ export const DEFAULT_COURSES = [
     id: "sanskrit-basics",
     title: "Sanskrit Basics & Pronunciation",
     desc: "Learn to read, pronounce, and understand Samskritam vocabulary, mantras, and shlokas with correct intonation.",
-    type: "paid",
+    type: "free",
     lessons: 24,
     imageUrl: "images/sanskrit basics.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
@@ -101,7 +101,7 @@ export const DEFAULT_COURSES = [
     id: "indian-history",
     title: "Indian History True Perspective",
     desc: "Discover the authentic civilizational heritage, historical milestones, and contributions of ancient Bharat.",
-    type: "paid",
+    type: "free",
     lessons: 28,
     imageUrl: "images/india history.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
@@ -129,7 +129,7 @@ export const DEFAULT_COURSES = [
     id: "ramayanam",
     title: "Ramayana Deep Study",
     desc: "An in-depth exploration of Valmiki Ramayana, character ethics, dharma, and leadership virtues.",
-    type: "paid",
+    type: "free",
     lessons: 32,
     imageUrl: "images/ramayanam.png",
     videoUrl: "",
@@ -140,7 +140,7 @@ export const DEFAULT_COURSES = [
     id: "yoga-daily",
     title: "Yoga for Daily Life",
     desc: "Daily guided asanas, pranayama, and mindfulness routines for physical vitality and spiritual calm.",
-    type: "paid",
+    type: "free",
     lessons: 20,
     imageUrl: "",
     videoUrl: "",
@@ -162,7 +162,7 @@ export const DEFAULT_COURSES = [
     id: "intro-vedas",
     title: "Introduction to the Vedas",
     desc: "Foundational overview of the four Vedas, Upanishads, Vedic vision of reality, and cultural ethos.",
-    type: "paid",
+    type: "free",
     lessons: 18,
     imageUrl: "",
     videoUrl: "",
@@ -173,7 +173,7 @@ export const DEFAULT_COURSES = [
     id: "temple-culture",
     title: "Temple Culture & Architecture",
     desc: "Understand the sacred geometry, Agama shastras, and spiritual symbolism behind ancient Indian temples.",
-    type: "paid",
+    type: "free",
     lessons: 16,
     imageUrl: "",
     videoUrl: "",
@@ -1057,12 +1057,11 @@ export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = 
     if (!cs.length || !el) return;
 
     let html = cs.map(c => {
-      const k = c.type === "free" ? "free" : "paid";
       const icon = getCourseIcon(c.id);
       const lesCount = getCourseLessonCount(c);
-      return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
+      return `<a class="course" href="course.html?id=${encodeURIComponent(c.id)}">
       ${c.imageUrl ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`}
-      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span><span class="lessons">${lesCount} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
+      <div class="body"><h3>${esc(c.title)}</h3><div class="tags"><span class="lessons">${lesCount} Lessons</span></div><div class="rate"><b>★</b> ${c.rating || "4.8"}</div></div></a>`;
     }).join("");
 
     if (showMoreCard) {

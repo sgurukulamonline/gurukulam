@@ -14,7 +14,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
-  background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:84px}
+  background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -113,7 +113,7 @@ section{padding:34px 0 8px}
 .share{background:rgba(255,255,255,.6);padding:8px 16px;border-radius:12px;font-size:.85rem}
 
 /* Courses */
-.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 .course{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s}
 .course:hover{transform:translateY(-4px)}
 .course .pic{height:150px;overflow:hidden;background:#e8c98f}
@@ -122,10 +122,14 @@ section{padding:34px 0 8px}
 .course .body{padding:12px 14px 14px}
 .course h3{font-size:1.15rem}
 .tags{display:flex;gap:8px;margin:8px 0;font-size:.72rem;align-items:center}
-.tag{padding:2px 12px;border-radius:6px;font-weight:600}
-.free{background:#7cc062;color:#143d08}.paid{background:#f1b36a;color:#6a2f08}
-.lessons{background:#efe0bd;padding:2px 10px;border-radius:6px}
+.lessons{background:#efe0bd;padding:3px 10px;border-radius:6px;font-weight:600}
 .rate{font-size:.82rem;color:var(--muted)}.rate b{color:var(--gold)}
+@media(max-width:540px){
+  .courses{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+  .course .pic{height:115px}
+  .course .body{padding:10px 10px 12px}
+  .course h3{font-size:.95rem;line-height:1.25}
+}
 
 /* Quick access */
 .quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}

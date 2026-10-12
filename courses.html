@@ -14,7 +14,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
-  background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:84px}
+  background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -113,7 +113,7 @@ section{padding:34px 0 8px}
 .share{background:rgba(255,255,255,.6);padding:8px 16px;border-radius:12px;font-size:.85rem}
 
 /* Courses */
-.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 .course{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s}
 .course:hover{transform:translateY(-4px)}
 .course .pic{height:150px;overflow:hidden;background:#e8c98f}
@@ -122,10 +122,14 @@ section{padding:34px 0 8px}
 .course .body{padding:12px 14px 14px}
 .course h3{font-size:1.15rem}
 .tags{display:flex;gap:8px;margin:8px 0;font-size:.72rem;align-items:center}
-.tag{padding:2px 12px;border-radius:6px;font-weight:600}
-.free{background:#7cc062;color:#143d08}.paid{background:#f1b36a;color:#6a2f08}
-.lessons{background:#efe0bd;padding:2px 10px;border-radius:6px}
+.lessons{background:#efe0bd;padding:3px 10px;border-radius:6px;font-weight:600}
 .rate{font-size:.82rem;color:var(--muted)}.rate b{color:var(--gold)}
+@media(max-width:540px){
+  .courses{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+  .course .pic{height:115px}
+  .course .body{padding:10px 10px 12px}
+  .course h3{font-size:.95rem;line-height:1.25}
+}
 
 /* Quick access */
 .quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
@@ -181,11 +185,16 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 .page-h{padding:34px 0 0}
 .page-h h1{font-size:2.4rem;color:var(--brown)}
 .page-h p{color:var(--muted);font-size:.92rem}
-.chips{display:flex;gap:10px;margin:16px 0 4px}
-.chip{padding:6px 18px;border-radius:20px;border:1px solid var(--maroon);font-size:.85rem}
+.mobile-search-bar{display:none;margin-top:14px}
+.chips{display:flex;gap:10px;margin:16px 0 4px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:6px 18px;border-radius:20px;border:1px solid var(--maroon);font-size:.85rem;white-space:nowrap;flex-shrink:0}
 .chip.on{background:var(--maroon);color:var(--cream)}
 .course .pic.ph{display:grid;place-items:center;font-size:3.4rem}
 .group{margin-top:26px}
+@media(max-width:560px){
+  .mobile-search-bar{display:block}
+}
 </style></head><body>
 <header>
   <div class="wrap bar">
@@ -205,10 +214,18 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <div class="page-h">
     <h1 id="pageTitle">All Courses</h1>
     <p id="pageSub">Learn at your own pace with structured lessons</p>
+    <div class="mobile-search-bar">
+      <label class="search" style="display:flex;max-width:100%;margin:0;width:100%">
+        <span aria-hidden="true">🔍</span>
+        <input type="search" id="mobileCourseSearch" placeholder="Search courses, shlokas, topics…" aria-label="Search">
+      </label>
+    </div>
     <div class="chips" id="chipsBox">
-      <button class="chip on" data-f="all">All</button>
-      <button class="chip" data-f="free">Free</button>
-      <button class="chip" data-f="paid">Paid</button>
+      <button class="chip on" data-f="all">All Courses</button>
+      <button class="chip" data-f="bala">👶 Bala (5–12)</button>
+      <button class="chip" data-f="yuva">🏹 Yuva (13–25)</button>
+      <button class="chip" data-f="sadhaka">🕉️ Sadhaka (26–55)</button>
+      <button class="chip" data-f="jnana">🪷 Jnana (56+)</button>
     </div>
   </div>
   <section>
@@ -240,6 +257,7 @@ const initialPath = params.get("path") || "";
 let allCourses = [];
 let activeFilter = initialFilter;
 const searchInput = document.getElementById("courseSearch");
+const mobileSearchInput = document.getElementById("mobileCourseSearch");
 const grid = document.getElementById("coursesGrid");
 
 onAuthStateChanged(auth, u => {
@@ -257,18 +275,10 @@ onAuthStateChanged(auth, u => {
   }
 });
 
-if (initialQuery && searchInput) {
-  searchInput.value = initialQuery;
+if (initialQuery) {
+  if (searchInput) searchInput.value = initialQuery;
+  if (mobileSearchInput) mobileSearchInput.value = initialQuery;
 }
-
-// Track user auth for top avatar
-onAuthStateChanged(auth, u => {
-  const av = document.getElementById("userAvatar");
-  if (av && u) {
-    av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
-    av.title = "Signed in as " + (u.displayName || u.email || "Learner");
-  }
-});
 
 const pathNames = {
   bala: "👶 Bala Gurukulam (Ages 5–12)",
@@ -281,20 +291,21 @@ if (initialPath && pathNames[initialPath]) {
   const ps = document.getElementById("pageSub");
   if (pt) pt.textContent = pathNames[initialPath];
   if (ps) ps.innerHTML = `Curated lessons for ${pathNames[initialPath]} · <a href="courses.html" style="color:var(--maroon);text-decoration:underline;font-weight:600">View All Courses →</a>`;
+  activeFilter = initialPath;
+  document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === initialPath));
 }
 
 // Render courses matching filter & search
 function render() {
-  const q = (searchInput?.value || "").trim().toLowerCase();
+  const q = ((searchInput?.value || "") || (mobileSearchInput?.value || "")).trim().toLowerCase();
   let filtered = allCourses.filter(c => {
     if (c.published === false) return false;
-    if (activeFilter === "free" && c.type !== "free") return false;
-    if (activeFilter === "paid" && c.type !== "paid") return false;
-    if (initialPath) {
+    const targetGroup = activeFilter !== "all" ? activeFilter : initialPath;
+    if (targetGroup && targetGroup !== "all") {
       const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
         ? c.ageGroups
         : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
-      if (!ages.includes('all') && !ages.includes(initialPath)) return false;
+      if (!ages.includes('all') && !ages.includes(targetGroup)) return false;
     }
     if (q) {
       const matchTitle = (c.title || "").toLowerCase().includes(q);
@@ -314,6 +325,7 @@ function render() {
     document.getElementById("resetBtn")?.addEventListener("click", () => {
       activeFilter = "all";
       if (searchInput) searchInput.value = "";
+      if (mobileSearchInput) mobileSearchInput.value = "";
       document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
       render();
     });
@@ -321,9 +333,8 @@ function render() {
   }
 
   grid.innerHTML = filtered.map(c => {
-    const k = c.type === "free" ? "free" : "paid";
     const icon = getCourseIcon(c.id);
-    return `<a class="course" data-t="${k}" href="course.html?id=${encodeURIComponent(c.id)}">
+    return `<a class="course" href="course.html?id=${encodeURIComponent(c.id)}">
       ${c.imageUrl 
         ? `<div class="pic"><img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.className='pic ph';this.parentElement.innerHTML='${icon}';"></div>` 
         : `<div class="pic ph" style="background:linear-gradient(135deg,#e7a15a,#9a4a1f)">${icon}</div>`
@@ -331,7 +342,6 @@ function render() {
       <div class="body">
         <h3>${esc(c.title)}</h3>
         <div class="tags">
-          <span class="tag ${k}">${k === "free" ? "Free" : "Paid"}</span>
           <span class="lessons">${getCourseLessonCount(c)} Lessons</span>
         </div>
         <div class="rate"><b>★</b> ${c.rating || "4.8"}</div>
@@ -351,8 +361,15 @@ function render() {
   render();
 })();
 
-// Search listener
-searchInput?.addEventListener("input", render);
+// Search listeners (sync desktop & mobile)
+searchInput?.addEventListener("input", () => {
+  if (mobileSearchInput) mobileSearchInput.value = searchInput.value;
+  render();
+});
+mobileSearchInput?.addEventListener("input", () => {
+  if (searchInput) searchInput.value = mobileSearchInput.value;
+  render();
+});
 
 // Filter chips
 document.querySelectorAll(".chip").forEach(b => {
