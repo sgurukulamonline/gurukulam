@@ -267,6 +267,13 @@ export const DEFAULT_NOTIFICATIONS = [
   }
 ];
 
+export const DEFAULT_WISDOM = {
+  sanskrit: "कर्मण्येवाधिकारस्ते\nमा फलेषु कदाचन ।",
+  meaning: "నీకు కర్మ చేయుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.",
+  audioText: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.",
+  updatedAt: Date.now()
+};
+
 export const DEFAULT_PATHS = [
   {
     id: "kids",
@@ -302,6 +309,7 @@ function initMockDB() {
   const initial = {
     courses: {},
     liveClasses: {},
+    wisdom: { ...DEFAULT_WISDOM },
     notifications: {},
     learningPaths: {},
     community: DEFAULT_COMMUNITY,
@@ -317,6 +325,7 @@ function initMockDB() {
   };
   DEFAULT_COURSES.forEach(c => { initial.courses[c.id] = c; });
   DEFAULT_LIVE.forEach(l => { initial.liveClasses[l.id] = l; });
+  initial.wisdom = { ...DEFAULT_WISDOM };
   DEFAULT_NOTIFICATIONS.forEach(n => { initial.notifications[n.id] = n; });
   DEFAULT_PATHS.forEach(p => { initial.learningPaths[p.id] = p; });
   localStorage.setItem(LS_DB_KEY, JSON.stringify(initial));

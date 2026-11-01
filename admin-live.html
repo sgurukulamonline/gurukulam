@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Classes Scheduling – Sanathana Gurukulam</title>
+<title>Live Classes &amp; Daily Wisdom – Sanathana Gurukulam</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -94,6 +94,12 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
         <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Meeting Link</label>
         <input name="link" placeholder="https://meet.google.com/...">
       </div>
+            <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;background:#fef3c7;padding:12px 14px;border-radius:12px;border:1px solid #fde68a">
+        <input type="checkbox" name="isLive" id="chkIsLive" style="width:20px;height:20px;accent-color:var(--maroon)">
+        <label for="chkIsLive" style="font-size:.88rem;font-weight:600;color:var(--brown);cursor:pointer">
+          🔴 Feature as active "LIVE NOW" class on Homepage banner
+        </label>
+      </div>
       <button class="btn" style="grid-column:1/-1;margin-top:6px">Schedule Live Class</button>
     </form>
   </div>
@@ -105,7 +111,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 </div>
 
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, push, remove, list } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, set, push, remove, list, DEFAULT_WISDOM } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });

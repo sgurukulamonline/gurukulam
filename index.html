@@ -245,24 +245,25 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
   <section id="live"><div class="wrap">
     <div class="sec-h"><h2>Live Classes</h2><a href="live.html">View All →</a></div>
-    <div class="live-grid">
-      <div class="live-wrap">
-        <div class="live-now">
-          <span class="badge">● LIVE NOW</span>
-          <h3>Bhagavad Gita<br>Chapter 2</h3>
-          <small>Acharya Dr. Srinivas Sharma</small>
-          <div class="row"><small>👥 1.2K watching</small><button class="join" id="btnJoinLive">Join Class</button></div>
+        <div class="live-grid" id="homeLiveGrid">
+      <div class="live-wrap" id="homeLiveWrap">
+        <div class="live-now" id="homeFeaturedLive">
+          <span class="badge" id="homeLiveBadge">● LIVE NOW</span>
+          <h3 id="homeLiveTitle">Loading Live Class…</h3>
+          <small id="homeLiveTeacher">Instructor</small>
+          <div class="row">
+            <small id="homeLiveMeta">👥 Gurukulam Live</small>
+            <a class="join" id="btnJoinLive" href="live.html">Join Class</a>
+          </div>
         </div>
-        <div class="list">
-          <div class="item"><div class="av">🧑‍🏫</div><div><b>Sanskrit Basics</b><small>Today, 6:00 PM</small><small>Acharya Veda Prakash</small></div></div>
-          <div class="item"><div class="av">🧘‍♀️</div><div><b>Yoga for Daily Life</b><small>Today, 7:30 PM</small><small>Smt. Anasuya Devi</small></div></div>
-          <div class="item"><div class="av">🙏</div><div><b>Vishnu Sahasranamam</b><small>Tomorrow, 6:00 AM</small><small>Sri Parthasarathy garu</small></div></div>
+        <div class="list" id="homeUpcomingList">
+          <p class="muted" style="text-align:center;padding:20px;font-size:.85rem">Loading upcoming sessions…</p>
         </div>
       </div>
-      <div class="wisdom">
+      <div class="wisdom" id="homeWisdomCard">
         <h3>🎁 Today's Wisdom <span class="date" id="today"></span></h3>
-        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फలేషు कदाचन ।</p>
-        <p class="te" id="shlokaMeaning">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
+        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फलेषु कदाचन ।</p>
+        <p class="te" id="shlokaMeaning">నీకు కర్మ చేయుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
         <div class="acts">
           <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
           <button class="share" id="btnShare">↗ Share</button>
@@ -353,6 +354,101 @@ import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, lis
 // Today date
 document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
+
+// -------------------------------------------------------------
+// REALTIME TODAY'S WISDOM & LIVE CLASSES
+// -------------------------------------------------------------
+let currentWisdom = {
+  sanskrit: "कर्मण्येवाधिकारस्ते\nमा फलेषु कदाचन ।",
+  meaning: "నీకు కర్మ చేయుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.",
+  audioText: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। You have a right to perform your prescribed duty, but you are not entitled to the fruits of action."
+};
+
+function renderWisdom(w) {
+  if (!w) return;
+  currentWisdom = w;
+  const sEl = document.getElementById("shlokaSanskrit");
+  const mEl = document.getElementById("shlokaMeaning");
+  if (sEl && w.sanskrit) sEl.innerHTML = esc(w.sanskrit).replace(/\n/g, "<br>");
+  if (mEl && w.meaning) mEl.textContent = w.meaning;
+}
+
+// Subscribe to realtime wisdom updates from Admin
+onValue(ref(db, "wisdom"), snap => {
+  if (snap.exists() && snap.val()) {
+    renderWisdom(snap.val());
+  }
+});
+
+// Render dynamic Live Classes from Admin
+function renderHomeLive(sessions) {
+  const wrap = document.getElementById("homeLiveWrap");
+  if (!wrap) return;
+
+  const now = Date.now();
+  const list = (sessions || []).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
+
+  if (!list.length) {
+    wrap.innerHTML = `
+      <div class="live-now" style="grid-column:1/-1;min-height:200px;justify-content:center;text-align:center">
+        <span class="badge" style="background:var(--gold);color:var(--brown)">SATSANG SCHEDULE</span>
+        <h3 style="margin:10px 0 6px">No Live Classes Right Now</h3>
+        <small style="opacity:.9;margin-bottom:16px">Check our full schedule for upcoming daily chanting and lectures.</small>
+        <div style="display:flex;justify-content:center">
+          <a class="join" href="live.html" style="background:var(--gold);color:var(--brown)">View Live Schedule →</a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // Find active or nearest upcoming session
+  const activeSession = list.find(s => s.isLive || (s.startsAt <= now + 30 * 60000 && s.startsAt >= now - 90 * 60000)) || list[0];
+  const upcomingList = list.filter(s => s.id !== activeSession.id).slice(0, 3);
+
+  const isLiveNow = activeSession.isLive || (activeSession.startsAt <= now + 15 * 60000 && activeSession.startsAt >= now - 60 * 60000);
+  const timeStr = activeSession.startsAt ? new Date(activeSession.startsAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "";
+  const dateStr = activeSession.startsAt ? new Date(activeSession.startsAt).toLocaleDateString("en-IN", { month: "short", day: "numeric" }) : "";
+
+  wrap.innerHTML = `
+    <div class="live-now">
+      <span class="badge" style="${isLiveNow ? 'background:#e11d48' : 'background:#d97706'}">${isLiveNow ? '● LIVE NOW' : '🕒 UPCOMING'}</span>
+      <h3>${esc(activeSession.title)}</h3>
+      <small>${esc(activeSession.teacher || "Instructor")} · ${dateStr} ${timeStr}</small>
+      <div class="row">
+        <small>${isLiveNow ? '👥 Active Satsang' : '⏰ Scheduled'}</small>
+        ${activeSession.link 
+          ? `<a class="join" href="${esc(activeSession.link)}" target="_blank" rel="noopener">${isLiveNow ? 'Join Class' : 'Meeting Link'}</a>` 
+          : `<a class="join" href="live.html">View Schedule</a>`}
+      </div>
+    </div>
+
+    <div class="list">
+      ${upcomingList.length ? upcomingList.map(s => {
+        const uTime = s.startsAt ? new Date(s.startsAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "";
+        const uDate = s.startsAt ? new Date(s.startsAt).toLocaleDateString("en-IN", { month: "short", day: "numeric" }) : "";
+        return `
+          <div class="item">
+            <div class="av">🎥</div>
+            <div style="flex:1">
+              <b>${esc(s.title)}</b>
+              <small>${uDate}, ${uTime} · ${esc(s.teacher || "Instructor")}</small>
+            </div>
+            ${s.link ? `<a href="${esc(s.link)}" target="_blank" style="font-size:.74rem;color:var(--maroon);font-weight:700;text-decoration:underline">Join</a>` : ''}
+          </div>
+        `;
+      }).join("") : '<div style="padding:20px;text-align:center"><small class="muted">More upcoming classes will be announced soon.</small></div>'}
+    </div>
+  `;
+}
+
+// Subscribe to realtime liveClasses updates
+onValue(ref(db, "liveClasses"), snap => {
+  const v = snap.val() || {};
+  const sessions = Object.entries(v).map(([id, d]) => ({ id, ...d }));
+  renderHomeLive(sessions);
+});
+
 // Load dynamic courses: 3 pinned courses + 1 "More Courses" card (total 4 cards)
 const popularEl = document.getElementById("popularCourses");
 if (popularEl) loadCourses(popularEl, 3, true, true);
@@ -424,7 +520,7 @@ btnListen?.addEventListener("click", () => {
     return;
   }
   window.speechSynthesis.cancel();
-  const text = "कर्मण्येवाधिकारस्ते मा फలేషు कदाచన। You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.";
+  const text = currentWisdom.audioText || currentWisdom.sanskrit || "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।";
   const utter = new SpeechSynthesisUtterance(text);
   utter.rate = 0.85;
   utter.onend = () => {
@@ -445,7 +541,7 @@ btnListen?.addEventListener("click", () => {
 
 // Shloka Share
 document.getElementById("btnShare")?.addEventListener("click", async () => {
-  const shareText = "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\n- Bhagavad Gita, Chapter 2, Verse 47\nLearn at Sanathana Gurukulam: " + location.href;
+  const shareText = (currentWisdom.sanskrit || "") + "\n" + (currentWisdom.meaning || "") + "\nLearn at Sanathana Gurukulam: " + location.href;
   if (navigator.share) {
     try {
       await navigator.share({ title: "Today's Wisdom – Sanathana Gurukulam", text: shareText, url: location.href });
