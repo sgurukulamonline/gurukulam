@@ -38,7 +38,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .lesson input{width:20px;height:20px;accent-color:var(--maroon);padding:0}
 .video{aspect-ratio:16/9;width:100%;border:0;border-radius:14px;margin-bottom:22px}
 .badge{background:#d62a2a;color:#fff;padding:2px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
-.chatbox{display:grid;gap:16px;grid-template-columns:1fr}@media(min-width:800px){.chatbox{grid-template-columns:240px 1fr}}
+.chatbox{max-width:880px;margin:0 auto}
 .rooms{background:var(--brown);color:var(--cream);border-radius:18px;padding:14px;height:max-content}.rooms h3{color:var(--sand);margin-bottom:6px;font-size:1.3rem}
 .room{display:block;width:100%;text-align:left;background:none;color:inherit;padding:10px 12px;border-radius:12px}
 .room.on,.room:hover{background:rgba(232,201,143,.2)}
@@ -94,11 +94,10 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 
 </style></head><body>
 <div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html">Live</a><a href="community.html" style="color:var(--gold)">Community</a><button class="btn gold sm" id="out">Logout</button></span></div>
-<div class="wrap"><h1>Community Circles</h1>
+<div class="wrap"><h1>Community</h1>
 <div class="chatbox">
-  <aside class="rooms"><h3>Circles</h3><div id="rooms"></div></aside>
-  <div><div class="panel" style="padding:12px"><h2 id="rt" style="margin:0 0 8px"></h2><div class="msgs" id="msgs" aria-live="polite"></div>
-  <form class="send" id="f"><input id="t" maxlength="500" placeholder="Write a message in this circle…" aria-label="Message" autocomplete="off" required><button class="btn">Send</button></form></div></div>
+  <div style="width:100%"><div class="panel" style="padding:18px"><h2 id="rt" style="margin:0 0 6px">🕉️ Gurukulam Community</h2><p class="muted" style="margin-bottom:14px">Welcome to the Gurukulam Community — ask questions, share reflections, and discuss with fellow seekers.</p><div class="msgs" id="msgs" aria-live="polite"></div>
+  <form class="send" id="f"><input id="t" maxlength="500" placeholder="Write a message to the community…" aria-label="Message" autocomplete="off" required><button class="btn">Send</button></form></div></div>
 </div></div>
 <nav class="bottom" aria-label="App">
   <a href="index.html"><span>🏠</span>Home</a>
@@ -110,43 +109,71 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 <script type="module">
 import { db, requireUser, logout, esc, ref, push, remove, onValue, query, limitToLast } from "./firebase-init.js";
 const $ = id => document.getElementById(id);
-const ROOMS = { gita: "🪔 Gita Study Circle", sanskrit: "🪷 Sanskrit Learners", yoga: "🧘 Daily Yoga", temple: "🛕 Temple Heritage", parents: "👨‍👩‍👧 Parents of Bala" };
-let me, prof, room = "gita", off;
+const COMMUNITY_ROOM = "community";
+let me, prof, off;
 $("out").onclick = logout;
 
-requireUser((u, p) => { me = u; prof = p; $("rooms").innerHTML = Object.entries(ROOMS).map(([k, v]) => `<button class="room" data-r="${k}">${v}</button>`).join(""); open(room); });
+requireUser((u, p) => {
+  me = u;
+  prof = p;
+  openCommunity();
+});
 
-function open(r) {
-  room = r; off?.();
-  $("rt").textContent = ROOMS[r];
-  document.querySelectorAll(".room").forEach(b => b.classList.toggle("on", b.dataset.r === r));
-  off = onValue(query(ref(db, "community/" + r), limitToLast(60)), snap => {
+function renderMsgs(v) {
+  $("msgs").innerHTML = Object.entries(v).map(([k, m]) => {
+    const timeStr = m.at ? new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    const canDelete = prof.role === "admin" || m.uid === me.uid;
+    return `<div class="m ${m.uid === me.uid ? "me" : ""}">
+      <small>
+        <span>${esc(m.name || "Learner")}</span>
+        <span><span class="time">${timeStr}</span> ${canDelete ? `<button class="x" data-del="${k}" title="Delete message">✕</button>` : ""}</span>
+      </small>
+      ${esc(m.text)}
+    </div>`;
+  }).join("") || '<p class="muted">No messages yet. Start with a Namaste 🙏</p>';
+  $("msgs").scrollTop = $("msgs").scrollHeight;
+}
+
+function openCommunity() {
+  off?.();
+  off = onValue(query(ref(db, "community/" + COMMUNITY_ROOM), limitToLast(80)), snap => {
     const v = snap.val() || {};
-    $("msgs").innerHTML = Object.entries(v).map(([k, m]) => {
-      const timeStr = m.at ? new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-      const canDelete = prof.role === "admin" || m.uid === me.uid;
-      return `<div class="m ${m.uid === me.uid ? "me" : ""}">
-        <small>
-          <span>${esc(m.name || "Learner")}</span>
-          <span><span class="time">${timeStr}</span> ${canDelete ? `<button class="x" data-del="${k}" title="Delete message">✕</button>` : ""}</span>
-        </small>
-        ${esc(m.text)}
-      </div>`;
-    }).join("") || '<p class="muted">No messages yet. Start with a Namaste 🙏</p>';
-    $("msgs").scrollTop = $("msgs").scrollHeight;
-  }, () => ($("msgs").innerHTML = '<p class="muted">Could not load messages.</p>'));
+    renderMsgs(v);
+  }, err => {
+    console.warn("Community listen fallback:", err);
+    if (COMMUNITY_ROOM !== "gita") {
+      off = onValue(query(ref(db, "community/gita"), limitToLast(80)), snap => {
+        renderMsgs(snap.val() || {});
+      }, () => ($("msgs").innerHTML = '<p class="muted">Could not load messages.</p>'));
+    } else {
+      $("msgs").innerHTML = '<p class="muted">Could not load messages.</p>';
+    }
+  });
 }
 
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.r) open(b.dataset.r);
-  else if (b.dataset.del && confirm("Delete this message?")) remove(ref(db, `community/${room}/${b.dataset.del}`));
+  if (b.dataset.del && confirm("Delete this message?")) {
+    remove(ref(db, `community/${COMMUNITY_ROOM}/${b.dataset.del}`)).catch(() => {
+      remove(ref(db, `community/gita/${b.dataset.del}`));
+    });
+  }
 });
+
 $("f").onsubmit = async e => {
   e.preventDefault();
   const text = $("t").value.trim(); if (!text) return;
   $("t").value = "";
-  await push(ref(db, "community/" + room), { uid: me.uid, name: prof.name || "Learner", text, at: Date.now() });
+  const payload = { uid: me.uid, name: prof.name || "Learner", text, at: Date.now() };
+  try {
+    await push(ref(db, "community/" + COMMUNITY_ROOM), payload);
+  } catch (err) {
+    try {
+      await push(ref(db, "community/gita"), payload);
+    } catch (e2) {
+      alert("Could not send message: " + (e2.message || err.message));
+    }
+  }
 };
 </script>
 </body></html>

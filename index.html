@@ -142,13 +142,7 @@ section{padding:34px 0 8px}
 .q span{display:block;font-size:1.7rem;margin-bottom:4px}
 
 /* Community */
-.community{display:grid;gap:18px;grid-template-columns:1fr}
-@media(min-width:900px){.community{grid-template-columns:260px 1fr}}
-.rooms{background:var(--brown);color:var(--cream);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
-.rooms h3{font-size:1.3rem;margin-bottom:10px;color:var(--sand)}
-.room{display:flex;justify-content:space-between;padding:10px 12px;border-radius:12px;font-size:.88rem;cursor:pointer}
-.room.on,.room:hover{background:rgba(232,201,143,.18)}
-.room em{font-style:normal;background:var(--gold);color:var(--brown);border-radius:10px;padding:0 8px;font-size:.72rem;font-weight:600}
+.community{max-width:880px;margin:0 auto}
 .chat{background:var(--card);border-radius:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
 .chat-h{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;
   background:linear-gradient(90deg,#f3dfb2,var(--card))}
@@ -348,24 +342,16 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   </div></section>
 
   <section id="community"><div class="wrap">
-    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in your Gurukulam circle</p></div><a href="community.html">Browse Circles →</a></div>
+    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in the Gurukulam community</p></div><a href="community.html">Open Full Community →</a></div>
     <div class="community">
-      <aside class="rooms" aria-label="Circles">
-        <h3>Your Circles</h3>
-        <div class="room on" data-r="gita"><span>🪔 Gita Study Circle</span><em>3</em></div>
-        <div class="room" data-r="sanskrit"><span>🪷 Sanskrit Learners</span><em>1</em></div>
-        <div class="room" data-r="yoga"><span>🧘 Daily Yoga</span></div>
-        <div class="room" data-r="temple"><span>🛕 Temple Heritage</span></div>
-        <div class="room" data-r="parents"><span>👨‍👩‍👧 Parents of Bala</span></div>
-      </aside>
       <div class="chat">
         <div class="chat-h">
-          <div><b id="homeCircleTitle">Gita Study Circle</b><br><small id="homeCircleSub">248 members • 32 online</small></div>
-          <span aria-hidden="true">🕉️</span>
+          <div><b id="homeCircleTitle">🕉️ Gurukulam Community</b><br><small id="homeCircleSub">Active learners &amp; seekers • Open spiritual discussion</small></div>
+          <span aria-hidden="true">🪔</span>
         </div>
         <div class="msgs" id="msgs"></div>
         <form class="compose" id="chatForm">
-          <input id="chatIn" placeholder="Write a message in this circle…" aria-label="Message" required>
+          <input id="chatIn" placeholder="Write a message to the community…" aria-label="Message" required>
           <button type="submit">Send</button>
         </form>
       </div>
@@ -624,48 +610,42 @@ document.getElementById("btnShare")?.addEventListener("click", async () => {
   }
 });
 
-// Community circle selector on homepage
-const circleMeta = {
-  gita: { title: "Gita Study Circle", sub: "248 members • 32 online" },
-  sanskrit: { title: "Sanskrit Learners", sub: "180 members • 21 online" },
-  yoga: { title: "Daily Yoga", sub: "135 members • 15 online" },
-  temple: { title: "Temple Heritage", sub: "98 members • 12 online" },
-  parents: { title: "Parents of Bala", sub: "76 members • 9 online" }
-};
-let activeRoom = "gita";
+// Community chat on homepage (Unified Gurukulam Community)
+const COMMUNITY_ROOM = "community";
 let unlistenChat = null;
 
-function loadRoom(room) {
-  activeRoom = room;
-  document.getElementById("homeCircleTitle").textContent = circleMeta[room]?.title || "Circle";
-  document.getElementById("homeCircleSub").textContent = circleMeta[room]?.sub || "Active members";
-  document.querySelectorAll(".rooms .room").forEach(r => r.classList.toggle("on", r.dataset.r === room));
-  
-  if (unlistenChat) unlistenChat();
-  unlistenChat = onValue(ref(db, "community/" + room), snap => {
-    const v = snap.val() || {};
-    const entries = Object.entries(v);
-    const box = document.getElementById("msgs");
-    if (!entries.length) {
-      box.innerHTML = '<p class="muted" style="text-align:center;padding:20px">No messages in this circle yet. Start the conversation!</p>';
-      return;
-    }
-    const curUid = auth.currentUser?.uid;
-    box.innerHTML = entries.slice(-10).map(([k, m]) => `
-      <div class="m ${m.uid === curUid ? 'me' : ''}">
-        <small>${esc(m.name || "Learner")}</small>
-        ${esc(m.text || "")}
-      </div>
-    `).join("");
-    box.scrollTop = box.scrollHeight;
-  });
+function renderHomeMsgs(entries) {
+  const box = document.getElementById("msgs");
+  if (!box) return;
+  if (!entries.length) {
+    box.innerHTML = '<p class="muted" style="text-align:center;padding:24px">No messages in the community yet. Start the conversation!</p>';
+    return;
+  }
+  const curUid = auth.currentUser?.uid;
+  box.innerHTML = entries.slice(-15).map(([k, m]) => `
+    <div class="m ${m.uid === curUid ? 'me' : ''}">
+      <small>${esc(m.name || "Learner")}</small>
+      ${esc(m.text || "")}
+    </div>
+  `).join("");
+  box.scrollTop = box.scrollHeight;
 }
 
-document.querySelectorAll(".rooms .room").forEach(r => {
-  r.style.cursor = "pointer";
-  r.addEventListener("click", () => loadRoom(r.dataset.r));
-});
-loadRoom("gita");
+function loadCommunityChat() {
+  if (unlistenChat) unlistenChat();
+  unlistenChat = onValue(ref(db, "community/" + COMMUNITY_ROOM), snap => {
+    const v = snap.val() || {};
+    renderHomeMsgs(Object.entries(v));
+  }, err => {
+    console.warn("Community listen fallback:", err);
+    if (COMMUNITY_ROOM !== "gita") {
+      onValue(ref(db, "community/gita"), snap => {
+        renderHomeMsgs(Object.entries(snap.val() || {}));
+      });
+    }
+  });
+}
+loadCommunityChat();
 
 // Chat submit
 document.getElementById("chatForm")?.addEventListener("submit", async e => {
@@ -677,13 +657,24 @@ document.getElementById("chatForm")?.addEventListener("submit", async e => {
   const senderName = user?.displayName || "You";
   const uid = user?.uid || "u_guest";
   
-  await push(ref(db, "community/" + activeRoom), {
+  const payload = {
     uid,
     name: senderName,
     text: txt,
     at: Date.now()
-  });
-  input.value = "";
+  };
+
+  try {
+    await push(ref(db, "community/" + COMMUNITY_ROOM), payload);
+    input.value = "";
+  } catch (err) {
+    try {
+      await push(ref(db, "community/gita"), payload);
+      input.value = "";
+    } catch (e2) {
+      alert("Could not send message: " + (e2.message || err.message));
+    }
+  }
 });
 
 // Language switcher
