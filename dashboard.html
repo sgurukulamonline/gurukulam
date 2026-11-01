@@ -386,12 +386,12 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <div id="live"></div>
   </div>
 
-    <!-- Explore More Courses -->
+    <!-- Available Courses -->
   <div class="panel">
     <div class="panel-head" style="flex-wrap:wrap;gap:10px">
       <div>
-        <h2>Explore More Courses</h2>
-        <p class="muted" style="font-size:.85rem">Discover curriculum suited for Kids and Adults</p>
+        <h2>All Courses Catalog</h2>
+        <p class="muted" style="font-size:.85rem">Browse lessons suited for Kids and Adults</p>
       </div>
       <div class="dash-sec-chips" id="dashSecChips" style="display:flex;gap:8px;align-items:center">
         <button type="button" class="btn sm gold" data-sec="all" style="padding:4px 12px;font-size:.78rem">All Courses</button>
@@ -796,7 +796,7 @@ document.querySelectorAll("#dashSecChips button").forEach(btn => {
     });
     btn.className = "btn sm gold";
     activeDashSec = btn.dataset.sec;
-    renderExploreCourses();
+    renderAvailableCourses();
   };
 });
 
@@ -811,7 +811,7 @@ function matchesDashSection(c, sec) {
   return true;
 }
 
-function renderExploreCourses() {
+function renderAvailableCourses() {
   const rest = courses.filter(c => !enr[c.id]);
   const filteredRest = rest.filter(c => matchesDashSection(c, activeDashSec));
   const el = $("all");
@@ -886,7 +886,7 @@ async function load() {
           }
         </div>
       `);
-    }).join("") || '<p class="muted">You have not enrolled in any course yet. Pick one from Explore Courses below to get started!</p>';
+    }).join("") || '<p class="muted">You have not enrolled in any course yet. Pick one from All Courses below to get started!</p>';
 
     // Render Explore Courses
     $("all").innerHTML = rest.map(c => card(c, `
