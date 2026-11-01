@@ -16,8 +16,8 @@
   --shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
+html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;overflow-x:hidden;max-width:100%;
   background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
 a{color:inherit;text-decoration:none}
@@ -201,6 +201,74 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 .modal-close{position:absolute;top:12px;right:14px;background:#fff;border-radius:50%;width:34px;height:34px;font-size:1.2rem;display:grid;place-items:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.2);border:0}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--brown);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
 .toast.show{opacity:1}
+
+/* Mobile Alignment & Polish */
+@media(max-width:560px){
+  .wrap{padding:0 14px}
+  .bar{height:60px;gap:8px}
+  .logo svg{width:34px;height:34px}
+  .logo b{font-size:1.18rem}
+  .logo small{font-size:.5rem;letter-spacing:.12em}
+  .lang button{padding:4px 8px;font-size:.72rem}
+  .avatar{width:36px;height:36px;font-size:.95rem}
+  #homeNotifBtn{font-size:1.15rem;padding:2px 4px}
+  
+  .hero{min-height:360px}
+  .hero .in{padding:36px 14px 44px}
+  .hero h1{font-size:2.1rem;line-height:1.18}
+  .hero p.te{font-size:1.05rem;margin:10px 0 2px}
+  .hero .rule{margin:4px 0 16px}
+  .cta{padding:11px 20px;font-size:.92rem}
+  .story{margin-left:0;margin-top:10px;font-size:.85rem;display:flex}
+  
+  .sec-h h2{font-size:1.6rem}
+  .sec-h p{font-size:.82rem}
+  
+  .live-now{min-height:190px;padding:16px}
+  .live-now h3{font-size:1.4rem;line-height:1.25}
+  .live-now .row{flex-wrap:wrap;gap:8px}
+  .join{padding:8px 18px;font-size:.85rem}
+  
+  .wisdom{padding:16px}
+  .wisdom h3{font-size:1.25rem}
+  .sloka{font-size:1.35rem;line-height:1.45;margin:12px 0 6px}
+  .wisdom .te{font-size:.86rem}
+  .wisdom .acts{margin-top:14px;gap:8px}
+  .listen{font-size:1.1rem}
+  .listen i{width:36px;height:36px;font-size:.8rem}
+  .share{padding:7px 14px;font-size:.8rem}
+}
+
+@media(max-width:768px){
+  .community{gap:12px}
+  .community .rooms{
+    display:flex;
+    overflow-x:auto;
+    gap:8px;
+    padding:10px;
+    border-radius:14px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .community .rooms::-webkit-scrollbar{display:none}
+  .community .rooms h3{display:none}
+  .community .room{
+    flex:0 0 auto;
+    white-space:nowrap;
+    padding:7px 12px;
+    font-size:.8rem;
+    gap:6px;
+  }
+  .chat{border-radius:16px}
+  .chat-h{padding:12px 14px}
+  .chat-h b{font-size:1.1rem}
+  .msgs{padding:12px;min-height:200px;max-height:280px}
+  .m{max-width:88%;font-size:.84rem;padding:8px 12px}
+  .compose{padding:10px}
+  .compose input{padding:9px 14px;font-size:.85rem}
+  .compose button{padding:0 16px;font-size:.85rem}
+}
+
 </style>
 </head>
 <body>

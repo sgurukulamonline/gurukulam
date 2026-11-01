@@ -69,6 +69,37 @@ button{font:inherit;cursor:pointer;border:0}
   body{background:#fff}
   .cert{box-shadow:none;border-width:8px;margin:0}
 }
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:600px){
+  .wrap{padding:14px 10px calc(88px + env(safe-area-inset-bottom,0px))}
+  .cert{
+    padding:28px 14px;
+    border-width:6px;
+    border-radius:16px;
+  }
+  .cert .logo-mark{font-size:2.4rem}
+  .cert .inst{font-size:1.6rem}
+  .cert .tagline{font-size:.78rem}
+  .cert h1{font-size:1.65rem}
+  .cert .recipient{font-size:1.6rem;margin:8px 0}
+  .cert .c-title{font-size:1.25rem}
+  .cert-footer{
+    flex-direction:column;
+    gap:14px;
+    text-align:center;
+    margin-top:22px;
+  }
+  .actions{
+    flex-direction:column;
+    gap:8px;
+  }
+  .actions .btn{
+    width:100%;
+    text-align:center;
+  }
+}
+
 </style>
 </head>
 <body>
