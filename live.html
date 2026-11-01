@@ -49,7 +49,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   .wrap>h1{font-size:1.8rem}
 }
 </style></head><body>
-<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a></span></div>
+<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a><a href="login.html" id="liveUserLink" style="font-weight:600">Login</a></span></div>
 <div class="wrap"><h1>Live Classes &amp; Satsangs</h1><div class="panel"><h2>Upcoming &amp; Live Now</h2><div id="up"></div></div><div class="panel"><h2>Past Sessions Archive</h2><div id="past"></div></div></div>
 <nav class="bottom" aria-label="App">
   <a href="index.html"><span>🏠</span>Home</a>
@@ -59,7 +59,20 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   <a href="more.html"><span>🛕</span>Explore</a>
 </nav>
 <script type="module">
-import { list, esc, DEFAULT_LIVE } from "./firebase-init.js";
+import { list, esc, DEFAULT_LIVE, auth, onAuthStateChanged } from "./firebase-init.js";
+
+onAuthStateChanged(auth, u => {
+  const link = document.getElementById("liveUserLink");
+  if (link) {
+    if (u) {
+      link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Dashboard";
+      link.href = "dashboard.html";
+    } else {
+      link.textContent = "Login";
+      link.href = "login.html";
+    }
+  }
+});
 
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
