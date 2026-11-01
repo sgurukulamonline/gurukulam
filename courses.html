@@ -222,10 +222,8 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
     </div>
     <div class="chips" id="chipsBox">
       <button class="chip on" data-f="all">All Courses</button>
-      <button class="chip" data-f="bala">👶 Bala (5–12)</button>
-      <button class="chip" data-f="yuva">🏹 Yuva (13–25)</button>
-      <button class="chip" data-f="sadhaka">🕉️ Sadhaka (26–55)</button>
-      <button class="chip" data-f="jnana">🪷 Jnana (56+)</button>
+      <button class="chip" data-f="kids">👶 Kids (Ages 5–15)</button>
+      <button class="chip" data-f="adults">🕉️ Adults (Ages 16+)</button>
     </div>
   </div>
   <section>
@@ -281,10 +279,12 @@ if (initialQuery) {
 }
 
 const pathNames = {
-  bala: "👶 Bala Gurukulam (Ages 5–12)",
-  yuva: "🏹 Yuva Gurukulam (Ages 13–25)",
-  sadhaka: "🕉️ Sadhaka Gurukulam (Ages 26–55)",
-  jnana: "🪷 Jnana Gurukulam (Ages 56+)"
+  kids: "👶 Kids Gurukulam (Ages 5–15)",
+  adults: "🕉️ Adults Gurukulam (Ages 16+)",
+  bala: "👶 Kids Gurukulam (Ages 5–15)",
+  yuva: "🕉️ Adults Gurukulam (Ages 16+)",
+  sadhaka: "🕉️ Adults Gurukulam (Ages 16+)",
+  jnana: "🕉️ Adults Gurukulam (Ages 16+)"
 };
 if (initialPath && pathNames[initialPath]) {
   const pt = document.getElementById("pageTitle");

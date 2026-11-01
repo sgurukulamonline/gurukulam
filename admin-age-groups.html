@@ -145,14 +145,24 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   </div>
 
   <!-- The 4 Fixed Age Group Sections Overview -->
-  <div class="fixed-paths-preview">
+  <div class="fixed-paths-preview" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
     <div class="path-preview-card">
-      <img src="images/Bala%20Gurukulam.png" alt="Bala">
+      <img src="images/Bala%20Gurukulam.png" alt="Kids Gurukulam">
       <div>
-        <div class="path-preview-title">Bala Gurukulam</div>
-        <div class="path-preview-age">Ages 5 – 12</div>
-        <div class="path-preview-sub">సంస్కారం • సంప్రదాయం</div>
+        <div class="path-preview-title">👶 Kids Gurukulam</div>
+        <div class="path-preview-age">Ages 5 – 15</div>
+        <div class="path-preview-sub">సంస్కారం • సంప్రదాయం • కథలు</div>
       </div>
+    </div>
+    <div class="path-preview-card">
+      <img src="images/Sadhaka%20Gurukulam.png" alt="Adults Gurukulam">
+      <div>
+        <div class="path-preview-title">🕉️ Adults Gurukulam</div>
+        <div class="path-preview-age">Ages 16+</div>
+        <div class="path-preview-sub">ఆధ్యాత్మికం • సాధన • జీవన విధానం</div>
+      </div>
+    </div>
+  </div>
     </div>
     <div class="path-preview-card">
       <img src="images/Yuva%20Gurukulam.png" alt="Yuva">
@@ -202,14 +212,26 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           💡 Check 1, 2, or any: Whatever boxes you check, this same lesson/course will automatically appear in all of those selected age group sections!
         </p>
 
-        <div class="age-check-grid">
-          <label class="age-box checked" id="card-bala">
-            <input type="checkbox" name="targetAges" value="bala" class="age-cb" checked>
+        <div class="age-check-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+          <label class="age-box checked" id="card-kids">
+            <input type="checkbox" name="targetAges" value="kids" class="age-cb" checked>
             <div class="age-box-body">
-              <div class="age-box-title">👶 Bala Gurukulam</div>
-              <div class="age-box-range">Ages 5 – 12</div>
-              <div class="age-box-sub">సంస్కారం • సంప్రదాయం</div>
+              <div class="age-box-title">👶 Kids Section</div>
+              <div class="age-box-range">Ages 5 – 15</div>
+              <div class="age-box-sub">సంస్కారం • సంప్రదాయం • కథలు</div>
             </div>
+          </label>
+
+          <label class="age-box checked" id="card-adults">
+            <input type="checkbox" name="targetAges" value="adults" class="age-cb" checked>
+            <div class="age-box-body">
+              <div class="age-box-title">🕉️ Adults Section</div>
+              <div class="age-box-range">Ages 16+</div>
+              <div class="age-box-sub">ఆధ్యాత్మికం • సాధన • జీవన విధానం</div>
+            </div>
+          </label>
+        </div>
+      </div>
           </label>
 
           <label class="age-box" id="card-yuva">

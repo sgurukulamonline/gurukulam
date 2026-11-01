@@ -36,6 +36,7 @@ const hasRealFirebase = Boolean(
 export const DEFAULT_COURSES = [
   {
     id: "bhagavad-gita",
+    ageGroups: ["adults"],
     title: "Bhagavad Gita for Beginners",
     desc: "Understand the timeless spiritual wisdom of the Bhagavad Gita explained simply with daily life applications.",
     type: "free",
@@ -71,6 +72,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "sanskrit-basics",
+    ageGroups: ["kids","adults"],
     title: "Sanskrit Basics & Pronunciation",
     desc: "Learn to read, pronounce, and understand Samskritam vocabulary, mantras, and shlokas with correct intonation.",
     type: "free",
@@ -99,6 +101,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "indian-history",
+    ageGroups: ["kids","adults"],
     title: "Indian History True Perspective",
     desc: "Discover the authentic civilizational heritage, historical milestones, and contributions of ancient Bharat.",
     type: "free",
@@ -127,6 +130,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "ramayanam",
+    ageGroups: ["kids","adults"],
     title: "Ramayana Deep Study",
     desc: "An in-depth exploration of Valmiki Ramayana, character ethics, dharma, and leadership virtues.",
     type: "free",
@@ -138,6 +142,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "yoga-daily",
+    ageGroups: ["kids","adults"],
     title: "Yoga for Daily Life",
     desc: "Daily guided asanas, pranayama, and mindfulness routines for physical vitality and spiritual calm.",
     type: "free",
@@ -149,6 +154,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "vishnu-sahasranamam",
+    ageGroups: ["adults"],
     title: "Vishnu Sahasranamam Chanting & Meaning",
     desc: "Learn the proper chanting, stotra cadence, and profound philosophical meanings of the 1,000 sacred names.",
     type: "free",
@@ -160,6 +166,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "intro-vedas",
+    ageGroups: ["adults"],
     title: "Introduction to the Vedas",
     desc: "Foundational overview of the four Vedas, Upanishads, Vedic vision of reality, and cultural ethos.",
     type: "free",
@@ -171,6 +178,7 @@ export const DEFAULT_COURSES = [
   },
   {
     id: "temple-culture",
+    ageGroups: ["kids","adults"],
     title: "Temple Culture & Architecture",
     desc: "Understand the sacred geometry, Agama shastras, and spiritual symbolism behind ancient Indian temples.",
     type: "free",
@@ -261,40 +269,22 @@ export const DEFAULT_NOTIFICATIONS = [
 
 export const DEFAULT_PATHS = [
   {
-    id: "bala",
-    title: "Bala Gurukulam",
-    ageRange: "Ages 5 – 12",
-    subTe: "సంస్కారం • సంప్రదాయం\nసంతోషంగా",
+    id: "kids",
+    title: "Kids Gurukulam",
+    ageRange: "Ages 5 – 15",
+    subTe: "సంస్కారం • సంప్రదాయం • కథలు\nసంతోషంగా",
     imageUrl: "images/Bala%20Gurukulam.png",
-    link: "courses.html?path=bala",
+    link: "courses.html?path=kids",
     order: 1
   },
   {
-    id: "yuva",
-    title: "Yuva Gurukulam",
-    ageRange: "Ages 13 – 25",
-    subTe: "జ్ఞానం • నాయకత్వం\nజీవిత నైపుణ్యాలు",
-    imageUrl: "images/Yuva%20Gurukulam.png",
-    link: "courses.html?path=yuva",
-    order: 2
-  },
-  {
-    id: "sadhaka",
-    title: "Sadhaka Gurukulam",
-    ageRange: "Ages 26 – 55",
-    subTe: "ఆధ్యాత్మికం • కుటుంబం\nజీవన విలువలు",
+    id: "adults",
+    title: "Adults Gurukulam",
+    ageRange: "Ages 16+",
+    subTe: "ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం\nజీవన విలువలు",
     imageUrl: "images/Sadhaka%20Gurukulam.png",
-    link: "courses.html?path=sadhaka",
-    order: 3
-  },
-  {
-    id: "jnana",
-    title: "Jnana Gurukulam",
-    ageRange: "Ages 56+",
-    subTe: "భక్తి • ఆధ్యాత్మిక జ్ఞానం\nసహజమైన జీవితం",
-    imageUrl: "images/Jnana%20Gurukulam.png",
-    link: "courses.html?path=jnana",
-    order: 4
+    link: "courses.html?path=adults",
+    order: 2
   }
 ];
 
