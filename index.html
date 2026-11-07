@@ -201,9 +201,351 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 .modal-close{position:absolute;top:12px;right:14px;background:#fff;border-radius:50%;width:34px;height:34px;font-size:1.2rem;display:grid;place-items:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.2);border:0}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--brown);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
 .toast.show{opacity:1}
+
+/* ============================================================= */
+/* Cool Simple Website Intro Styles                              */
+/* ============================================================= */
+#sgIntroOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 45%, #2e0f06 0%, #170702 55%, #0a0301 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  overflow: hidden;
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), filter 0.65s ease;
+  user-select: none;
+}
+#sgIntroOverlay.intro-fade-out {
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(8px);
+  pointer-events: none;
+}
+#sgIntroOverlay.intro-hidden {
+  display: none !important;
+}
+
+/* Background animated radiant rings */
+.intro-bg-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  max-width: 90vw;
+  max-height: 90vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217,154,39,0.3) 0%, rgba(122,46,22,0.15) 50%, transparent 70%);
+  filter: blur(35px);
+  animation: introPulseGlow 3.6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes introPulseGlow {
+  0% { transform: scale(0.85); opacity: 0.55; }
+  100% { transform: scale(1.2); opacity: 0.95; }
+}
+
+.intro-mandala-ring {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border: 1px dashed rgba(217, 154, 39, 0.35);
+  animation: introRotate 24s linear infinite;
+  pointer-events: none;
+}
+.intro-mandala-ring::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px dotted rgba(232, 201, 143, 0.22);
+}
+@keyframes introRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.intro-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(247,232,200,0.7), transparent),
+    radial-gradient(2px 2px at 80px 140px, rgba(217,154,39,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 160px 80px, rgba(247,232,200,0.6), transparent),
+    radial-gradient(2px 2px at 260px 220px, rgba(217,154,39,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 340px 110px, rgba(255,248,234,0.6), transparent),
+    radial-gradient(2px 2px at 450px 310px, rgba(217,154,39,0.8), transparent),
+    radial-gradient(2px 2px at 520px 190px, rgba(247,232,200,0.7), transparent);
+  background-size: 550px 350px;
+  opacity: 0.5;
+  animation: introStarDrift 30s linear infinite;
+}
+@keyframes introStarDrift {
+  from { background-position: 0 0; }
+  to { background-position: 550px 350px; }
+}
+
+/* Central Content Container */
+.intro-center {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 20px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Sacred Diya / Logo Emblem */
+.intro-emblem-wrap {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 246, 228, 0.12), rgba(122, 46, 22, 0.45));
+  border: 1.5px solid rgba(217, 154, 39, 0.6);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  box-shadow: 0 0 32px rgba(217, 154, 39, 0.4), inset 0 0 16px rgba(217, 154, 39, 0.2);
+  animation: introEmblemEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes introEmblemEntrance {
+  0% { opacity: 0; transform: scale(0.6) translateY(-10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.intro-logo-svg {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 2px 8px rgba(217,154,39,0.5));
+}
+
+/* Shloka chant line */
+.intro-mantra {
+  font-family: 'Noto Serif Devanagari', serif;
+  color: #E8C98F;
+  font-size: 0.96rem;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  animation: introFadeUp 0.8s 0.25s ease forwards;
+  margin-bottom: 6px;
+  text-shadow: 0 0 12px rgba(217,154,39,0.5);
+}
+
+/* Main Brand Title */
+.intro-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.3rem, 6.5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #FFF9ED 15%, #F4D189 50%, #D99A27 85%, #FFDF9E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  opacity: 0;
+  animation: introFadeUp 0.9s 0.45s ease forwards;
+  margin: 0;
+}
+
+/* Tagline */
+.intro-tagline {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
+  color: #D99A27;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+  margin-top: 8px;
+  opacity: 0;
+  animation: introFadeUp 0.8s 0.65s ease forwards;
+}
+
+/* Subtitle */
+.intro-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(0.78rem, 2.5vw, 0.94rem);
+  color: #E8C98F;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+  opacity: 0;
+  animation: introFadeUp 0.8s 0.85s ease forwards;
+}
+
+/* Enter button */
+.intro-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: introFadeUp 0.8s 1.05s ease forwards;
+}
+.intro-btn-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #e6a935, #D99A27);
+  color: #351307;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 11px 28px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 235, 185, 0.6);
+  box-shadow: 0 4px 20px rgba(217, 154, 39, 0.45);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.04em;
+}
+.intro-btn-enter:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(217, 154, 39, 0.65);
+  background: linear-gradient(135deg, #f0ba4e, #e3a837);
+}
+.intro-btn-enter .arrow {
+  transition: transform 0.2s ease;
+}
+.intro-btn-enter:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Skip button in top right */
+.intro-skip-btn {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 201, 143, 0.25);
+  color: #E8C98F;
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+  letter-spacing: 0.06em;
+}
+.intro-skip-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: #D99A27;
+}
+
+/* Sound toggle in top left */
+.intro-sound-btn {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 201, 143, 0.25);
+  color: #E8C98F;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.intro-sound-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: #D99A27;
+}
+
+/* Bottom Progress Track */
+.intro-progress-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.intro-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #7A2E16, #D99A27, #FFF4DF);
+  box-shadow: 0 0 10px #D99A27;
+}
+
+@keyframes introFadeUp {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero actions alignment */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-actions .story {
+  margin-left: 0;
+}
+@media(max-width:560px){
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .hero-actions .cta, .hero-actions .story {
+    justify-content: center;
+  }
+}
+
 </style>
 </head>
 <body>
+
+<!-- Cool Simple Website Intro -->
+<div id="sgIntroOverlay" role="dialog" aria-modal="true" aria-label="Welcome to Sanathana Gurukulam">
+  <div class="intro-bg-glow"></div>
+  <div class="intro-mandala-ring"></div>
+  <div class="intro-stars"></div>
+
+  <button class="intro-skip-btn" id="btnSkipIntro" aria-label="Skip Intro">Skip [Esc]</button>
+  <button class="intro-sound-btn" id="btnIntroSound" aria-label="Toggle Sacred Sound"><span>🔊</span> Sound</button>
+
+  <div class="intro-center">
+    <div class="intro-emblem-wrap">
+      <svg class="intro-logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="20" r="13" fill="#D99A27"/>
+        <path d="M32 4c4 5 5 12 0 18-5-6-4-13 0-18z" fill="#FFF4DF"/>
+        <path d="M6 32c10-4 18-1 26 5 8-6 16-9 26-5v24c-10-4-18-1-26 5-8-6-16-9-26-5z" fill="#D99A27"/>
+        <path d="M32 37v24" stroke="#FFF4DF" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="32" cy="18" r="3.5" fill="#FFF" filter="drop-shadow(0 0 5px #FFE9BF)"/>
+      </svg>
+    </div>
+
+    <div class="intro-mantra">॥ ॐ असतो मा सद्गमయ ॥</div>
+    <h1 class="intro-title">Sanathana Gurukulam</h1>
+    <div class="intro-tagline">LEARN • PRACTICE • LIVE</div>
+    <p class="intro-sub">Ancient Wisdom • Modern Learning • Timeless Values</p>
+
+    <div class="intro-actions">
+      <button class="intro-btn-enter" id="btnEnterGurukulam">
+        <span>Enter Gurukulam</span>
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="intro-progress-wrap">
+    <div class="intro-progress-bar" id="introProgressBar"></div>
+  </div>
+</div>
+
 
 <header>
   <div class="wrap bar">
@@ -230,8 +572,11 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <h1 id="heroH1">Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
       <p class="te" id="heroSub">భారతీయ జీవిత విధానం తరతరాలకు…</p>
       <div class="rule"></div>
-      <a class="cta" href="courses.html">Explore Courses <span aria-hidden="true">→</span></a>
-      <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
+      <div class="hero-actions">
+        <a class="cta" href="courses.html">Explore Courses <span aria-hidden="true">→</span></a>
+        <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
+        <button class="story" id="btnReplayIntro"><i>✨</i>Play Intro</button>
+      </div>
     </div>
   </div>
 
@@ -629,6 +974,132 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
   updateHomeNotifs();
   showToast("All notifications marked as read");
 });
+
+// =============================================================
+// Cool Simple Website Intro Logic
+// =============================================================
+const introOverlay = document.getElementById('sgIntroOverlay');
+const introProgressBar = document.getElementById('introProgressBar');
+const btnSkipIntro = document.getElementById('btnSkipIntro');
+const btnEnterGurukulam = document.getElementById('btnEnterGurukulam');
+const btnIntroSound = document.getElementById('btnIntroSound');
+const btnReplayIntro = document.getElementById('btnReplayIntro');
+
+let introTimer = null;
+let soundEnabled = true;
+
+// Synthesize soothing cosmic Om chime with Web Audio API
+function playSacredChime() {
+  if (!soundEnabled) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+
+    // Cosmic Om frequency ~136.1 Hz + harmonics
+    const freqs = [136.1, 272.2, 408.3, 544.4];
+    const now = ctx.currentTime;
+
+    freqs.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = i === 0 ? 'sine' : (i === 1 ? 'triangle' : 'sine');
+      osc.frequency.setValueAtTime(freq, now);
+
+      const vol = 0.22 / (i + 1);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(vol, now + 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.0);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 3.1);
+    });
+  } catch (e) {}
+}
+
+function dismissIntro(withSound = false) {
+  if (introTimer) {
+    clearTimeout(introTimer);
+    introTimer = null;
+  }
+  if (withSound) {
+    playSacredChime();
+  }
+  if (!introOverlay || introOverlay.classList.contains('intro-hidden')) return;
+  introOverlay.classList.add('intro-fade-out');
+  setTimeout(() => {
+    introOverlay.classList.add('intro-hidden');
+    introOverlay.classList.remove('intro-fade-out');
+  }, 680);
+}
+
+function startIntro() {
+  if (!introOverlay) return;
+  introOverlay.classList.remove('intro-hidden', 'intro-fade-out');
+
+  // Reset & start bottom progress bar
+  if (introProgressBar) {
+    introProgressBar.style.transition = 'none';
+    introProgressBar.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        introProgressBar.style.transition = 'width 2.8s linear';
+        introProgressBar.style.width = '100%';
+      });
+    });
+  }
+
+  // Auto-dismiss after 2.8s
+  if (introTimer) clearTimeout(introTimer);
+  introTimer = setTimeout(() => {
+    dismissIntro(false);
+  }, 2850);
+}
+
+// Sound toggle button
+btnIntroSound?.addEventListener('click', e => {
+  e.stopPropagation();
+  soundEnabled = !soundEnabled;
+  btnIntroSound.innerHTML = soundEnabled ? '<span>🔊</span> Sound' : '<span>🔇</span> Muted';
+  if (soundEnabled) playSacredChime();
+});
+
+btnSkipIntro?.addEventListener('click', e => {
+  e.stopPropagation();
+  dismissIntro(false);
+});
+
+btnEnterGurukulam?.addEventListener('click', e => {
+  e.stopPropagation();
+  dismissIntro(true);
+});
+
+// Replay button in hero
+btnReplayIntro?.addEventListener('click', () => {
+  startIntro();
+});
+
+// Keyboard controls: Escape, Space, Enter to dismiss
+document.addEventListener('keydown', e => {
+  if (introOverlay && !introOverlay.classList.contains('intro-hidden')) {
+    if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+      dismissIntro(e.key === 'Enter');
+    }
+  }
+});
+
+// Check whether to run intro on load
+const isInternalNav = document.referrer && document.referrer.includes(location.host) && sessionStorage.getItem('sg_intro_shown');
+if (isInternalNav && !new URLSearchParams(location.search).has('intro')) {
+  introOverlay.classList.add('intro-hidden');
+} else {
+  startIntro();
+  sessionStorage.setItem('sg_intro_shown', '1');
+}
+
 </script>
 </body>
 </html>
