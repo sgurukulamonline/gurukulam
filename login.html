@@ -11,6 +11,7 @@
   --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
 body{
   font-family:'Poppins',sans-serif;color:var(--brown);
   background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
@@ -60,6 +61,15 @@ input,textarea{font:inherit;padding:12px 14px;border:1px solid var(--line);borde
 #msg{font-size:.85rem;margin-top:12px;padding:8px 12px;border-radius:8px;display:none}
 #msg.err{background:#fee2e2;color:#991b1b;display:block}
 #msg.succ{background:#dcfce7;color:#166534;display:block}
+
+@media(max-width:768px){
+  .top{padding:10px 14px}
+  .top b{font-size:1.2rem}
+  .top span a:not([href="index.html"]){display:none}
+  .container{margin:20px auto 40px;padding:24px 18px;border-radius:18px}
+  .container h1{font-size:2rem}
+}
+
 </style>
 </head>
 <body>

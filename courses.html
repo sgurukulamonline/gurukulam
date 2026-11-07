@@ -12,7 +12,8 @@
   --shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
+html,body{overflow-x:hidden}
 body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
   background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
@@ -38,7 +39,19 @@ nav.top a:hover{color:var(--gold)}
 .lang .on{background:var(--maroon);color:var(--cream)}
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 @media(min-width:900px){nav.top{display:flex}}
-@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
+@media(max-width:560px){
+  .search{display:none}
+  .bar{justify-content:space-between;height:60px;gap:6px}
+  .logo svg{width:36px;height:36px}
+  .logo b{font-size:1.18rem}
+  .logo small{font-size:.5rem;letter-spacing:.12em}
+  .lang{font-size:.72rem}
+  .lang button{padding:4px 7px}
+  .avatar{width:36px;height:36px;font-size:.95rem}
+  .page-h{padding:20px 0 0}
+  .page-h h1{font-size:1.85rem}
+  .mobile-search-bar input{font-size:16px}
+}
 
 /* Hero */
 .hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}

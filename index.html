@@ -16,7 +16,8 @@
   --shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
+html,body{overflow-x:hidden}
 body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
   background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
@@ -42,7 +43,25 @@ nav.top a:hover{color:var(--gold)}
 .lang .on{background:var(--maroon);color:var(--cream)}
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 @media(min-width:900px){nav.top{display:flex}}
-@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
+@media(max-width:560px){
+  .search{display:none}
+  .bar{justify-content:space-between;height:60px;gap:6px}
+  .logo svg{width:36px;height:36px}
+  .logo b{font-size:1.18rem}
+  .logo small{font-size:.5rem;letter-spacing:.12em}
+  .lang{font-size:.72rem}
+  .lang button{padding:4px 7px}
+  .avatar{width:36px;height:36px;font-size:.95rem}
+  #homeNotifBtn{font-size:1.2rem;padding:2px 4px}
+  .hero{min-height:380px}
+  .hero .in{padding:34px 18px 40px}
+  .hero h1{font-size:clamp(1.8rem,7.5vw,2.5rem)}
+  .hero p.te{font-size:1rem;margin:10px 0 2px}
+  .hero .rule{margin:4px 0 16px}
+  .hero-actions{flex-direction:column;align-items:stretch;gap:10px}
+  .hero-actions .cta{justify-content:center;padding:11px 20px;font-size:.92rem}
+  .hero-actions .story{justify-content:center;padding:10px 18px;font-size:.86rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:12px;backdrop-filter:blur(4px)}
+}
 
 /* Hero */
 .hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}
@@ -502,6 +521,56 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   .hero-actions .cta, .hero-actions .story {
     justify-content: center;
   }
+}
+
+
+/* Advanced Mobile Responsive Alignments */
+@media(max-width:540px){
+  .paths{grid-template-columns:repeat(2,1fr);gap:10px}
+  .path .pic{height:120px}
+  .path .body{padding:10px 10px 14px}
+  .path h3{font-size:.98rem;line-height:1.2}
+  .path .age{font-size:.74rem;margin-top:2px}
+  .path .te{font-size:.7rem;max-width:100%;margin-top:4px;line-height:1.25}
+  .path .go{width:28px;height:28px;right:8px;bottom:8px;font-size:.78rem}
+  .sec-h h2{font-size:1.6rem}
+  .sec-h{margin-bottom:12px}
+}
+
+@media(max-width:600px){
+  .live-now{min-height:190px;padding:16px}
+  .live-now h3{font-size:1.35rem}
+  .live-now .row{flex-wrap:wrap;gap:8px}
+  .join{padding:8px 16px;font-size:.85rem}
+  .wisdom{padding:16px}
+  .sloka{font-size:1.25rem;margin:10px 0 6px}
+  .wisdom .acts{flex-wrap:wrap;gap:10px}
+  .listen{font-size:1.1rem}
+  .listen i{width:36px;height:36px;font-size:.8rem}
+}
+
+@media(max-width:768px){
+  .community{gap:12px}
+  .rooms{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;border-radius:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .rooms::-webkit-scrollbar{display:none}
+  .rooms h3{display:none}
+  .room{white-space:nowrap;padding:6px 14px;background:rgba(232,201,143,.14);border-radius:20px;flex-shrink:0;font-size:.82rem}
+  .room.on{background:rgba(217,154,39,.35)}
+  .msgs{min-height:200px;max-height:280px;padding:12px}
+  .modal-body{max-height:88vh;overflow-y:auto}
+}
+
+@media(max-width:480px){
+  .intro-skip-btn{top:14px;right:14px;font-size:.72rem;padding:5px 12px}
+  .intro-sound-btn{top:14px;left:14px;font-size:.72rem;padding:5px 10px}
+  .intro-emblem-wrap{width:76px;height:76px;margin-bottom:12px}
+  .intro-logo-svg{width:44px;height:44px}
+  .intro-mantra{font-size:.85rem;letter-spacing:.12em}
+  .intro-title{font-size:1.95rem;line-height:1.15}
+  .intro-tagline{font-size:.68rem;letter-spacing:.22em}
+  .intro-sub{font-size:.76rem;line-height:1.35;margin-top:6px}
+  .intro-actions{margin-top:18px}
+  .intro-btn-enter{padding:10px 24px;font-size:.86rem}
 }
 
 </style>
