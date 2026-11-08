@@ -109,6 +109,12 @@ section{padding:34px 0 8px}
 /* Live + wisdom */
 .live-grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:900px){.live-grid{grid-template-columns:1.3fr 1fr}}
+.live-grid.only-live{grid-template-columns:1fr}
+.live-grid.only-wisdom{grid-template-columns:1fr;max-width:820px;margin:0 auto}
+.live-wrap.single{grid-template-columns:1fr}
+.badge.upcoming{background:var(--gold);color:var(--brown)}
+.badge.live-pulse{background:var(--live);animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(200,40,20,.6)}50%{box-shadow:0 0 0 8px rgba(200,40,20,0)}}
 .live-wrap{display:grid;gap:12px;grid-template-columns:1fr}
 @media(min-width:560px){.live-wrap{grid-template-columns:1fr 1.1fr}}
 .live-now{border-radius:18px;padding:18px;color:#fff;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;
@@ -659,32 +665,12 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
     </div>
   </div></section>
 
-  <section id="live"><div class="wrap">
-    <div class="sec-h"><h2>Live Classes</h2><a href="live.html">View All →</a></div>
-    <div class="live-grid">
-      <div class="live-wrap">
-        <div class="live-now">
-          <span class="badge">● LIVE NOW</span>
-          <h3>Bhagavad Gita<br>Chapter 2</h3>
-          <small>Acharya Dr. Srinivas Sharma</small>
-          <div class="row"><small>👥 1.2K watching</small><button class="join" id="btnJoinLive">Join Class</button></div>
-        </div>
-        <div class="list">
-          <div class="item"><div class="av">🧑‍🏫</div><div><b>Sanskrit Basics</b><small>Today, 6:00 PM</small><small>Acharya Veda Prakash</small></div></div>
-          <div class="item"><div class="av">🧘‍♀️</div><div><b>Yoga for Daily Life</b><small>Today, 7:30 PM</small><small>Smt. Anasuya Devi</small></div></div>
-          <div class="item"><div class="av">🙏</div><div><b>Vishnu Sahasranamam</b><small>Tomorrow, 6:00 AM</small><small>Sri Parthasarathy garu</small></div></div>
-        </div>
-      </div>
-      <div class="wisdom">
-        <h3>🎁 Today's Wisdom <span class="date" id="today"></span></h3>
-        <p class="sloka" id="shlokaSanskrit">कर्मण्येवाधिकारस्ते<br>मा फలేషు कदाचन ।</p>
-        <p class="te" id="shlokaMeaning">నీకు కర్మ చేయ్యుటలో మాత్రమే అధికారం, ఫలాలపై ఎన్నడూ లేదు.</p>
-        <div class="acts">
-          <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
-          <button class="share" id="btnShare">↗ Share</button>
-        </div>
-      </div>
+  <section id="live" style="display:none"><div class="wrap">
+    <div class="sec-h" id="liveSecHeader">
+      <h2 id="liveSecTitle">Live Classes</h2>
+      <a id="liveViewAll" href="live.html">View All →</a>
     </div>
+    <div class="live-grid" id="liveGrid"></div>
   </div></section>
 
   <section id="courses"><div class="wrap">
@@ -766,114 +752,192 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 <script type="module">
 import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list } from "./firebase-init.js";
 
-// Today date
-document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+// Dynamic Live Classes & Today's Wisdom Loader
+let currentWisdom = null;
+let currentLiveClasses = [];
+let isPlayingSpeech = false;
 
-// Load dynamic courses: 3 pinned courses + 1 "More Courses" card (total 4 cards)
-const popularEl = document.getElementById("popularCourses");
-if (popularEl) loadCourses(popularEl, 3, true, true);
-
-// User auth avatar
-onAuthStateChanged(auth, u => {
-  const av = document.getElementById("homeAvatar");
-  if (av) {
-    if (u) {
-      av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
-      av.title = "Namaste, " + (u.displayName || u.email || "Learner");
-      av.href = "dashboard.html";
-    } else {
-      av.textContent = "👤";
-      av.title = "Sign In / Login";
-      av.href = "login.html";
-    }
-  }
-});
-
-// Search input redirect
-const searchIn = document.getElementById("homeSearch");
-searchIn?.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    const q = searchIn.value.trim();
-    if (q) location.href = "courses.html?q=" + encodeURIComponent(q);
-  }
-});
-
-// Live class join button
-document.getElementById("btnJoinLive")?.addEventListener("click", () => {
-  window.open("https://meet.google.com/gurukulam-live", "_blank");
-});
-
-// Toast notification helper
-const showToast = msg => {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2500);
+const formatLiveDateTime = t => {
+  const d = new Date(t);
+  const now = new Date();
+  const isToday = d.toDateString() === now.toDateString();
+  const tomorrow = new Date(now.getTime() + 86400000);
+  const isTomorrow = d.toDateString() === tomorrow.toDateString();
+  const timeStr = d.toLocaleTimeString("en-IN", { hour: 'numeric', minute: '2-digit', hour12: true });
+  if (isToday) return "Today, " + timeStr;
+  if (isTomorrow) return "Tomorrow, " + timeStr;
+  return d.toLocaleDateString("en-IN", { day: 'numeric', month: 'short' }) + ", " + timeStr;
 };
 
-// Story modal
-const storyModal = document.getElementById("storyModal");
-document.getElementById("btnStory")?.addEventListener("click", () => {
-  storyModal.classList.add("open");
-});
-document.getElementById("closeStory")?.addEventListener("click", () => {
-  storyModal.classList.remove("open");
-});
-storyModal?.addEventListener("click", e => {
-  if (e.target === storyModal) storyModal.classList.remove("open");
-});
+function renderLiveAndWisdom() {
+  const liveSec = document.getElementById("live");
+  const liveGrid = document.getElementById("liveGrid");
+  const liveSecTitle = document.getElementById("liveSecTitle");
+  const liveViewAll = document.getElementById("liveViewAll");
+  if (!liveSec || !liveGrid) return;
 
-// Shloka Listen / Speech Synthesis
-let isPlaying = false;
-const btnListen = document.getElementById("btnListen");
-btnListen?.addEventListener("click", () => {
-  if (!('speechSynthesis' in window)) {
-    showToast("Speech synthesis not supported on this browser.");
+  const now = Date.now();
+  // Filter active or future classes (starts within next period or started within last 2 hours)
+  const upcoming = (currentLiveClasses || [])
+    .filter(c => (c.startsAt || 0) + 2 * 3600 * 1000 > now)
+    .sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
+
+  const hasLive = upcoming.length > 0;
+  const hasWisdom = Boolean(currentWisdom && currentWisdom.shloka && currentWisdom.active !== false);
+
+  if (!hasLive && !hasWisdom) {
+    liveSec.style.display = "none";
+    liveGrid.innerHTML = "";
     return;
   }
-  if (isPlaying) {
-    window.speechSynthesis.cancel();
-    isPlaying = false;
-    btnListen.querySelector("span").textContent = "Listen";
-    btnListen.querySelector("i").textContent = "▶";
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const text = "कर्मण्येवाधिकारस्ते मा फలేషు कदाచన। You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.";
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.85;
-  utter.onend = () => {
-    isPlaying = false;
-    btnListen.querySelector("span").textContent = "Listen";
-    btnListen.querySelector("i").textContent = "▶";
-  };
-  utter.onerror = () => {
-    isPlaying = false;
-    btnListen.querySelector("span").textContent = "Listen";
-    btnListen.querySelector("i").textContent = "▶";
-  };
-  window.speechSynthesis.speak(utter);
-  isPlaying = true;
-  btnListen.querySelector("span").textContent = "Stop";
-  btnListen.querySelector("i").textContent = "⏹";
-});
 
-// Shloka Share
-document.getElementById("btnShare")?.addEventListener("click", async () => {
-  const shareText = "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\n- Bhagavad Gita, Chapter 2, Verse 47\nLearn at Sanathana Gurukulam: " + location.href;
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: "Today's Wisdom – Sanathana Gurukulam", text: shareText, url: location.href });
+  liveSec.style.display = "block";
+
+  // Configure grid layout and titles
+  if (hasLive && hasWisdom) {
+    liveGrid.className = "live-grid";
+    if (liveSecTitle) liveSecTitle.textContent = "Live Classes & Today's Wisdom";
+    if (liveViewAll) { liveViewAll.style.display = "inline-flex"; liveViewAll.textContent = "View All Classes →"; }
+  } else if (hasLive) {
+    liveGrid.className = "live-grid only-live";
+    if (liveSecTitle) liveSecTitle.textContent = "Live Classes";
+    if (liveViewAll) { liveViewAll.style.display = "inline-flex"; liveViewAll.textContent = "View All →"; }
+  } else {
+    liveGrid.className = "live-grid only-wisdom";
+    if (liveSecTitle) liveSecTitle.textContent = "Today's Wisdom · ఈ రోజు సుభాషితం";
+    if (liveViewAll) liveViewAll.style.display = "none";
+  }
+
+  let html = "";
+
+  if (hasLive) {
+    const primary = upcoming[0];
+    const isLive = primary.startsAt <= now && now <= primary.startsAt + 2 * 3600 * 1000;
+    const rest = upcoming.slice(1, 4);
+
+    html += `
+      <div class="live-wrap ${rest.length === 0 ? 'single' : ''}">
+        <div class="live-now">
+          <span class="badge ${isLive ? 'live-pulse' : 'upcoming'}">${isLive ? '● LIVE NOW' : '⏰ UPCOMING'}</span>
+          <h3>${esc(primary.title)}</h3>
+          <small>🧑‍🏫 ${esc(primary.teacher || "Acharya")}</small>
+          <div class="row">
+            <small>🕒 ${formatLiveDateTime(primary.startsAt)}</small>
+            ${primary.link ? `<a class="join" href="${esc(primary.link)}" target="_blank" rel="noopener">${isLive ? 'Join Class' : 'Meeting Link'}</a>` : '<span style="font-size:0.75rem;opacity:0.85">Meeting link will appear here</span>'}
+          </div>
+        </div>
+        ${rest.length > 0 ? `
+          <div class="list">
+            ${rest.map(c => `
+              <div class="item">
+                <div class="av">🪔</div>
+                <div style="flex:1;min-width:0">
+                  <b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.title)}</b>
+                  <small>🕒 ${formatLiveDateTime(c.startsAt)}</small>
+                  <small>🧑‍🏫 ${esc(c.teacher || "Acharya")}</small>
+                </div>
+                ${c.link ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener" style="flex:none;padding:5px 12px;font-size:0.8rem">Join</a>` : ''}
+              </div>
+            `).join("")}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  if (hasWisdom) {
+    const todayStr = currentWisdom.dateTitle || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    html += `
+      <div class="wisdom">
+        <h3>
+          <span>🎁 Today's Wisdom</span>
+          <span class="date">${esc(todayStr)}</span>
+        </h3>
+        ${currentWisdom.source ? `<div style="font-size:0.85rem;color:var(--maroon);font-weight:600;margin:6px 0 2px">📜 ${esc(currentWisdom.source)}</div>` : ''}
+        <p class="sloka" id="shlokaSanskrit">${esc(currentWisdom.shloka).replace(/\n/g, '<br>')}</p>
+        ${currentWisdom.meaningTe ? `<p class="te" id="shlokaMeaningTe">${esc(currentWisdom.meaningTe)}</p>` : ''}
+        ${currentWisdom.meaningEn ? `<p class="en" id="shlokaMeaningEn" style="font-size:0.9rem;margin-top:6px;opacity:0.9;color:var(--brown)">${esc(currentWisdom.meaningEn)}</p>` : ''}
+        <div class="acts">
+          <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
+          <button class="share" id="btnShare">↗ Share</button>
+        </div>
+      </div>
+    `;
+  }
+
+  liveGrid.innerHTML = html;
+  bindWisdomControls();
+}
+
+function bindWisdomControls() {
+  const btnListen = document.getElementById("btnListen");
+  const btnShare = document.getElementById("btnShare");
+
+  btnListen?.addEventListener("click", () => {
+    if (!('speechSynthesis' in window)) {
+      showToast("Speech synthesis not supported on this browser.");
       return;
-    } catch (e) {}
-  }
-  try {
-    await navigator.clipboard.writeText(shareText);
-    showToast("✨ Shloka copied to clipboard!");
-  } catch (err) {
-    showToast("Unable to copy to clipboard.");
-  }
+    }
+    if (isPlayingSpeech) {
+      window.speechSynthesis.cancel();
+      isPlayingSpeech = false;
+      btnListen.querySelector("span").textContent = "Listen";
+      btnListen.querySelector("i").textContent = "▶";
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if (!currentWisdom || !currentWisdom.shloka) return;
+    const textToSpeak = `${currentWisdom.shloka}. ${currentWisdom.meaningTe || ''} ${currentWisdom.meaningEn || ''}`;
+    const utter = new SpeechSynthesisUtterance(textToSpeak);
+    utter.rate = 0.85;
+    utter.onend = () => {
+      isPlayingSpeech = false;
+      if (btnListen) {
+        btnListen.querySelector("span").textContent = "Listen";
+        btnListen.querySelector("i").textContent = "▶";
+      }
+    };
+    utter.onerror = () => {
+      isPlayingSpeech = false;
+      if (btnListen) {
+        btnListen.querySelector("span").textContent = "Listen";
+        btnListen.querySelector("i").textContent = "▶";
+      }
+    };
+    window.speechSynthesis.speak(utter);
+    isPlayingSpeech = true;
+    btnListen.querySelector("span").textContent = "Stop";
+    btnListen.querySelector("i").textContent = "⏹";
+  });
+
+  btnShare?.addEventListener("click", async () => {
+    if (!currentWisdom || !currentWisdom.shloka) return;
+    const shareText = `${currentWisdom.shloka}\n\n${currentWisdom.meaningTe ? currentWisdom.meaningTe + '\n' : ''}${currentWisdom.meaningEn ? currentWisdom.meaningEn + '\n' : ''}${currentWisdom.source ? '- ' + currentWisdom.source + '\n' : ''}\nLearn at Sanathana Gurukulam: ${location.href}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Today's Wisdom – Sanathana Gurukulam", text: shareText, url: location.href });
+        return;
+      } catch (e) {}
+    }
+    try {
+      await navigator.clipboard.writeText(shareText);
+      showToast("✨ Shloka copied to clipboard!");
+    } catch (err) {
+      showToast("Unable to copy to clipboard.");
+    }
+  });
+}
+
+// Live database listeners for realtime updates
+onValue(ref(db, "liveClasses"), snap => {
+  const val = snap.val() || {};
+  currentLiveClasses = Object.entries(val).map(([id, d]) => ({ id, ...d }));
+  renderLiveAndWisdom();
+});
+
+onValue(ref(db, "dailyWisdom"), snap => {
+  currentWisdom = snap.val() || null;
+  renderLiveAndWisdom();
 });
 
 // Community circle selector on homepage

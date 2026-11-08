@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Classes Scheduling – Sanathana Gurukulam</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Live Classes &amp; Today's Wisdom – Sanathana Gurukulam Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Noto+Serif+Devanagari:wght@400;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
@@ -18,7 +18,7 @@ body{
 h1,h2,h3{font-family:'Cormorant Garamond',serif}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0}
-input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
+input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
 .btn{
@@ -30,6 +30,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
 .btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
 .btn.sm{padding:5px 12px;font-size:.8rem}
+.btn.danger{background:#dc2626;color:#fff}
 
 .top{
   display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
@@ -37,11 +38,11 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 }
 .top b{font-family:'Cormorant Garamond';font-size:1.5rem}
 .top b a{color:inherit}
-.top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
+.top span{display:flex;gap:14px;align-items:center;font-size:.88rem;flex-wrap:wrap}
 .top a:hover{color:var(--gold)}
 
 .wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
-.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:28px;border:1px solid var(--line)}
 .panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
 .row:last-child{border-bottom:0}
@@ -50,6 +51,11 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
+
+/* Notification Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#15803d;color:#fff;padding:12px 20px;border-radius:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);display:none;z-index:9999}
+.toast.show{display:block;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
@@ -60,37 +66,124 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
     <a href="admin.html">← Dashboard Hub</a>
     <a href="admin-age-groups.html">Age Groups</a>
     <a href="admin-courses.html">Courses</a>
+    <a href="admin-live.html" style="color:var(--gold)">Live &amp; Wisdom</a>
     <a href="admin-community.html">Community</a>
+    <a href="admin-notifications.html">Notifications</a>
+    <a href="index.html" target="_blank">View Site ↗</a>
     <button class="btn gold sm" id="out">Logout</button>
   </span>
 </div>
 
 <div class="wrap" id="wrap" hidden>
   <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px">
     <div>
-      <h1 style="font-size:2.4rem;color:var(--maroon)">🎥 Live Classes Scheduling</h1>
-      <p class="muted">Schedule live satsangs, recitation lectures, and manage Google Meet join links.</p>
+      <h1 style="font-size:2.3rem;color:var(--maroon)">🎥 Live Classes &amp; 🎁 Today's Wisdom</h1>
+      <p class="muted">Manage live chanting lectures, Google Meet sessions, and the sacred daily Sanskrit Subhashitam.</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a class="btn sm ghost" href="#liveSection">↓ Jump to Live Classes</a>
+      <a class="btn sm gold" href="#wisdomSection">↓ Jump to Today's Wisdom</a>
     </div>
   </div>
 
-  <div class="panel">
-    <h2>Schedule a New Live Class</h2>
+  <!-- SECTION 1: TODAY'S WISDOM -->
+  <div class="panel" id="wisdomSection">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div>
+        <h2 style="margin-bottom:2px">🎁 Today's Wisdom (ఈ రోజు సుభాషితం)</h2>
+        <p class="muted">Enter the sacred shloka, Telugu meaning, and scripture reference. If empty, the wisdom card is cleanly hidden from the website.</p>
+      </div>
+      <div id="wisdomBadge" class="tag" style="background:#fef3c7;color:#92400e">Loading...</div>
+    </div>
+
+    <!-- Live Preview Card -->
+    <div style="background:linear-gradient(135deg,#f3dfb2,#e7c98d);border:1px solid rgba(122,46,22,.2);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--maroon)">Live Website Preview</span>
+        <span id="prevDate" style="font-size:0.75rem;border:1px solid var(--maroon);border-radius:8px;padding:2px 10px;color:var(--maroon);font-family:'Poppins',sans-serif">Today</span>
+      </div>
+      <div id="prevSource" style="font-size:0.85rem;color:var(--maroon);font-weight:600;margin-bottom:6px"></div>
+      <div id="prevShloka" style="font-family:'Noto Serif Devanagari',serif;font-size:1.45rem;color:var(--maroon);line-height:1.5;margin-bottom:8px">
+        No shloka published yet. Fill in the form below and click "Save &amp; Publish Wisdom" to display it on the website.
+      </div>
+      <div id="prevMeaningTe" style="font-size:0.95rem;color:var(--brown);margin-bottom:4px"></div>
+      <div id="prevMeaningEn" style="font-size:0.88rem;color:var(--muted);font-style:italic"></div>
+    </div>
+
+    <form class="form" id="wForm" style="grid-template-columns:1fr">
+      <div>
+        <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">
+          Sanskrit / Devanagari Shloka (సంస్కృత శ్లోకం) *
+        </label>
+        <textarea name="shloka" id="wShloka" rows="3" style="width:100%;font-family:'Noto Serif Devanagari',serif;font-size:1.15rem;resize:vertical" placeholder="ఉదా: कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।&#10;मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त్వकर्मणि ॥" required></textarea>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+        <div>
+          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">
+            Telugu Meaning (తాత్పర్యం)
+          </label>
+          <textarea name="meaningTe" id="wMeaningTe" rows="3" style="width:100%;resize:vertical" placeholder="ఉదా: నీకు కర్మ చేయుట యందే అధికారము కలదు, ఫలముల యందు ఎన్నడూ లేదు."></textarea>
+        </div>
+
+        <div>
+          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">
+            English Meaning (Optional)
+          </label>
+          <textarea name="meaningEn" id="wMeaningEn" rows="3" style="width:100%;resize:vertical" placeholder="e.g. You have a right to perform your prescribed duty, but you are not entitled to the fruits of action."></textarea>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+        <div>
+          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">
+            Scripture Source / Topic (శాస్త్ర మూలం)
+          </label>
+          <input name="source" id="wSource" placeholder="e.g. Bhagavad Gita 2.47 / భగవద్గీత 2.47">
+        </div>
+
+        <div>
+          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">
+            Display Date Label (Optional)
+          </label>
+          <input name="dateTitle" id="wDateTitle" placeholder="Leave empty for auto-generated today's date">
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+        <button type="submit" class="btn" style="flex:1;min-width:220px">💾 Save &amp; Publish Today's Wisdom</button>
+        <button type="button" class="btn ghost" id="btnTestVoice">🔊 Test Voice Pronunciation</button>
+        <button type="button" class="btn ghost danger" id="btnClearWisdom" style="border-color:#f87171">🗑️ Clear / Hide from Website</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- SECTION 2: LIVE CLASSES -->
+  <div class="panel" id="liveSection">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div>
+        <h2 style="margin-bottom:2px">🎥 Schedule a New Live Class</h2>
+        <p class="muted">Add interactive chanting lectures, yoga satsangs, and live Google Meet links. If no classes are scheduled, the live classes card is cleanly hidden.</p>
+      </div>
+      <button class="btn sm ghost" id="btnCleanMock" style="display:none;color:#dc2626;border-color:#fca5a5">🧹 Clear Legacy Mock Classes</button>
+    </div>
+
     <form class="form" id="lForm">
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Teacher / Instructor Name</label>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Teacher / Instructor Name *</label>
         <input name="teacher" placeholder="e.g. Dr. Srinivas Sharma" required>
       </div>
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Class Title</label>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Class Title *</label>
         <input name="title" placeholder="e.g. Bhagavad Gita Ch 2 Live Recitation" required>
       </div>
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Starts At (Date &amp; Time)</label>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Starts At (Date &amp; Time) *</label>
         <input name="startsAt" type="datetime-local" required aria-label="Start time">
       </div>
       <div>
-        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Meeting Link</label>
+        <label style="font-size:.78rem;font-weight:600;color:var(--muted)">Meeting Link (Google Meet / Zoom / YouTube)</label>
         <input name="link" placeholder="https://meet.google.com/...">
       </div>
       <button class="btn" style="grid-column:1/-1;margin-top:6px">Schedule Live Class</button>
@@ -103,50 +196,212 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, push, remove, list } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, push, set, remove, list, get } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 $("out").onclick = adminLogout;
 
+const showToast = msg => {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+};
+
 requireAdmin((u, p) => {
   $("wrap").hidden = false;
-  load();
+  loadLive();
+  loadWisdom();
 });
 
-async function load() {
+// Live input preview for Today's Wisdom form
+$("wShloka").addEventListener("input", updateWisdomPreview);
+$("wMeaningTe").addEventListener("input", updateWisdomPreview);
+$("wMeaningEn").addEventListener("input", updateWisdomPreview);
+$("wSource").addEventListener("input", updateWisdomPreview);
+$("wDateTitle").addEventListener("input", updateWisdomPreview);
+
+function updateWisdomPreview() {
+  const shloka = $("wShloka").value.trim();
+  const meaningTe = $("wMeaningTe").value.trim();
+  const meaningEn = $("wMeaningEn").value.trim();
+  const source = $("wSource").value.trim();
+  const dateTitle = $("wDateTitle").value.trim() || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+
+  $("prevDate").textContent = dateTitle;
+  $("prevSource").textContent = source ? "📜 " + source : "";
+  $("prevShloka").innerHTML = shloka ? esc(shloka).replace(/\n/g, '<br>') : '<span style="color:var(--muted);font-style:italic">No shloka entered yet.</span>';
+  $("prevMeaningTe").textContent = meaningTe || "";
+  $("prevMeaningEn").textContent = meaningEn || "";
+}
+
+// ------------------------------------------------------------
+// LOAD & MANAGE TODAY'S WISDOM
+// ------------------------------------------------------------
+let currentWisdom = null;
+
+async function loadWisdom() {
+  try {
+    const snap = await get(ref(db, "dailyWisdom"));
+    currentWisdom = snap.val();
+
+    if (currentWisdom && currentWisdom.shloka && currentWisdom.active !== false) {
+      $("wShloka").value = currentWisdom.shloka || "";
+      $("wMeaningTe").value = currentWisdom.meaningTe || "";
+      $("wMeaningEn").value = currentWisdom.meaningEn || "";
+      $("wSource").value = currentWisdom.source || "";
+      $("wDateTitle").value = currentWisdom.dateTitle || "";
+
+      $("wisdomBadge").textContent = "🟢 Published on Website";
+      $("wisdomBadge").style.background = "#dcfce7";
+      $("wisdomBadge").style.color = "#166534";
+    } else {
+      $("wShloka").value = "";
+      $("wMeaningTe").value = "";
+      $("wMeaningEn").value = "";
+      $("wSource").value = "";
+      $("wDateTitle").value = "";
+
+      $("wisdomBadge").textContent = "⚪ Not Set / Hidden";
+      $("wisdomBadge").style.background = "#fef3c7";
+      $("wisdomBadge").style.color = "#92400e";
+    }
+    updateWisdomPreview();
+  } catch (err) {
+    console.error("Error loading wisdom:", err);
+  }
+}
+
+// Save Today's Wisdom
+$("wForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  const shloka = f.shloka ? f.shloka.trim() : "";
+  if (!shloka) {
+    alert("Please enter a shloka.");
+    return;
+  }
+
+  const wisdomData = {
+    shloka,
+    meaningTe: f.meaningTe ? f.meaningTe.trim() : "",
+    meaningEn: f.meaningEn ? f.meaningEn.trim() : "",
+    source: f.source ? f.source.trim() : "",
+    dateTitle: f.dateTitle ? f.dateTitle.trim() : new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+    active: true,
+    updatedAt: Date.now()
+  };
+
+  try {
+    await set(ref(db, "dailyWisdom"), wisdomData);
+    showToast("✨ Today's Wisdom published to website successfully!");
+    await loadWisdom();
+  } catch (err) {
+    console.error("Save wisdom error:", err);
+    alert("Failed to save wisdom: " + err.message);
+  }
+};
+
+// Clear Today's Wisdom
+$("btnClearWisdom").onclick = async () => {
+  if (!confirm("Are you sure you want to clear Today's Wisdom? It will be completely removed and hidden from the website.")) return;
+  try {
+    await remove(ref(db, "dailyWisdom"));
+    showToast("Today's Wisdom removed and hidden from website.");
+    await loadWisdom();
+  } catch (err) {
+    console.error("Clear wisdom error:", err);
+    alert("Failed to clear wisdom: " + err.message);
+  }
+};
+
+// Test Voice
+$("btnTestVoice").onclick = () => {
+  const shloka = $("wShloka").value.trim();
+  const meaningTe = $("wMeaningTe").value.trim();
+  if (!shloka) {
+    alert("Enter a shloka first to test voice.");
+    return;
+  }
+  if (!('speechSynthesis' in window)) {
+    alert("Speech synthesis is not supported on this browser.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(shloka + ". " + meaningTe);
+  utter.rate = 0.85;
+  window.speechSynthesis.speak(utter);
+  showToast("Playing pronunciation sample...");
+};
+
+// ------------------------------------------------------------
+// LOAD & MANAGE LIVE CLASSES
+// ------------------------------------------------------------
+let currentLiveClasses = [];
+
+async function loadLive() {
   try {
     const ls = await list("liveClasses");
-    $("lList").innerHTML = (ls || []).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
+    currentLiveClasses = ls || [];
+
+    // Check if legacy mock items exist
+    const legacyMockIds = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
+    const hasMock = currentLiveClasses.some(c => legacyMockIds.includes(c.id) || (c.title && c.title.includes("Bhagavad Gita – Chapter 2")));
+    $("btnCleanMock").style.display = hasMock ? "inline-flex" : "none";
+
+    $("lList").innerHTML = currentLiveClasses.sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
       <div class="row">
         <span>
           <b>${esc(c.title)}</b> 
           <br><span class="muted">${esc(c.teacher || "Instructor")} · 🕒 ${when(c.startsAt)}</span>
-          ${c.link ? `<br><a href="${esc(c.link)}" target="_blank" style="color:var(--maroon);font-size:.82rem;font-weight:600;text-decoration:underline">Meeting Link: ${esc(c.link)}</a>` : ''}
+          ${c.link ? `<br><a href="${esc(c.link)}" target="_blank" style="color:var(--maroon);font-size:.82rem;font-weight:600;text-decoration:underline">Meeting Link: ${esc(c.link)}</a>` : '<br><span style="color:var(--muted);font-size:.8rem">No link set</span>'}
         </span>
-        <button class="btn sm" data-del="liveClasses/${c.id}">Cancel / Delete</button>
+        <button class="btn sm danger" data-del="liveClasses/${c.id}">Cancel / Delete</button>
       </div>
-    `).join("") || '<p class="muted">No live classes scheduled.</p>';
+    `).join("") || '<p class="muted" style="padding:14px 0">No live classes scheduled. The website live classes card is currently hidden.</p>';
   } catch (err) {
     console.error("Live load error:", err);
   }
 }
 
+// Clear mock classes helper
+$("btnCleanMock").onclick = async () => {
+  if (!confirm("Remove all legacy mock demo sessions from the database?")) return;
+  const legacyMockIds = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
+  for (const c of currentLiveClasses) {
+    if (legacyMockIds.includes(c.id) || (c.title && c.title.includes("Bhagavad Gita – Chapter 2"))) {
+      try { await remove(ref(db, `liveClasses/${c.id}`)); } catch(e) {}
+    }
+  }
+  showToast("Cleared mock live classes.");
+  await loadLive();
+};
+
+// Schedule live class
 $("lForm").onsubmit = async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target));
-  await push(ref(db, "liveClasses"), {
-    title: f.title,
-    teacher: f.teacher,
-    link: f.link || "",
-    startsAt: new Date(f.startsAt).getTime(),
-    createdAt: Date.now()
-  });
-  e.target.reset();
-  await load();
+  try {
+    await push(ref(db, "liveClasses"), {
+      title: f.title.trim(),
+      teacher: f.teacher.trim(),
+      link: f.link ? f.link.trim() : "",
+      startsAt: new Date(f.startsAt).getTime(),
+      createdAt: Date.now()
+    });
+    e.target.reset();
+    showToast("🎉 Live session scheduled successfully!");
+    await loadLive();
+  } catch (err) {
+    alert("Error scheduling class: " + err.message);
+  }
 };
 
+// Delete live class
 document.addEventListener("click", async e => {
   const b = e.target.closest("button");
   const d = b?.dataset;
@@ -154,8 +409,13 @@ document.addEventListener("click", async e => {
 
   if (d.del) {
     if (!confirm("Are you sure you want to cancel and delete this live session?")) return;
-    await remove(ref(db, d.del));
-    await load();
+    try {
+      await remove(ref(db, d.del));
+      showToast("Live session deleted.");
+      await loadLive();
+    } catch (err) {
+      alert("Failed to delete session: " + err.message);
+    }
   }
 });
 </script>

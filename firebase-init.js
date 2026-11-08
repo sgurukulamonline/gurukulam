@@ -182,40 +182,7 @@ export const DEFAULT_COURSES = [
   }
 ];
 
-export const DEFAULT_LIVE = [
-  {
-    id: "live-gita",
-    title: "Bhagavad Gita – Chapter 2",
-    teacher: "Acharya Dr. Srinivas Sharma",
-    startsAt: Date.now() + 2 * 3600 * 1000,
-    link: "https://meet.google.com/gurukulam-live",
-    createdAt: Date.now()
-  },
-  {
-    id: "live-sanskrit",
-    title: "Sanskrit Basics & Shloka Recitation",
-    teacher: "Acharya Veda Prakash",
-    startsAt: Date.now() + 5 * 3600 * 1000,
-    link: "https://meet.google.com/gurukulam-sanskrit",
-    createdAt: Date.now()
-  },
-  {
-    id: "live-yoga",
-    title: "Yoga for Daily Life",
-    teacher: "Smt. Anasuya Devi",
-    startsAt: Date.now() + 8 * 3600 * 1000,
-    link: "https://meet.google.com/gurukulam-yoga",
-    createdAt: Date.now()
-  },
-  {
-    id: "live-vishnu",
-    title: "Vishnu Sahasranamam Chanting",
-    teacher: "Sri Parthasarathy garu",
-    startsAt: Date.now() + 24 * 3600 * 1000,
-    link: "https://meet.google.com/gurukulam-vishnu",
-    createdAt: Date.now()
-  }
-];
+export const DEFAULT_LIVE = [];
 
 export const DEFAULT_COMMUNITY = {
   gita: {
@@ -326,7 +293,7 @@ function initMockDB() {
     }
   };
   DEFAULT_COURSES.forEach(c => { initial.courses[c.id] = c; });
-  DEFAULT_LIVE.forEach(l => { initial.liveClasses[l.id] = l; });
+  // No mock live classes seeded - only admin scheduled classes appear
   DEFAULT_NOTIFICATIONS.forEach(n => { initial.notifications[n.id] = n; });
   DEFAULT_PATHS.forEach(p => { initial.learningPaths[p.id] = p; });
   localStorage.setItem(LS_DB_KEY, JSON.stringify(initial));
@@ -342,18 +309,17 @@ if (mockDB && (!mockDB.notifications || !Object.keys(mockDB.notifications).lengt
   localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
 }
 
-// Ensure mock live classes have upcoming dates for testing
+// Clean up any legacy mock live classes from prior sessions
 if (mockDB && mockDB.liveClasses) {
-  const now = Date.now();
-  const allPast = Object.values(mockDB.liveClasses).every(l => (l.startsAt || 0) < now - 3600000);
-  if (allPast) {
-    let offsetHours = 2;
-    Object.values(mockDB.liveClasses).forEach(l => {
-      l.startsAt = now + offsetHours * 3600 * 1000;
-      offsetHours += 3;
-    });
-    localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
+  const legacyMockIds = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
+  let cleaned = false;
+  for (const mid of legacyMockIds) {
+    if (mockDB.liveClasses[mid]) {
+      delete mockDB.liveClasses[mid];
+      cleaned = true;
+    }
   }
+  if (cleaned) localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
 }
 
 function saveMockDB() {
@@ -478,9 +444,7 @@ export async function seedDefaultDataIfEmpty() {
       DEFAULT_COURSES.forEach(c => { initialCourses[c.id] = c; });
       await fbSet(fbRef(realDb, "courses"), initialCourses);
 
-      const initialLive = {};
-      DEFAULT_LIVE.forEach(l => { initialLive[l.id] = l; });
-      await fbSet(fbRef(realDb, "liveClasses"), initialLive);
+      // Live classes start empty - populated strictly by admin in Firebase
 
       const initialNotifs = {};
       DEFAULT_NOTIFICATIONS.forEach(n => { initialNotifs[n.id] = n; });
@@ -668,7 +632,7 @@ export async function list(path) {
   } catch (err) {
     console.warn(`list(${path}) error:`, err);
     if (path === "courses") return [...DEFAULT_COURSES];
-    if (path === "liveClasses") return [...DEFAULT_LIVE];
+    if (path === "liveClasses") return [];
     if (path === "notifications") return [...DEFAULT_NOTIFICATIONS];
     return [];
   }

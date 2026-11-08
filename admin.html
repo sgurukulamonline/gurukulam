@@ -140,7 +140,7 @@ button{font:inherit;cursor:pointer;border:0}
     <a href="dashboard.html">Learner Portal</a>
     <a href="admin-age-groups.html">Age Groups</a>
     <a href="admin-courses.html">Courses</a>
-    <a href="admin-live.html">Live</a>
+    <a href="admin-live.html">Live &amp; Wisdom</a>
     <a href="admin-community.html">Community</a>
     <a href="admin-notifications.html">Notifications</a>
     <a href="index.html">Home</a>
@@ -188,15 +188,16 @@ button{font:inherit;cursor:pointer;border:0}
       </div>
     </a>
 
-    <!-- Box 3: Live Classes -->
+    <!-- Box 3: Live Classes & Today's Wisdom -->
     <a class="admin-card" href="admin-live.html">
       <div class="admin-card-icon">🎥</div>
       <div>
-        <h2>3. Live Classes</h2>
-        <p>Schedule live chanting, recitation sessions, set start dates &amp; times, and manage Google Meet join links.</p>
+        <h2>3. Live Classes &amp; Today's Wisdom</h2>
+        <p>Schedule live chanting lectures, Google Meet links, and publish or update the daily Sanskrit shloka and Telugu meanings.</p>
       </div>
       <div class="admin-card-footer">
         <span class="admin-badge" id="bLive">0 Live Classes</span>
+        <span class="admin-badge" id="bWisdom" style="background:#fef3c7;color:#92400e">Wisdom: Checking...</span>
         <span class="admin-go">Open Section →</span>
       </div>
     </a>
@@ -252,13 +253,14 @@ requireAdmin((u, p) => {
 
 async function load() {
   try {
-    const [us, cs, ls, es, ns, ps] = await Promise.all([
+    const [us, cs, ls, es, ns, ps, wSnap] = await Promise.all([
       list("users"),
       list("courses"),
       list("liveClasses"),
       get(ref(db, "enrollments")),
       list("notifications"),
-      list("learningPaths")
+      list("learningPaths"),
+      get(ref(db, "dailyWisdom"))
     ]);
 
     let totalEnr = 0;
@@ -282,6 +284,14 @@ async function load() {
     $("bPaths").textContent = "4 Fixed Sections";
     $("bCourses").textContent = `${cs.length} Active Courses`;
     $("bLive").textContent = `${ls.length} Scheduled Sessions`;
+    const wVal = wSnap.val();
+    const hasWisdom = Boolean(wVal && wVal.shloka && wVal.active !== false);
+    const bW = $("bWisdom");
+    if (bW) {
+      bW.textContent = hasWisdom ? "Wisdom: Published" : "Wisdom: Hidden";
+      bW.style.background = hasWisdom ? "#dcfce7" : "#fef3c7";
+      bW.style.color = hasWisdom ? "#166534" : "#92400e";
+    }
     $("bNotifs").textContent = `${(ns || []).length} Broadcast Alerts`;
 
     // Render registered users

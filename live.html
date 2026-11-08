@@ -59,7 +59,7 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   <a href="more.html"><span>🛕</span>Explore</a>
 </nav>
 <script type="module">
-import { list, esc, DEFAULT_LIVE } from "./firebase-init.js";
+import { list, esc } from "./firebase-init.js";
 
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
@@ -85,32 +85,21 @@ const row = (c, live, upcomingBadge) => `<div class="row">
 (async () => {
   try {
     let all = await list("liveClasses");
-    if (!all || !all.length) all = [...DEFAULT_LIVE];
+    if (!all) all = [];
 
     const now = Date.now(), WIN = 2 * 3600e3;
-    let up = all.filter(c => c.startsAt + WIN > now).sort((a, b) => a.startsAt - b.startsAt);
-    let past = all.filter(c => c.startsAt + WIN <= now).sort((a, b) => b.startsAt - a.startsAt);
+    let up = all.filter(c => (c.startsAt || 0) + WIN > now).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
+    let past = all.filter(c => (c.startsAt || 0) + WIN <= now).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0));
 
-    // If all classes passed, project future recurring daily slots
-    if (!up.length) {
-      let offset = 2;
-      all.forEach(c => {
-        c.startsAt = now + offset * 3600 * 1000;
-        offset += 3;
-      });
-      up = all.sort((a, b) => a.startsAt - b.startsAt);
-      past = [];
-    }
-
-    const isLive = c => c.startsAt <= now && now < c.startsAt + WIN;
+    const isLive = c => (c.startsAt || 0) <= now && now < (c.startsAt || 0) + WIN;
 
     document.getElementById("up").innerHTML = up.map(c => {
       const live = isLive(c);
       const diffBadge = !live ? formatDiff(c.startsAt, now) : "";
       return row(c, live, diffBadge);
-    }).join("") || '<p class="muted">No upcoming classes yet. Check back soon.</p>';
+    }).join("") || '<p class="muted" style="padding:20px 0;text-align:center">No upcoming live classes scheduled at this time. Please check back later.</p>';
 
-    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted">All sessions are currently scheduled ahead.</p>';
+    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted" style="padding:20px 0;text-align:center">No past session recordings available.</p>';
   } catch (e) {
     document.getElementById("up").innerHTML = '<p class="muted">Could not load classes.</p>';
   }
