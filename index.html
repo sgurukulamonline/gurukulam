@@ -990,16 +990,31 @@ document.getElementById("chatForm")?.addEventListener("submit", async e => {
   const txt = input.value.trim();
   if (!txt) return;
   const user = auth.currentUser;
-  const senderName = user?.displayName || "You";
-  const uid = user?.uid || "u_guest";
+  let senderName = user?.displayName || user?.email?.split("@")[0] || "";
+  let uid = user?.uid;
+  if (!uid) {
+    uid = localStorage.getItem("sg_guest_uid");
+    if (!uid) {
+      uid = "g_" + Math.random().toString(36).slice(2, 9);
+      localStorage.setItem("sg_guest_uid", uid);
+    }
+  }
+  if (!senderName) {
+    senderName = localStorage.getItem("sg_guest_name") || "Sadhaka";
+  }
   
-  await push(ref(db, "community/" + activeRoom), {
-    uid,
-    name: senderName,
-    text: txt,
-    at: Date.now()
-  });
-  input.value = "";
+  try {
+    await push(ref(db, "community/" + activeRoom), {
+      uid,
+      name: senderName,
+      text: txt,
+      at: Date.now()
+    });
+    input.value = "";
+  } catch (err) {
+    console.error("Community send error:", err);
+    showToast("⚠️ Could not send: Firebase Rules require update in Console.");
+  }
 });
 
 // Language switcher

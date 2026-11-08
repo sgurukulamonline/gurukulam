@@ -114,8 +114,13 @@ document.addEventListener("click", e => {
 $("f").onsubmit = async e => {
   e.preventDefault();
   const text = $("t").value.trim(); if (!text) return;
-  $("t").value = "";
-  await push(ref(db, "community/" + room), { uid: me.uid, name: prof.name || "Learner", text, at: Date.now() });
+  try {
+    await push(ref(db, "community/" + room), { uid: me.uid, name: prof?.name || "Learner", text, at: Date.now() });
+    $("t").value = "";
+  } catch (err) {
+    console.error("Community push error:", err);
+    alert("⚠️ Could not send message: Realtime Database Security Rules in Firebase Console require updating.\n\nError: " + (err.message || err.code || err));
+  }
 };
 </script>
 </body></html>
