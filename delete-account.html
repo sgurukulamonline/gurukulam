@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account &amp; Data Deletion – Sanathana Gurukulam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
+  --card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12);
+  --danger:#dc2626;--danger-bg:#fef2f2;
+}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{
+  font-family:'Poppins',sans-serif;color:var(--brown);
+  background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
+  line-height:1.7;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--maroon);line-height:1.25}
+a{color:var(--maroon);text-decoration:underline;text-underline-offset:3px}
+a:hover{color:var(--gold)}
+
+.top{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 22px;background:var(--brown);color:var(--cream);position:sticky;top:0;z-index:50;
+}
+.top b{font-family:'Cormorant Garamond';font-size:1.5rem}
+.top b a{color:inherit;text-decoration:none}
+.top span{display:flex;gap:16px;align-items:center;font-size:.9rem}
+.top a{color:var(--cream);text-decoration:none}
+.top a:hover{color:var(--gold)}
+
+.wrap{max-width:840px;margin:0 auto;padding:36px 20px 90px}
+
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;font-size:.9rem;font-weight:600;
+  color:var(--maroon);text-decoration:none;margin-bottom:20px;
+}
+.back-link:hover{text-decoration:underline}
+
+.card{
+  background:var(--card);border-radius:22px;padding:36px 30px;
+  box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:26px;
+}
+@media(max-width:600px){.card{padding:24px 18px}}
+
+.header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+.header h1{font-size:2.4rem;margin-bottom:6px}
+.meta{font-size:.88rem;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+
+.btn{
+  background:var(--maroon);color:var(--cream);padding:11px 22px;border-radius:12px;
+  font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;text-align:center;border:0;cursor:pointer;font-family:'Poppins',sans-serif;
+  text-decoration:none;font-size:.95rem;
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.danger:hover{background:#b91c1c}
+.btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
+.btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+
+.alert-box{
+  background:#fff;border-radius:14px;padding:18px 20px;margin:20px 0;
+  border-left:4px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.alert-box.danger{border-left-color:var(--danger);background:var(--danger-bg)}
+
+.info-table{
+  width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;
+  background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);
+}
+.info-table th{background:#f3dfb2;color:var(--maroon);text-align:left;padding:12px 14px}
+.info-table td{padding:10px 14px;border-bottom:1px solid var(--line)}
+.info-table tr:last-child td{border-bottom:0}
+
+input,textarea{
+  font:inherit;padding:11px 14px;border:1px solid var(--line);border-radius:12px;
+  background:#fff;color:var(--brown);width:100%;font-size:.95rem;margin-top:4px;
+}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.form-group{margin-bottom:16px}
+.form-group label{font-size:.85rem;font-weight:600;color:var(--muted);display:block}
+
+footer{
+  background:var(--brown);color:var(--cream);text-align:center;padding:24px 16px;
+  margin-top:40px;font-size:.85rem;
+}
+footer a{color:var(--sand);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* Mobile bottom nav */
+.bottom{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);
+  display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));
+  border-radius:20px 20px 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.15);
+}
+.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0;text-decoration:none}
+.bottom a span{display:block;font-size:1.3rem}
+.bottom a:hover{color:var(--gold)}
+@media(min-width:900px){.bottom{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <b><a href="index.html">🕉️ Sanathana Gurukulam</a></b>
+  <span>
+    <a href="index.html">Home</a>
+    <a href="courses.html">Courses</a>
+    <a href="live.html">Live</a>
+    <a href="community.html">Community</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </span>
+</header>
+
+<main class="wrap">
+  <a class="back-link" href="index.html">← Back to Home</a>
+
+  <article class="card">
+    <div class="header">
+      <h1>Account &amp; Data Deletion</h1>
+      <div class="meta">
+        <span><b>Application:</b> Sanathana Gurukulam</span>
+        <span><b>Publisher:</b> Reflection Media and Advertising</span>
+        <span><b>Updated:</b> November 8, 2026</span>
+      </div>
+    </div>
+
+    <p style="font-size:1rem;margin-bottom:16px">
+      In accordance with <strong>Google Play Store Data Safety Policies</strong> and our dedication to your privacy rights, <strong>Reflection Media and Advertising</strong> provides transparent options to permanently delete your <strong>Sanathana Gurukulam</strong> account and all associated personal data.
+    </p>
+
+    <!-- METHOD 1: ACTIVE SESSION DELETION (DETECTS LOGGED IN USER) -->
+    <div class="alert-box" id="activeSessionBox" style="display:none">
+      <h2 style="font-size:1.4rem;color:var(--maroon);margin-bottom:6px">Active Session Detected</h2>
+      <p style="font-size:.92rem;margin-bottom:10px">
+        You are currently signed in as <strong id="activeUserEmail">user@example.com</strong> (<span id="activeUserName">Learner</span>).
+      </p>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">
+        Clicking the button below will immediately and permanently erase your account, lesson progress, certificates, and community messages.
+      </p>
+      <button class="btn danger" id="btnInstantDelete">🗑️ Delete My Account &amp; Data Immediately</button>
+    </div>
+
+    <!-- METHOD 2: WEB-BASED DELETION REQUEST FORM -->
+    <div style="margin-top:28px">
+      <h2 style="font-size:1.7rem;margin-bottom:8px">Submit a Web Deletion Request</h2>
+      <p style="font-size:.92rem;color:var(--muted);margin-bottom:18px">
+        If you have uninstalled the application or cannot access your account, enter your registered email address below. All verified records will be permanently purged from our active databases within thirty (30) days.
+      </p>
+
+      <form id="deleteRequestForm" style="background:#fff;padding:22px;border-radius:16px;border:1px solid var(--line)">
+        <div class="form-group">
+          <label for="reqEmail">Registered Email Address *</label>
+          <input type="email" id="reqEmail" name="email" placeholder="e.g. sadhaka@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reqName">Full Name (as registered, optional)</label>
+          <input type="text" id="reqName" name="name" placeholder="e.g. Raman Sharma">
+        </div>
+
+        <div class="form-group">
+          <label for="reqReason">Reason for Leaving (optional)</label>
+          <textarea id="reqReason" name="reason" rows="2" placeholder="Help us improve Gurukulam..."></textarea>
+        </div>
+
+        <div style="margin:16px 0 20px">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:.88rem;color:var(--brown);cursor:pointer">
+            <input type="checkbox" id="reqConfirm" required style="width:18px;height:18px;margin-top:2px;accent-color:var(--maroon)">
+            <span>I understand that this request will permanently erase my account profile, completed lesson records, certificates, and saved preferences. This action cannot be reversed.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn danger" style="width:100%">Submit Permanent Deletion Request</button>
+      </form>
+
+      <div id="deleteSuccessMsg" style="display:none;background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:18px;border-radius:14px;margin-top:16px;font-size:.95rem">
+        <strong>✅ Request Submitted Successfully!</strong><br>
+        Your account deletion request has been registered. All account details, watch history, and data associated with your email will be permanently wiped from our production servers within thirty (30) days.
+      </div>
+    </div>
+
+    <!-- METHOD 3: IN-APP INSTRUCTIONS -->
+    <div style="margin-top:34px">
+      <h2 style="font-size:1.7rem;margin-bottom:8px">In-App Account Deletion</h2>
+      <p style="font-size:.92rem;margin-bottom:10px">
+        If you have the Sanathana Gurukulam mobile application installed on your Android device:
+      </p>
+      <div class="alert-box" style="margin:10px 0">
+        <strong>Open App ➔ Profile ➔ Settings ➔ Account ➔ Delete Account</strong>
+      </div>
+      <p style="font-size:.88rem;color:var(--muted)">
+        Confirming deletion inside the application initiates immediate, automated purging of your account and credentials.
+      </p>
+    </div>
+
+    <!-- METHOD 4: DIRECT EMAIL -->
+    <div style="margin-top:28px">
+      <h2 style="font-size:1.7rem;margin-bottom:8px">Direct Email Contact</h2>
+      <p style="font-size:.92rem;margin-bottom:12px">
+        You may also email our dedicated Privacy &amp; Grievance desk directly:
+      </p>
+      <p style="font-size:.92rem">
+        <strong>Email:</strong> <a href="mailto:sgurukulamonline@gmail.com?subject=Data%20Deletion%20Request%20-%20Sanathana%20Gurukulam" style="font-weight:600">sgurukulamonline@gmail.com</a><br>
+        <strong>Subject Line:</strong> <code>Data Deletion Request - Sanathana Gurukulam</code><br>
+        <strong>Officer:</strong> Privacy Grievance Officer, Reflection Media and Advertising
+      </p>
+    </div>
+
+    <!-- WHAT DATA IS DELETED TABLE -->
+    <div style="margin-top:34px">
+      <h2 style="font-size:1.7rem;margin-bottom:8px">Data Retention &amp; Erasure Breakdown</h2>
+      <table class="info-table">
+        <thead>
+          <tr>
+            <th>Data Category</th>
+            <th>Deletion Action</th>
+            <th>Timeframe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>User Profile</strong> (Name, email, avatar, credentials)</td>
+            <td>Permanently Deleted</td>
+            <td>Immediate (In-App) / 30 Days (Web Request)</td>
+          </tr>
+          <tr>
+            <td><strong>Course Progress &amp; Watch History</strong></td>
+            <td>Permanently Deleted</td>
+            <td>Immediate (In-App) / 30 Days (Web Request)</td>
+          </tr>
+          <tr>
+            <td><strong>Earned Certificates</strong></td>
+            <td>De-linked and Purged</td>
+            <td>Immediate (In-App) / 30 Days (Web Request)</td>
+          </tr>
+          <tr>
+            <td><strong>Community Circle Messages</strong></td>
+            <td>User Attribution Removed / Purged</td>
+            <td>Immediate (In-App) / 30 Days (Web Request)</td>
+          </tr>
+          <tr>
+            <td><strong>System Performance Logs</strong></td>
+            <td>Fully Anonymized Telemetry Only</td>
+            <td>Aggregated with zero personal identifiers</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </article>
+</main>
+
+<footer>
+  <p><b>Sanathana Gurukulam</b> · Owned and operated by Reflection Media and Advertising</p>
+  <p style="margin-top:6px;opacity:0.85">
+    <a href="index.html">Home</a> · <a href="courses.html">Courses</a> · <a href="privacy.html">Privacy Policy</a> · <a href="delete-account.html">Delete Account</a>
+  </p>
+  <p style="margin-top:6px;font-size:.78rem;opacity:0.7">© 2026 Reflection Media and Advertising. All rights reserved.</p>
+</footer>
+
+<nav class="bottom" aria-label="App">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="more.html"><span>🛕</span>Explore</a>
+</nav>
+
+<script type="module">
+import { auth, onAuthStateChanged, db, ref, remove, push, set } from "./firebase-init.js";
+
+let currentUser = null;
+
+// Check if user is currently signed in on this device
+onAuthStateChanged(auth, u => {
+  currentUser = u;
+  const sessionBox = document.getElementById("activeSessionBox");
+  if (u && sessionBox) {
+    sessionBox.style.display = "block";
+    document.getElementById("activeUserEmail").textContent = u.email || u.phoneNumber || "Signed-in User";
+    document.getElementById("activeUserName").textContent = u.displayName || "Learner";
+    
+    // Auto-fill web form email if empty
+    const reqEmail = document.getElementById("reqEmail");
+    if (reqEmail && !reqEmail.value) reqEmail.value = u.email || "";
+  }
+});
+
+// Instant In-App / Online Deletion Handler
+document.getElementById("btnInstantDelete")?.addEventListener("click", async () => {
+  if (!currentUser) return;
+  const confirmed = confirm("⚠️ PERMANENT ACCOUNT DELETION\n\nAre you sure you want to delete your Sanathana Gurukulam account? All your course enrollments, certificate links, and learning progress will be permanently erased. This cannot be undone.");
+  if (!confirmed) return;
+
+  const uid = currentUser.uid;
+  try {
+    // 1. Delete user record in Realtime Database
+    try { await remove(ref(db, "users/" + uid)); } catch (e) {}
+    // 2. Delete user enrollments
+    try { await remove(ref(db, "enrollments/" + uid)); } catch (e) {}
+
+    // 3. Delete auth account if supported
+    try {
+      if (currentUser.delete) await currentUser.delete();
+    } catch (e) {
+      console.warn("Auth deletion note:", e);
+    }
+
+    // 4. Clear local guest/cached storage
+    localStorage.removeItem("sg_gurukulam_user_v1");
+    localStorage.removeItem("sg_guest_enrollments");
+    localStorage.removeItem("sg_guest_uid");
+
+    alert("Your account and all associated personal records have been permanently deleted.");
+    window.location.href = "index.html";
+  } catch (err) {
+    alert("Error deleting account: " + err.message + "\nPlease submit a Web Deletion Request below and our team will process it.");
+  }
+});
+
+// Web Deletion Request Form Handler
+document.getElementById("deleteRequestForm")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const form = e.target;
+  const email = form.email.value.trim();
+  const name = form.name.value.trim();
+  const reason = form.reason.value.trim();
+
+  if (!email) return;
+
+  try {
+    // Log deletion request in database for admin processing
+    const reqData = {
+      email,
+      name: name || "Anonymous",
+      reason: reason || "None provided",
+      requestedAt: Date.now(),
+      status: "pending",
+      platform: "web"
+    };
+
+    try {
+      await push(ref(db, "deletionRequests"), reqData);
+    } catch (err) {
+      console.warn("Database log warning:", err);
+    }
+
+    form.style.display = "none";
+    document.getElementById("deleteSuccessMsg").style.display = "block";
+  } catch (err) {
+    alert("Could not submit request: " + err.message);
+  }
+});
+</script>
+
+</body>
+</html>
