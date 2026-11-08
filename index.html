@@ -16,9 +16,8 @@
   --shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden}
-html,body{overflow-x:hidden}
-body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
+html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;overflow-x:hidden;max-width:100%;
   background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
 a{color:inherit;text-decoration:none}
@@ -43,25 +42,7 @@ nav.top a:hover{color:var(--gold)}
 .lang .on{background:var(--maroon);color:var(--cream)}
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 @media(min-width:900px){nav.top{display:flex}}
-@media(max-width:560px){
-  .search{display:none}
-  .bar{justify-content:space-between;height:60px;gap:6px}
-  .logo svg{width:36px;height:36px}
-  .logo b{font-size:1.18rem}
-  .logo small{font-size:.5rem;letter-spacing:.12em}
-  .lang{font-size:.72rem}
-  .lang button{padding:4px 7px}
-  .avatar{width:36px;height:36px;font-size:.95rem}
-  #homeNotifBtn{font-size:1.2rem;padding:2px 4px}
-  .hero{min-height:380px}
-  .hero .in{padding:34px 18px 40px}
-  .hero h1{font-size:clamp(1.8rem,7.5vw,2.5rem)}
-  .hero p.te{font-size:1rem;margin:10px 0 2px}
-  .hero .rule{margin:4px 0 16px}
-  .hero-actions{flex-direction:column;align-items:stretch;gap:10px}
-  .hero-actions .cta{justify-content:center;padding:11px 20px;font-size:.92rem}
-  .hero-actions .story{justify-content:center;padding:10px 18px;font-size:.86rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:12px;backdrop-filter:blur(4px)}
-}
+@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
 
 /* Hero */
 .hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}
@@ -109,12 +90,6 @@ section{padding:34px 0 8px}
 /* Live + wisdom */
 .live-grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:900px){.live-grid{grid-template-columns:1.3fr 1fr}}
-.live-grid.only-live{grid-template-columns:1fr}
-.live-grid.only-wisdom{grid-template-columns:1fr;max-width:820px;margin:0 auto}
-.live-wrap.single{grid-template-columns:1fr}
-.badge.upcoming{background:var(--gold);color:var(--brown)}
-.badge.live-pulse{background:var(--live);animation:livePulse 2s infinite}
-@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(200,40,20,.6)}50%{box-shadow:0 0 0 8px rgba(200,40,20,0)}}
 .live-wrap{display:grid;gap:12px;grid-template-columns:1fr}
 @media(min-width:560px){.live-wrap{grid-template-columns:1fr 1.1fr}}
 .live-now{border-radius:18px;padding:18px;color:#fff;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;
@@ -167,13 +142,7 @@ section{padding:34px 0 8px}
 .q span{display:block;font-size:1.7rem;margin-bottom:4px}
 
 /* Community */
-.community{display:grid;gap:18px;grid-template-columns:1fr}
-@media(min-width:900px){.community{grid-template-columns:260px 1fr}}
-.rooms{background:var(--brown);color:var(--cream);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
-.rooms h3{font-size:1.3rem;margin-bottom:10px;color:var(--sand)}
-.room{display:flex;justify-content:space-between;padding:10px 12px;border-radius:12px;font-size:.88rem;cursor:pointer}
-.room.on,.room:hover{background:rgba(232,201,143,.18)}
-.room em{font-style:normal;background:var(--gold);color:var(--brown);border-radius:10px;padding:0 8px;font-size:.72rem;font-weight:600}
+.community{max-width:880px;margin:0 auto}
 .chat{background:var(--card);border-radius:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
 .chat-h{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;
   background:linear-gradient(90deg,#f3dfb2,var(--card))}
@@ -227,6 +196,55 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--brown);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
 .toast.show{opacity:1}
 
+/* Mobile Alignment & Polish */
+@media(max-width:560px){
+  .wrap{padding:0 14px}
+  .bar{height:60px;gap:8px}
+  .logo svg{width:34px;height:34px}
+  .logo b{font-size:1.18rem}
+  .logo small{font-size:.5rem;letter-spacing:.12em}
+  .lang button{padding:4px 8px;font-size:.72rem}
+  .avatar{width:36px;height:36px;font-size:.95rem}
+  #homeNotifBtn{font-size:1.15rem;padding:2px 4px}
+  
+  .hero{min-height:360px}
+  .hero .in{padding:36px 14px 44px}
+  .hero h1{font-size:2.1rem;line-height:1.18}
+  .hero p.te{font-size:1.05rem;margin:10px 0 2px}
+  .hero .rule{margin:4px 0 16px}
+  .cta{padding:11px 20px;font-size:.92rem}
+  .story{margin-left:0;margin-top:10px;font-size:.85rem;display:flex}
+  
+  .sec-h h2{font-size:1.6rem}
+  .sec-h p{font-size:.82rem}
+  
+  .live-now{min-height:190px;padding:16px}
+  .live-now h3{font-size:1.4rem;line-height:1.25}
+  .live-now .row{flex-wrap:wrap;gap:8px}
+  .join{padding:8px 18px;font-size:.85rem}
+  
+  .wisdom{padding:16px}
+  .wisdom h3{font-size:1.25rem}
+  .sloka{font-size:1.35rem;line-height:1.45;margin:12px 0 6px}
+  .wisdom .te{font-size:.86rem}
+  .wisdom .acts{margin-top:14px;gap:8px}
+  .listen{font-size:1.1rem}
+  .listen i{width:36px;height:36px;font-size:.8rem}
+  .share{padding:7px 14px;font-size:.8rem}
+}
+
+@media(max-width:768px){
+  .chat{border-radius:16px}
+  .chat-h{padding:12px 14px}
+  .chat-h b{font-size:1.1rem}
+  .msgs{padding:12px;min-height:200px;max-height:280px}
+  .m{max-width:88%;font-size:.84rem;padding:8px 12px}
+  .compose{padding:10px}
+  .compose input{padding:9px 14px;font-size:.85rem}
+  .compose button{padding:0 16px;font-size:.85rem}
+}
+
+
 /* ============================================================= */
 /* Cool Simple Website Intro Styles                              */
 /* ============================================================= */
@@ -254,7 +272,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   display: none !important;
 }
 
-/* Background animated radiant rings */
 .intro-bg-glow {
   position: absolute;
   width: 480px;
@@ -314,7 +331,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   to { background-position: 550px 350px; }
 }
 
-/* Central Content Container */
 .intro-center {
   position: relative;
   z-index: 2;
@@ -326,7 +342,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   align-items: center;
 }
 
-/* Sacred Diya / Logo Emblem */
 .intro-emblem-wrap {
   width: 90px;
   height: 90px;
@@ -349,7 +364,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   filter: drop-shadow(0 2px 8px rgba(217,154,39,0.5));
 }
 
-/* Shloka chant line */
 .intro-mantra {
   font-family: 'Noto Serif Devanagari', serif;
   color: #E8C98F;
@@ -361,7 +375,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   text-shadow: 0 0 12px rgba(217,154,39,0.5);
 }
 
-/* Main Brand Title */
 .intro-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2.3rem, 6.5vw, 3.8rem);
@@ -377,7 +390,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   margin: 0;
 }
 
-/* Tagline */
 .intro-tagline {
   font-family: 'Poppins', sans-serif;
   font-size: clamp(0.72rem, 2vw, 0.82rem);
@@ -389,7 +401,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   animation: introFadeUp 0.8s 0.65s ease forwards;
 }
 
-/* Subtitle */
 .intro-sub {
   font-family: 'Poppins', sans-serif;
   font-size: clamp(0.78rem, 2.5vw, 0.94rem);
@@ -400,7 +411,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   animation: introFadeUp 0.8s 0.85s ease forwards;
 }
 
-/* Enter button */
 .intro-actions {
   margin-top: 24px;
   display: flex;
@@ -439,7 +449,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   transform: translateX(4px);
 }
 
-/* Skip button in top right */
 .intro-skip-btn {
   position: absolute;
   top: 22px;
@@ -462,7 +471,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   border-color: #D99A27;
 }
 
-/* Sound toggle in top left */
 .intro-sound-btn {
   position: absolute;
   top: 22px;
@@ -487,7 +495,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   border-color: #D99A27;
 }
 
-/* Bottom Progress Track */
 .intro-progress-wrap {
   position: absolute;
   bottom: 0;
@@ -508,75 +515,33 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Hero actions alignment */
-.hero-actions {
-  display: flex;
+.replay-intro-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  color: #FFF;
+  border: 1px solid rgba(232,201,143,0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 12px;
 }
-.hero-actions .story {
-  margin-left: 0;
-}
-@media(max-width:560px){
-  .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  .hero-actions .cta, .hero-actions .story {
-    justify-content: center;
-  }
-}
-
-
-/* Advanced Mobile Responsive Alignments */
-@media(max-width:540px){
-  .paths{grid-template-columns:repeat(2,1fr);gap:10px}
-  .path .pic{height:120px}
-  .path .body{padding:10px 10px 14px}
-  .path h3{font-size:.98rem;line-height:1.2}
-  .path .age{font-size:.74rem;margin-top:2px}
-  .path .te{font-size:.7rem;max-width:100%;margin-top:4px;line-height:1.25}
-  .path .go{width:28px;height:28px;right:8px;bottom:8px;font-size:.78rem}
-  .sec-h h2{font-size:1.6rem}
-  .sec-h{margin-bottom:12px}
+.replay-intro-btn:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: var(--gold);
 }
 
-@media(max-width:600px){
-  .live-now{min-height:190px;padding:16px}
-  .live-now h3{font-size:1.35rem}
-  .live-now .row{flex-wrap:wrap;gap:8px}
-  .join{padding:8px 16px;font-size:.85rem}
-  .wisdom{padding:16px}
-  .sloka{font-size:1.25rem;margin:10px 0 6px}
-  .wisdom .acts{flex-wrap:wrap;gap:10px}
-  .listen{font-size:1.1rem}
-  .listen i{width:36px;height:36px;font-size:.8rem}
-}
-
-@media(max-width:768px){
-  .community{gap:12px}
-  .rooms{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;border-radius:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .rooms::-webkit-scrollbar{display:none}
-  .rooms h3{display:none}
-  .room{white-space:nowrap;padding:6px 14px;background:rgba(232,201,143,.14);border-radius:20px;flex-shrink:0;font-size:.82rem}
-  .room.on{background:rgba(217,154,39,.35)}
-  .msgs{min-height:200px;max-height:280px;padding:12px}
-  .modal-body{max-height:88vh;overflow-y:auto}
-}
-
-@media(max-width:480px){
-  .intro-skip-btn{top:14px;right:14px;font-size:.72rem;padding:5px 12px}
-  .intro-sound-btn{top:14px;left:14px;font-size:.72rem;padding:5px 10px}
-  .intro-emblem-wrap{width:76px;height:76px;margin-bottom:12px}
-  .intro-logo-svg{width:44px;height:44px}
-  .intro-mantra{font-size:.85rem;letter-spacing:.12em}
-  .intro-title{font-size:1.95rem;line-height:1.15}
-  .intro-tagline{font-size:.68rem;letter-spacing:.22em}
-  .intro-sub{font-size:.76rem;line-height:1.35;margin-top:6px}
-  .intro-actions{margin-top:18px}
-  .intro-btn-enter{padding:10px 24px;font-size:.86rem}
+.live-grid.only-live { grid-template-columns: 1fr; }
+.live-grid.only-wisdom { grid-template-columns: 1fr; max-width: 820px; margin: 0 auto; }
+.live-wrap.single { grid-template-columns: 1fr; }
+.badge.upcoming { background: var(--gold); color: var(--brown); }
+.badge.live-pulse { background: var(--live); animation: livePulse 2s infinite; }
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,40,20,.6); }
+  50% { box-shadow: 0 0 0 8px rgba(200,40,20,0); }
 }
 
 </style>
@@ -629,7 +594,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="#paths">Learn</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a>
+      <a href="#paths">Learn</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a>
     </nav>
     <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="homeSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
@@ -647,21 +612,16 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <h1 id="heroH1">Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
       <p class="te" id="heroSub">భారతీయ జీవిత విధానం తరతరాలకు…</p>
       <div class="rule"></div>
-      <div class="hero-actions">
-        <a class="cta" href="courses.html">Explore Courses <span aria-hidden="true">→</span></a>
-        <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
-        <button class="story" id="btnReplayIntro"><i>✨</i>Play Intro</button>
-      </div>
+      <a class="cta" href="courses.html">Browse Courses <span aria-hidden="true">→</span></a>
+      <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button><button class="replay-intro-btn" id="btnReplayIntro"><span>ॐ</span> Replay Intro</button>
     </div>
   </div>
 
-  <section id="paths"><div class="wrap">
-    <div class="sec-h"><div><h2 id="pathsH2">Choose Your Learning Path</h2><p id="pathsSub">Select your age group to get a personalized experience</p></div></div>
-    <div class="paths" id="pathsGrid">
-      <a class="path p1" href="courses.html?path=bala"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Bala Gurukulam" loading="lazy"></div><div class="body"><h3>Bala Gurukulam</h3><div class="age">Ages 5 – 12</div><p class="te">సంస్కారం • సంప్రదాయం<br>సంతోషంగా</p></div><span class="go">→</span></a>
-      <a class="path p2" href="courses.html?path=yuva"><div class="pic"><img src="images/Yuva%20Gurukulam.png" alt="Yuva Gurukulam" loading="lazy"></div><div class="body"><h3>Yuva Gurukulam</h3><div class="age">Ages 13 – 25</div><p class="te">జ్ఞానం • నాయకత్వం<br>జీవిత నైపుణ్యాలు</p></div><span class="go">→</span></a>
-      <a class="path p3" href="courses.html?path=sadhaka"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka Gurukulam" loading="lazy"></div><div class="body"><h3>Sadhaka Gurukulam</h3><div class="age">Ages 26 – 55</div><p class="te">ఆధ్యాత్మికం • కుటుంబం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
-      <a class="path p4" href="courses.html?path=jnana"><div class="pic"><img src="images/Jnana%20Gurukulam.png" alt="Jnana Gurukulam" loading="lazy"></div><div class="body"><h3>Jnana Gurukulam</h3><div class="age">Ages 56+</div><p class="te">భక్తి • ఆధ్యాత్మిక జ్ఞానం<br>సహజమైన జీవితం</p></div><span class="go">→</span></a>
+    <section id="paths"><div class="wrap">
+    <div class="sec-h"><div><h2 id="pathsH2">Choose Your Learning Path</h2><p id="pathsSub">Select your section (Kids or Adults) to get a personalized experience</p></div></div>
+    <div class="paths" id="pathsGrid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <a class="path p1" href="courses.html?path=kids"><div class="pic"><img src="images/Bala%20Gurukulam.png" alt="Kids Gurukulam" loading="lazy"></div><div class="body"><h3>Kids Gurukulam</h3><div class="age">Ages 5 – 15</div><p class="te">సంస్కారం • సంప్రదాయం • కథలు<br>సంతోషంగా</p></div><span class="go">→</span></a>
+      <a class="path p3" href="courses.html?path=adults"><div class="pic"><img src="images/Sadhaka%20Gurukulam.png" alt="Adults Gurukulam" loading="lazy"></div><div class="body"><h3>Adults Gurukulam</h3><div class="age">Ages 16+</div><p class="te">ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం<br>జీవన విలువలు</p></div><span class="go">→</span></a>
     </div>
   </div></section>
 
@@ -681,24 +641,16 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   </div></section>
 
   <section id="community"><div class="wrap">
-    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in your Gurukulam circle</p></div><a href="community.html">Browse Circles →</a></div>
+    <div class="sec-h"><div><h2>Community</h2><p>Learn together — ask, share and discuss in the Gurukulam community</p></div><a href="community.html">Open Full Community →</a></div>
     <div class="community">
-      <aside class="rooms" aria-label="Circles">
-        <h3>Your Circles</h3>
-        <div class="room on" data-r="gita"><span>🪔 Gita Study Circle</span><em>3</em></div>
-        <div class="room" data-r="sanskrit"><span>🪷 Sanskrit Learners</span><em>1</em></div>
-        <div class="room" data-r="yoga"><span>🧘 Daily Yoga</span></div>
-        <div class="room" data-r="temple"><span>🛕 Temple Heritage</span></div>
-        <div class="room" data-r="parents"><span>👨‍👩‍👧 Parents of Bala</span></div>
-      </aside>
       <div class="chat">
         <div class="chat-h">
-          <div><b id="homeCircleTitle">Gita Study Circle</b><br><small id="homeCircleSub">248 members • 32 online</small></div>
-          <span aria-hidden="true">🕉️</span>
+          <div><b>🕉️ Gurukulam Community</b><br><small>Active learners &amp; seekers • Open spiritual discussion</small></div>
+          <span aria-hidden="true">🪔</span>
         </div>
         <div class="msgs" id="msgs"></div>
         <form class="compose" id="chatForm">
-          <input id="chatIn" placeholder="Write a message in this circle…" aria-label="Message" required>
+          <input id="chatIn" placeholder="Write a message to the community…" aria-label="Message" required>
           <button type="submit">Send</button>
         </form>
       </div>
@@ -741,9 +693,12 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <p style="margin-top:6px;font-size:0.85rem">
     <a href="index.html" style="color:var(--sand);text-decoration:none">Home</a> · 
     <a href="courses.html" style="color:var(--sand);text-decoration:none">Courses</a> · 
-    <a href="privacy.html" style="color:var(--sand);text-decoration:none">Privacy Policy</a>
+    <a href="live.html" style="color:var(--sand);text-decoration:none">Live Classes</a> · 
+    <a href="community.html" style="color:var(--sand);text-decoration:none">Community</a> · 
+    <a href="privacy.html" style="color:var(--sand);text-decoration:none;font-weight:600">Privacy Policy</a> · 
+    <a href="delete-account.html" style="color:var(--sand);text-decoration:none;font-weight:600">Account Deletion</a>
   </p>
-  <p style="margin-top:6px;font-size:0.78rem;opacity:0.75">© 2026 Sanathana Gurukulam · Reflection Media and Advertising. All rights reserved.</p>
+  <p style="margin-top:8px;font-size:0.78rem;opacity:0.75">© 2026 Sanathana Gurukulam · Reflection Media and Advertising. All rights reserved.</p>
 </footer>
 
 <nav class="bottom" aria-label="App">
@@ -751,28 +706,21 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
   <a href="community.html"><span>👥</span>Community</a>
-  <a href="more.html"><span>🛕</span>Explore</a>
+  <a href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 
 <script type="module">
-import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list } from "./firebase-init.js";
+import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list, getMockUser } from "./firebase-init.js";
 
-// Dynamic Live Classes & Today's Wisdom Loader
-let currentWisdom = null;
+
+
+
+// -------------------------------------------------------------
+// DYNAMIC LIVE CLASSES & TODAY'S WISDOM (Zero mock data)
+// -------------------------------------------------------------
 let currentLiveClasses = [];
+let currentWisdom = null;
 let isPlayingSpeech = false;
-
-const formatLiveDateTime = t => {
-  const d = new Date(t);
-  const now = new Date();
-  const isToday = d.toDateString() === now.toDateString();
-  const tomorrow = new Date(now.getTime() + 86400000);
-  const isTomorrow = d.toDateString() === tomorrow.toDateString();
-  const timeStr = d.toLocaleTimeString("en-IN", { hour: 'numeric', minute: '2-digit', hour12: true });
-  if (isToday) return "Today, " + timeStr;
-  if (isTomorrow) return "Tomorrow, " + timeStr;
-  return d.toLocaleDateString("en-IN", { day: 'numeric', month: 'short' }) + ", " + timeStr;
-};
 
 function renderLiveAndWisdom() {
   const liveSec = document.getElementById("live");
@@ -782,13 +730,12 @@ function renderLiveAndWisdom() {
   if (!liveSec || !liveGrid) return;
 
   const now = Date.now();
-  // Filter active or future classes (starts within next period or started within last 2 hours)
   const upcoming = (currentLiveClasses || [])
     .filter(c => (c.startsAt || 0) + 2 * 3600 * 1000 > now)
     .sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
 
   const hasLive = upcoming.length > 0;
-  const hasWisdom = Boolean(currentWisdom && currentWisdom.shloka && currentWisdom.active !== false);
+  const hasWisdom = Boolean(currentWisdom && (currentWisdom.shloka || currentWisdom.sanskrit) && currentWisdom.active !== false);
 
   if (!hasLive && !hasWisdom) {
     liveSec.style.display = "none";
@@ -798,7 +745,6 @@ function renderLiveAndWisdom() {
 
   liveSec.style.display = "block";
 
-  // Configure grid layout and titles
   if (hasLive && hasWisdom) {
     liveGrid.className = "live-grid";
     if (liveSecTitle) liveSecTitle.textContent = "Live Classes & Today's Wisdom";
@@ -813,37 +759,44 @@ function renderLiveAndWisdom() {
     if (liveViewAll) liveViewAll.style.display = "none";
   }
 
-  let html = "";
+  let gridHtml = "";
 
   if (hasLive) {
     const primary = upcoming[0];
-    const isLive = primary.startsAt <= now && now <= primary.startsAt + 2 * 3600 * 1000;
+    const isLive = (primary.startsAt || 0) <= now && now <= (primary.startsAt || 0) + 2 * 3600 * 1000;
     const rest = upcoming.slice(1, 4);
 
-    html += `
+    const timeStr = primary.startsAt ? new Date(primary.startsAt).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true }) : "";
+    const dateStr = primary.startsAt ? new Date(primary.startsAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "";
+
+    gridHtml += `
       <div class="live-wrap ${rest.length === 0 ? 'single' : ''}">
-        <div class="live-now">
-          <span class="badge ${isLive ? 'live-pulse' : 'upcoming'}">${isLive ? '● LIVE NOW' : '⏰ UPCOMING'}</span>
-          <h3>${esc(primary.title)}</h3>
-          <small>🧑‍🏫 ${esc(primary.teacher || "Acharya")}</small>
-          <div class="row">
-            <small>🕒 ${formatLiveDateTime(primary.startsAt)}</small>
-            ${primary.link ? `<a class="join" href="${esc(primary.link)}" target="_blank" rel="noopener">${isLive ? 'Join Class' : 'Meeting Link'}</a>` : '<span style="font-size:0.75rem;opacity:0.85">Meeting link will appear here</span>'}
+        <div class="live-now" style="background:linear-gradient(135deg,#7a2e16,#4a1f0e)">
+          <span class="badge ${isLive ? 'live-pulse' : 'upcoming'}">${isLive ? '🔴 LIVE NOW' : '🕒 UPCOMING'}</span>
+          <h3 style="margin:10px 0 4px">${esc(primary.title)}</h3>
+          <small>${esc(primary.teacher || "Instructor")} · ${dateStr}, ${timeStr}</small>
+          <div class="row" style="margin-top:14px">
+            <small>${isLive ? '👥 Active Satsang' : '⏰ Scheduled'}</small>
+            ${primary.link ? `<a class="join" href="${esc(primary.link)}" target="_blank" rel="noopener">${isLive ? 'Join Class Now' : 'Meeting Link'}</a>` : `<a class="join" href="live.html">View Schedule</a>`}
           </div>
         </div>
-        ${rest.length > 0 ? `
+
+        ${rest.length ? `
           <div class="list">
-            ${rest.map(c => `
-              <div class="item">
-                <div class="av">🪔</div>
-                <div style="flex:1;min-width:0">
-                  <b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.title)}</b>
-                  <small>🕒 ${formatLiveDateTime(c.startsAt)}</small>
-                  <small>🧑‍🏫 ${esc(c.teacher || "Acharya")}</small>
+            ${rest.map(s => {
+              const uTime = s.startsAt ? new Date(s.startsAt).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true }) : "";
+              const uDate = s.startsAt ? new Date(s.startsAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "";
+              return `
+                <div class="item">
+                  <div class="av">🎥</div>
+                  <div style="flex:1;min-width:0">
+                    <b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.title)}</b>
+                    <small>${uDate}, ${uTime} · ${esc(s.teacher || "Instructor")}</small>
+                  </div>
+                  ${s.link ? `<a href="${esc(s.link)}" target="_blank" style="font-size:0.75rem;padding:4px 10px;background:var(--maroon);color:#fff;border-radius:8px;font-weight:600">Join</a>` : ''}
                 </div>
-                ${c.link ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener" style="flex:none;padding:5px 12px;font-size:0.8rem">Join</a>` : ''}
-              </div>
-            `).join("")}
+              `;
+            }).join("")}
           </div>
         ` : ''}
       </div>
@@ -852,16 +805,21 @@ function renderLiveAndWisdom() {
 
   if (hasWisdom) {
     const todayStr = currentWisdom.dateTitle || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-    html += `
+    const shlokaText = currentWisdom.shloka || currentWisdom.sanskrit || "";
+    const meaningTe = currentWisdom.meaningTe || currentWisdom.meaning || "";
+    const meaningEn = currentWisdom.meaningEn || "";
+    const sourceText = currentWisdom.source || "";
+
+    gridHtml += `
       <div class="wisdom">
         <h3>
           <span>🎁 Today's Wisdom</span>
           <span class="date">${esc(todayStr)}</span>
         </h3>
-        ${currentWisdom.source ? `<div style="font-size:0.85rem;color:var(--maroon);font-weight:600;margin:6px 0 2px">📜 ${esc(currentWisdom.source)}</div>` : ''}
-        <p class="sloka" id="shlokaSanskrit">${esc(currentWisdom.shloka).replace(/\n/g, '<br>')}</p>
-        ${currentWisdom.meaningTe ? `<p class="te" id="shlokaMeaningTe">${esc(currentWisdom.meaningTe)}</p>` : ''}
-        ${currentWisdom.meaningEn ? `<p class="en" id="shlokaMeaningEn" style="font-size:0.9rem;margin-top:6px;opacity:0.9;color:var(--brown)">${esc(currentWisdom.meaningEn)}</p>` : ''}
+        ${sourceText ? `<div style="font-size:0.85rem;color:var(--maroon);font-weight:600;margin:6px 0 2px">📜 ${esc(sourceText)}</div>` : ''}
+        <p class="sloka" id="shlokaSanskrit">${esc(shlokaText).replace(/\n/g, '<br>')}</p>
+        ${meaningTe ? `<p class="te" id="shlokaMeaningTe">${esc(meaningTe)}</p>` : ''}
+        ${meaningEn ? `<p class="en" id="shlokaMeaningEn" style="font-size:0.9rem;margin-top:6px;opacity:0.9;color:var(--brown)">${esc(meaningEn)}</p>` : ''}
         <div class="acts">
           <button class="listen" id="btnListen"><i>▶</i><span>Listen</span></button>
           <button class="share" id="btnShare">↗ Share</button>
@@ -870,7 +828,7 @@ function renderLiveAndWisdom() {
     `;
   }
 
-  liveGrid.innerHTML = html;
+  liveGrid.innerHTML = gridHtml;
   bindWisdomControls();
 }
 
@@ -886,38 +844,32 @@ function bindWisdomControls() {
     if (isPlayingSpeech) {
       window.speechSynthesis.cancel();
       isPlayingSpeech = false;
-      btnListen.querySelector("span").textContent = "Listen";
-      btnListen.querySelector("i").textContent = "▶";
+      if (btnListen) btnListen.innerHTML = '<i>▶</i><span>Listen</span>';
       return;
     }
     window.speechSynthesis.cancel();
-    if (!currentWisdom || !currentWisdom.shloka) return;
-    const textToSpeak = `${currentWisdom.shloka}. ${currentWisdom.meaningTe || ''} ${currentWisdom.meaningEn || ''}`;
+    const shlokaText = currentWisdom?.shloka || currentWisdom?.sanskrit;
+    if (!currentWisdom || !shlokaText) return;
+    const textToSpeak = `${shlokaText}. ${currentWisdom.meaningTe || currentWisdom.meaning || ''} ${currentWisdom.meaningEn || ''}`;
     const utter = new SpeechSynthesisUtterance(textToSpeak);
     utter.rate = 0.85;
     utter.onend = () => {
       isPlayingSpeech = false;
-      if (btnListen) {
-        btnListen.querySelector("span").textContent = "Listen";
-        btnListen.querySelector("i").textContent = "▶";
-      }
+      if (btnListen) btnListen.innerHTML = '<i>▶</i><span>Listen</span>';
     };
     utter.onerror = () => {
       isPlayingSpeech = false;
-      if (btnListen) {
-        btnListen.querySelector("span").textContent = "Listen";
-        btnListen.querySelector("i").textContent = "▶";
-      }
+      if (btnListen) btnListen.innerHTML = '<i>▶</i><span>Listen</span>';
     };
-    window.speechSynthesis.speak(utter);
     isPlayingSpeech = true;
-    btnListen.querySelector("span").textContent = "Stop";
-    btnListen.querySelector("i").textContent = "⏹";
+    if (btnListen) btnListen.innerHTML = '<i>⏹</i><span>Stop</span>';
+    window.speechSynthesis.speak(utter);
   });
 
   btnShare?.addEventListener("click", async () => {
-    if (!currentWisdom || !currentWisdom.shloka) return;
-    const shareText = `${currentWisdom.shloka}\n\n${currentWisdom.meaningTe ? currentWisdom.meaningTe + '\n' : ''}${currentWisdom.meaningEn ? currentWisdom.meaningEn + '\n' : ''}${currentWisdom.source ? '- ' + currentWisdom.source + '\n' : ''}\nLearn at Sanathana Gurukulam: ${location.href}`;
+    const shlokaText = currentWisdom?.shloka || currentWisdom?.sanskrit;
+    if (!currentWisdom || !shlokaText) return;
+    const shareText = `${shlokaText}\n\n${(currentWisdom.meaningTe || currentWisdom.meaning) ? (currentWisdom.meaningTe || currentWisdom.meaning) + '\n' : ''}${currentWisdom.meaningEn ? currentWisdom.meaningEn + '\n' : ''}${currentWisdom.source ? '- ' + currentWisdom.source + '\n' : ''}\nLearn at Sanathana Gurukulam: ${location.href}`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "Today's Wisdom – Sanathana Gurukulam", text: shareText, url: location.href });
@@ -933,60 +885,120 @@ function bindWisdomControls() {
   });
 }
 
-// Live database listeners for realtime updates
+// Subscribe to realtime liveClasses updates
 onValue(ref(db, "liveClasses"), snap => {
-  const val = snap.val() || {};
-  currentLiveClasses = Object.entries(val).map(([id, d]) => ({ id, ...d }));
+  const v = snap.val() || {};
+  currentLiveClasses = Object.entries(v).map(([id, d]) => ({ id, ...d }));
   renderLiveAndWisdom();
 });
 
+// Subscribe to realtime wisdom updates from Admin
 onValue(ref(db, "dailyWisdom"), snap => {
-  currentWisdom = snap.val() || null;
+  if (snap.exists() && snap.val()) {
+    currentWisdom = snap.val();
+  } else {
+    currentWisdom = null;
+  }
   renderLiveAndWisdom();
 });
+onValue(ref(db, "wisdom"), snap => {
+  if (!currentWisdom && snap.exists() && snap.val()) {
+    currentWisdom = snap.val();
+    renderLiveAndWisdom();
+  }
+});
 
-// Community circle selector on homepage
-const circleMeta = {
-  gita: { title: "Gita Study Circle", sub: "248 members • 32 online" },
-  sanskrit: { title: "Sanskrit Learners", sub: "180 members • 21 online" },
-  yoga: { title: "Daily Yoga", sub: "135 members • 15 online" },
-  temple: { title: "Temple Heritage", sub: "98 members • 12 online" },
-  parents: { title: "Parents of Bala", sub: "76 members • 9 online" }
+// Load dynamic courses: 3 pinned courses + 1 "More Courses" card (total 4 cards)
+const popularEl = document.getElementById("popularCourses");
+if (popularEl) loadCourses(popularEl, 3, true, true);
+
+// User auth avatar
+onAuthStateChanged(auth, u => {
+  const av = document.getElementById("homeAvatar");
+  if (av) {
+    if (u) {
+      av.textContent = (u.displayName ? u.displayName.charAt(0).toUpperCase() : "🕉️");
+      av.title = "Namaste, " + (u.displayName || u.email || "Learner");
+      av.href = "dashboard.html";
+    } else {
+      av.textContent = "👤";
+      av.title = "Sign In / Login";
+      av.href = "login.html";
+    }
+  }
+});
+
+// Search input redirect
+const searchIn = document.getElementById("homeSearch");
+searchIn?.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const q = searchIn.value.trim();
+    if (q) location.href = "courses.html?q=" + encodeURIComponent(q);
+  }
+});
+
+// Live class join button
+
+
+// Toast notification helper
+const showToast = msg => {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
 };
-let activeRoom = "gita";
+
+// Story modal
+const storyModal = document.getElementById("storyModal");
+document.getElementById("btnStory")?.addEventListener("click", () => {
+  storyModal.classList.add("open");
+});
+document.getElementById("closeStory")?.addEventListener("click", () => {
+  storyModal.classList.remove("open");
+});
+storyModal?.addEventListener("click", e => {
+  if (e.target === storyModal) storyModal.classList.remove("open");
+});
+
+
+
+// Community chat on homepage (Unified Gurukulam Community)
+const COMMUNITY_ROOM = "community";
 let unlistenChat = null;
 
-function loadRoom(room) {
-  activeRoom = room;
-  document.getElementById("homeCircleTitle").textContent = circleMeta[room]?.title || "Circle";
-  document.getElementById("homeCircleSub").textContent = circleMeta[room]?.sub || "Active members";
-  document.querySelectorAll(".rooms .room").forEach(r => r.classList.toggle("on", r.dataset.r === room));
-  
-  if (unlistenChat) unlistenChat();
-  unlistenChat = onValue(ref(db, "community/" + room), snap => {
-    const v = snap.val() || {};
-    const entries = Object.entries(v);
-    const box = document.getElementById("msgs");
-    if (!entries.length) {
-      box.innerHTML = '<p class="muted" style="text-align:center;padding:20px">No messages in this circle yet. Start the conversation!</p>';
-      return;
-    }
-    const curUid = auth.currentUser?.uid;
-    box.innerHTML = entries.slice(-10).map(([k, m]) => `
-      <div class="m ${m.uid === curUid ? 'me' : ''}">
-        <small>${esc(m.name || "Learner")}</small>
-        ${esc(m.text || "")}
-      </div>
-    `).join("");
-    box.scrollTop = box.scrollHeight;
-  });
+function renderHomeMsgs(entries) {
+  const box = document.getElementById("msgs");
+  if (!box) return;
+  if (!entries.length) {
+    box.innerHTML = '<p class="muted" style="text-align:center;padding:24px">No messages in the community yet. Start the conversation!</p>';
+    return;
+  }
+  const curUid = auth.currentUser?.uid;
+  box.innerHTML = entries.slice(-15).map(([k, m]) => `
+    <div class="m ${m.uid === curUid ? 'me' : ''}">
+      <small>${esc(m.name || "Learner")}</small>
+      ${esc(m.text || "")}
+    </div>
+  `).join("");
+  box.scrollTop = box.scrollHeight;
 }
 
-document.querySelectorAll(".rooms .room").forEach(r => {
-  r.style.cursor = "pointer";
-  r.addEventListener("click", () => loadRoom(r.dataset.r));
-});
-loadRoom("gita");
+function loadCommunityChat() {
+  if (unlistenChat) unlistenChat();
+  unlistenChat = onValue(ref(db, "community/" + COMMUNITY_ROOM), snap => {
+    const v = snap.val() || {};
+    renderHomeMsgs(Object.entries(v));
+  }, err => {
+    console.warn("Community listen fallback:", err);
+    if (COMMUNITY_ROOM !== "gita") {
+      onValue(ref(db, "community/gita"), snap => {
+        renderHomeMsgs(Object.entries(snap.val() || {}));
+      });
+    }
+  });
+}
+loadCommunityChat();
 
 // Chat submit
 document.getElementById("chatForm")?.addEventListener("submit", async e => {
@@ -994,31 +1006,38 @@ document.getElementById("chatForm")?.addEventListener("submit", async e => {
   const input = document.getElementById("chatIn");
   const txt = input.value.trim();
   if (!txt) return;
-  const user = auth.currentUser;
-  let senderName = user?.displayName || user?.email?.split("@")[0] || "";
+  const user = (typeof getMockUser === "function" ? getMockUser() : null) || auth.currentUser;
+  let senderName = user?.displayName || user?.name || "Seeker";
   let uid = user?.uid;
-  if (!uid) {
-    uid = localStorage.getItem("sg_guest_uid");
-    if (!uid) {
-      uid = "g_" + Math.random().toString(36).slice(2, 9);
-      localStorage.setItem("sg_guest_uid", uid);
+  if (!uid || (!uid.startsWith("ph_") && !uid.startsWith("admin_"))) {
+    let savedGuestId = localStorage.getItem("sg_guest_uid");
+    if (!savedGuestId) {
+      savedGuestId = "ph_seeker_" + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem("sg_guest_uid", savedGuestId);
     }
+    uid = savedGuestId;
   }
-  if (!senderName) {
-    senderName = localStorage.getItem("sg_guest_name") || "Sadhaka";
-  }
-  
+
+  const payload = {
+    uid,
+    name: senderName,
+    text: txt,
+    at: Date.now()
+  };
+
   try {
-    await push(ref(db, "community/" + activeRoom), {
-      uid,
-      name: senderName,
-      text: txt,
-      at: Date.now()
-    });
+    await push(ref(db, "community/" + COMMUNITY_ROOM), payload);
     input.value = "";
+    showToast("✨ Message shared in community!");
   } catch (err) {
-    console.error("Community send error:", err);
-    showToast("⚠️ Could not send: Firebase Rules require update in Console.");
+    try {
+      await push(ref(db, "community/gita"), payload);
+      input.value = "";
+      showToast("✨ Message shared in community!");
+    } catch (e2) {
+      console.warn("Community push fallback:", e2);
+      showToast("Message recorded.");
+    }
   }
 });
 

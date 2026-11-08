@@ -12,9 +12,8 @@
   --shadow:0 6px 18px rgba(74,31,14,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden}
-html,body{overflow-x:hidden}
-body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;
+html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+body{font-family:'Poppins','Noto Sans Telugu',sans-serif;color:var(--text);line-height:1.5;overflow-x:hidden;max-width:100%;
   background:radial-gradient(circle at 20% 0%,#fff6e0,var(--cream) 60%),var(--cream);padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:'Cormorant Garamond',serif;line-height:1.15}
 a{color:inherit;text-decoration:none}
@@ -39,19 +38,7 @@ nav.top a:hover{color:var(--gold)}
 .lang .on{background:var(--maroon);color:var(--cream)}
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 @media(min-width:900px){nav.top{display:flex}}
-@media(max-width:560px){
-  .search{display:none}
-  .bar{justify-content:space-between;height:60px;gap:6px}
-  .logo svg{width:36px;height:36px}
-  .logo b{font-size:1.18rem}
-  .logo small{font-size:.5rem;letter-spacing:.12em}
-  .lang{font-size:.72rem}
-  .lang button{padding:4px 7px}
-  .avatar{width:36px;height:36px;font-size:.95rem}
-  .page-h{padding:20px 0 0}
-  .page-h h1{font-size:1.85rem}
-  .mobile-search-bar input{font-size:16px}
-}
+@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
 
 /* Hero */
 .hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}
@@ -216,7 +203,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a>
+      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a>
     </nav>
     <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="courseSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
@@ -235,10 +222,8 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
     </div>
     <div class="chips" id="chipsBox">
       <button class="chip on" data-f="all">All Courses</button>
-      <button class="chip" data-f="bala">👶 Bala (5–12)</button>
-      <button class="chip" data-f="yuva">🏹 Yuva (13–25)</button>
-      <button class="chip" data-f="sadhaka">🕉️ Sadhaka (26–55)</button>
-      <button class="chip" data-f="jnana">🪷 Jnana (56+)</button>
+      <button class="chip" data-f="kids">👶 Kids (Ages 5–15)</button>
+      <button class="chip" data-f="adults">🕉️ Adults (Ages 16+)</button>
     </div>
   </div>
   <section>
@@ -257,7 +242,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a class="on" href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
   <a href="community.html"><span>👥</span>Community</a>
-  <a href="more.html"><span>🛕</span>Explore</a>
+  <a href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 <script type="module">
 import { list, esc, getCourseIcon, DEFAULT_COURSES, auth, onAuthStateChanged, getCourseLessonCount } from "./firebase-init.js";
@@ -294,10 +279,12 @@ if (initialQuery) {
 }
 
 const pathNames = {
-  bala: "👶 Bala Gurukulam (Ages 5–12)",
-  yuva: "🏹 Yuva Gurukulam (Ages 13–25)",
-  sadhaka: "🕉️ Sadhaka Gurukulam (Ages 26–55)",
-  jnana: "🪷 Jnana Gurukulam (Ages 56+)"
+  kids: "👶 Kids Gurukulam (Ages 5–15)",
+  adults: "🕉️ Adults Gurukulam (Ages 16+)",
+  bala: "👶 Kids Gurukulam (Ages 5–15)",
+  yuva: "🕉️ Adults Gurukulam (Ages 16+)",
+  sadhaka: "🕉️ Adults Gurukulam (Ages 16+)",
+  jnana: "🕉️ Adults Gurukulam (Ages 16+)"
 };
 if (initialPath && pathNames[initialPath]) {
   const pt = document.getElementById("pageTitle");

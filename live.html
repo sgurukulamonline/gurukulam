@@ -5,6 +5,7 @@
 <style>
 :root{--cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;--card:#FFF8EA;--muted:#7d5a45;--line:rgba(122,46,22,.15);--shadow:0 6px 18px rgba(74,31,14,.12)}
 *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+html,body{overflow-x:hidden;max-width:100%}
 body{font-family:'Poppins',sans-serif;color:var(--brown);background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh}
 h1,h2,h3{font-family:'Cormorant Garamond',serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0}
 input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
@@ -48,18 +49,41 @@ input,select{font:inherit;padding:10px 14px;border:1px solid var(--line);border-
   .wrap{padding:18px 14px calc(85px + env(safe-area-inset-bottom, 0px))}
   .wrap>h1{font-size:1.8rem}
 }
+
+@media(max-width:600px){
+  .wrap{padding:14px 10px calc(88px + env(safe-area-inset-bottom,0px))}
+  .wrap>h1{font-size:1.75rem;margin-bottom:12px}
+  .panel{padding:16px 12px;border-radius:16px}
+  .panel h2{font-size:1.35rem}
+  .row{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 0}
+  .row .btn{width:100%;text-align:center;padding:8px 14px}
+}
+
 </style></head><body>
-<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="more.html">Explore</a></span></div>
+<div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="login.html" id="liveUserLink" style="font-weight:600">Login</a></span></div>
 <div class="wrap"><h1>Live Classes &amp; Satsangs</h1><div class="panel"><h2>Upcoming &amp; Live Now</h2><div id="up"></div></div><div class="panel"><h2>Past Sessions Archive</h2><div id="past"></div></div></div>
 <nav class="bottom" aria-label="App">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="courses.html"><span>📖</span>Courses</a>
   <a class="on" href="live.html"><span>🎥</span>Live</a>
   <a href="community.html"><span>👥</span>Community</a>
-  <a href="more.html"><span>🛕</span>Explore</a>
+  <a href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 <script type="module">
-import { list, esc } from "./firebase-init.js";
+import { list, esc, DEFAULT_LIVE, auth, onAuthStateChanged } from "./firebase-init.js";
+
+onAuthStateChanged(auth, u => {
+  const link = document.getElementById("liveUserLink");
+  if (link) {
+    if (u) {
+      link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Dashboard";
+      link.href = "dashboard.html";
+    } else {
+      link.textContent = "Login";
+      link.href = "login.html";
+    }
+  }
+});
 
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
@@ -85,21 +109,15 @@ const row = (c, live, upcomingBadge) => `<div class="row">
 (async () => {
   try {
     let all = await list("liveClasses");
-    if (!all) all = [];
-
-    const now = Date.now(), WIN = 2 * 3600e3;
-    let up = all.filter(c => (c.startsAt || 0) + WIN > now).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
-    let past = all.filter(c => (c.startsAt || 0) + WIN <= now).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0));
-
-    const isLive = c => (c.startsAt || 0) <= now && now < (c.startsAt || 0) + WIN;
+    if (!all) all = []; const now = Date.now(), WIN = 2 * 3600e3; let up = all.filter(c => (c.startsAt || 0) + WIN > now).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0)); let past = all.filter(c => (c.startsAt || 0) + WIN <= now).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)); const isLive = c => (c.startsAt || 0) <= now && now < (c.startsAt || 0) + WIN;
 
     document.getElementById("up").innerHTML = up.map(c => {
       const live = isLive(c);
       const diffBadge = !live ? formatDiff(c.startsAt, now) : "";
       return row(c, live, diffBadge);
-    }).join("") || '<p class="muted" style="padding:20px 0;text-align:center">No upcoming live classes scheduled at this time. Please check back later.</p>';
+    }).join("") || '<p class="muted">No upcoming live classes scheduled at this time. Please check back later.</p>';
 
-    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted" style="padding:20px 0;text-align:center">No past session recordings available.</p>';
+    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted">No past session recordings available.</p>';
   } catch (e) {
     document.getElementById("up").innerHTML = '<p class="muted">Could not load classes.</p>';
   }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Community Circles Management – Sanathana Gurukulam</title>
+<title>Community Management – Sanathana Gurukulam</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -28,6 +28,8 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 }
 .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .btn.gold{background:var(--gold);color:var(--brown);font-weight:600}
+.btn.danger{background:#dc2626;color:#fff}
+.btn.danger:hover{background:#b91c1c}
 .btn.ghost{background:none;border:1px solid var(--maroon);color:var(--maroon)}
 .btn.sm{padding:5px 12px;font-size:.8rem}
 
@@ -43,15 +45,24 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
 .panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
 .panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;flex-wrap:wrap}
-.row:last-child{border-bottom:0}
-.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px;background:#fff;padding:18px;border-radius:14px;border:1px solid var(--line)}
 .muted{color:var(--muted);font-size:.85rem}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
-.circle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:14px}
-.circle-card{background:#fff;border-radius:16px;padding:18px;border:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.04);display:flex;flex-direction:column;justify-content:space-between}
+
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+.stat-box{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.stat-box b{font-size:1.8rem;color:var(--maroon);display:block}
+.stat-box span{font-size:.85rem;color:var(--muted)}
+
+.msg-feed{max-height:550px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--line)}
+.msg-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:12px 14px;border-radius:12px;background:#fbf6ec;border:1px solid var(--line)}
+.msg-item.admin-post{background:#fff3d4;border-color:var(--gold)}
+.msg-main{flex:1;min-width:0}
+.msg-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.msg-head b{color:var(--maroon);font-size:.92rem}
+.msg-head .time{font-size:.75rem;color:var(--muted)}
+.msg-text{font-size:.9rem;color:var(--brown);line-height:1.45;word-break:break-word}
 </style>
 </head>
 <body>
@@ -62,7 +73,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <a href="admin.html">← Dashboard Hub</a>
     <a href="admin-age-groups.html">Age Groups</a>
     <a href="admin-courses.html">Courses</a>
-    <a href="admin-live.html">Live &amp; Wisdom</a>
+    <a href="admin-live.html">Live</a>
     <a href="admin-notifications.html">Notifications</a>
     <button class="btn gold sm" id="out">Logout</button>
   </span>
@@ -72,87 +83,162 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   <a class="back-nav" href="admin.html">← Back to Dashboard Hub</a>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
-      <h1 style="font-size:2.4rem;color:var(--maroon)">👥 Community Circles Management</h1>
-      <p class="muted">Oversee Gurukulam student circles, discussions, and spiritual study groups.</p>
+      <h1 style="font-size:2.4rem;color:var(--maroon)">👥 Community Management</h1>
+      <p class="muted">Oversee and moderate the unified Gurukulam Community discussion.</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a class="btn sm ghost" href="community.html" target="_blank">Open Live Community ↗</a>
     </div>
   </div>
 
+  <div class="stats-bar">
+    <div class="stat-box">
+      <b id="totalMsgsCount">0</b>
+      <span>Total Messages Recorded</span>
+    </div>
+    <div class="stat-box">
+      <b>🕉️ Unified</b>
+      <span>Gurukulam Community</span>
+    </div>
+    <div class="stat-box">
+      <b style="color:#16a34a">Active</b>
+      <span>Realtime Sync Status</span>
+    </div>
+  </div>
+
+  <!-- Admin Broadcast to Community -->
   <div class="panel">
-    <h2>Gurukulam Active Study Circles</h2>
-    <p class="muted" style="margin-bottom:14px">Students interact, ask questions, and share insights in these circles.</p>
-    <div class="circle-grid">
-      <div class="circle-card">
-        <div>
-          <div style="font-size:1.8rem;margin-bottom:8px">🪔</div>
-          <b style="font-size:1.15rem;color:var(--maroon)">Gita Study Circle</b>
-          <p class="muted" style="margin:6px 0 12px;font-size:.85rem">Daily Bhagavad Gita chapter contemplations, shloka practice, and mentor Q&amp;A.</p>
-          <span class="tag">248 members · 32 online</span>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <a class="btn sm" href="community.html" target="_blank" style="flex:1">Open Circle Chat →</a>
-        </div>
-      </div>
+    <h2>Post Official Update to Community</h2>
+    <p class="muted" style="margin-bottom:12px">Post an announcement or answer questions directly in the community as Admin.</p>
+    <form id="adminPostForm" style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="adminPostInput" maxlength="500" placeholder="Type an official message or announcement to the Gurukulam Community..." required style="flex:1;min-width:240px">
+      <button class="btn gold" type="submit">Post to Community</button>
+    </form>
+  </div>
 
-      <div class="circle-card">
-        <div>
-          <div style="font-size:1.8rem;margin-bottom:8px">🪷</div>
-          <b style="font-size:1.15rem;color:var(--maroon)">Sanskrit Learners</b>
-          <p class="muted" style="margin:6px 0 12px;font-size:.85rem">Akshara pronunciation, sandhi rules, grammar discussions, and subhashitas recitation.</p>
-          <span class="tag">142 members · 18 online</span>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <a class="btn sm" href="community.html" target="_blank" style="flex:1">Open Circle Chat →</a>
-        </div>
+  <!-- Realtime Moderation Feed -->
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="margin:0">Active Community Messages</h2>
+        <p class="muted">Live discussion stream with 1-click message moderation/deletion.</p>
       </div>
+      <span class="tag" id="statusTag">Listening Live</span>
+    </div>
 
-      <div class="circle-card">
-        <div>
-          <div style="font-size:1.8rem;margin-bottom:8px">🧘</div>
-          <b style="font-size:1.15rem;color:var(--maroon)">Daily Yoga &amp; Pranayama</b>
-          <p class="muted" style="margin:6px 0 12px;font-size:.85rem">Morning sadhana routines, asana alignment tips, and breathing techniques for daily life.</p>
-          <span class="tag">186 members · 25 online</span>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <a class="btn sm" href="community.html" target="_blank" style="flex:1">Open Circle Chat →</a>
-        </div>
-      </div>
-
-      <div class="circle-card">
-        <div>
-          <div style="font-size:1.8rem;margin-bottom:8px">🛕</div>
-          <b style="font-size:1.15rem;color:var(--maroon)">Temple Heritage &amp; Architecture</b>
-          <p class="muted" style="margin:6px 0 12px;font-size:.85rem">Ancient temples, agamas, sacred architecture, and civilizational history of Bharat.</p>
-          <span class="tag">98 members · 11 online</span>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <a class="btn sm" href="community.html" target="_blank" style="flex:1">Open Circle Chat →</a>
-        </div>
-      </div>
-
-      <div class="circle-card">
-        <div>
-          <div style="font-size:1.8rem;margin-bottom:8px">👨‍👩‍👧</div>
-          <b style="font-size:1.15rem;color:var(--maroon)">Parents of Bala Gurukulam</b>
-          <p class="muted" style="margin:6px 0 12px;font-size:.85rem">Guidance for parents raising children with Sanathana values, sanskaras, and moral stories.</p>
-          <span class="tag">115 members · 14 online</span>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <a class="btn sm" href="community.html" target="_blank" style="flex:1">Open Circle Chat →</a>
-        </div>
-      </div>
+    <div class="msg-feed" id="msgFeed" aria-live="polite">
+      <p class="muted" style="text-align:center;padding:30px">Loading community messages...</p>
     </div>
   </div>
 </div>
 
 <script type="module">
-import { requireAdmin, adminLogout } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, push, remove, onValue, query, limitToLast } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 $("out").onclick = adminLogout;
 
+const COMMUNITY_ROOM = "community";
+let activeAdmin = null;
+
 requireAdmin((u, p) => {
+  activeAdmin = u;
   $("wrap").hidden = false;
+  listenToFeed();
 });
+
+function listenToFeed() {
+  const feed = $("msgFeed");
+  const countEl = $("totalMsgsCount");
+
+  onValue(query(ref(db, "community/" + COMMUNITY_ROOM), limitToLast(120)), snap => {
+    const data = snap.val() || {};
+    renderAdminFeed(data);
+  }, err => {
+    console.warn("Falling back to gita room if community empty:", err);
+    onValue(query(ref(db, "community/gita"), limitToLast(120)), snap => {
+      renderAdminFeed(snap.val() || {});
+    });
+  });
+}
+
+function renderAdminFeed(data) {
+  const feed = $("msgFeed");
+  const countEl = $("totalMsgsCount");
+  const entries = Object.entries(data);
+
+  countEl.textContent = entries.length;
+
+  if (!entries.length) {
+    feed.innerHTML = '<p class="muted" style="text-align:center;padding:36px">No messages in the community yet.</p>';
+    return;
+  }
+
+  // Reverse so newest appears on top in moderation view
+  feed.innerHTML = entries.reverse().map(([id, m]) => {
+    const timeStr = m.at ? new Date(m.at).toLocaleString() : 'Just now';
+    const isSpecial = m.name?.toLowerCase().includes("admin") || m.uid?.includes("admin");
+    return `
+      <div class="msg-item ${isSpecial ? 'admin-post' : ''}">
+        <div class="msg-main">
+          <div class="msg-head">
+            <b>${esc(m.name || "Learner")}</b>
+            ${isSpecial ? '<span class="tag">Admin</span>' : ''}
+            <span class="time">${timeStr}</span>
+            <small class="muted" style="font-size:.7rem">(UID: ${esc((m.uid || '').slice(0, 10))}...)</small>
+          </div>
+          <div class="msg-text">${esc(m.text || "")}</div>
+        </div>
+        <button class="btn danger sm" data-del="${id}" title="Delete inappropriate message">Delete</button>
+      </div>
+    `;
+  }).join("");
+}
+
+// Moderation Delete Action
+$("msgFeed").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-del]");
+  if (!b) return;
+  const id = b.dataset.del;
+  if (!confirm("Are you sure you want to delete this community message permanently?")) return;
+
+  try {
+    await remove(ref(db, `community/${COMMUNITY_ROOM}/${id}`));
+  } catch (err) {
+    try {
+      await remove(ref(db, `community/gita/${id}`));
+    } catch (e2) {
+      alert("Error deleting message: " + (e2.message || err.message));
+    }
+  }
+});
+
+// Admin Post Action
+$("adminPostForm").onsubmit = async e => {
+  e.preventDefault();
+  const input = $("adminPostInput");
+  const txt = input.value.trim();
+  if (!txt) return;
+
+  const payload = {
+    uid: activeAdmin?.uid || "admin",
+    name: "Gurukulam Acharya (Admin)",
+    text: txt,
+    at: Date.now()
+  };
+
+  try {
+    await push(ref(db, "community/" + COMMUNITY_ROOM), payload);
+    input.value = "";
+  } catch (err) {
+    try {
+      await push(ref(db, "community/gita"), payload);
+      input.value = "";
+    } catch (e2) {
+      alert("Could not post message: " + (e2.message || err.message));
+    }
+  }
+};
 </script>
 </body>
 </html>

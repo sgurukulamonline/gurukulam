@@ -69,6 +69,37 @@ button{font:inherit;cursor:pointer;border:0}
   body{background:#fff}
   .cert{box-shadow:none;border-width:8px;margin:0}
 }
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:600px){
+  .wrap{padding:14px 10px calc(88px + env(safe-area-inset-bottom,0px))}
+  .cert{
+    padding:28px 14px;
+    border-width:6px;
+    border-radius:16px;
+  }
+  .cert .logo-mark{font-size:2.4rem}
+  .cert .inst{font-size:1.6rem}
+  .cert .tagline{font-size:.78rem}
+  .cert h1{font-size:1.65rem}
+  .cert .recipient{font-size:1.6rem;margin:8px 0}
+  .cert .c-title{font-size:1.25rem}
+  .cert-footer{
+    flex-direction:column;
+    gap:14px;
+    text-align:center;
+    margin-top:22px;
+  }
+  .actions{
+    flex-direction:column;
+    gap:8px;
+  }
+  .actions .btn{
+    width:100%;
+    text-align:center;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -80,7 +111,7 @@ button{font:inherit;cursor:pointer;border:0}
     <a href="courses.html">Courses</a>
     <a href="live.html">Live</a>
     <a href="community.html">Community</a>
-    <a href="more.html">Explore</a>
+    
   </span>
 </div>
 
@@ -89,6 +120,8 @@ button{font:inherit;cursor:pointer;border:0}
     <p style="text-align:center;color:var(--muted);padding:40px">Verifying completion credentials…</p>
   </div>
 </div>
+
+<div id="toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#4A1F0E;color:#F7E8C8;padding:10px 22px;border-radius:30px;font-size:.85rem;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:99"></div>
 
 <script type="module">
 import { auth, onAuthStateChanged, db, ref, get, esc, DEFAULT_COURSES } from "./firebase-init.js";
@@ -131,7 +164,7 @@ async function verifyAndRender(targetUserId, recipientName) {
   const course = c.val() || DEFAULT_COURSES.find(x => x.id === id);
   const enr = e.val();
   const userProfile = u.val();
-  const studentName = recipientName || userProfile?.name || "Sadhaka";
+  const studentName = recipientName || userProfile?.name || userProfile?.displayName || "Sadhaka";
 
   if (!course || !enr || (enr.progress || 0) < 100) {
     const pr = enr?.progress || 0;
@@ -192,7 +225,7 @@ async function verifyAndRender(targetUserId, recipientName) {
     <div class="actions noprint">
       <button class="btn gold" id="btnPrint">🖨️ Print / Save as PDF</button>
       <button class="btn ghost" id="btnShareCert">🔗 Copy Shareable Link</button>
-      <a class="btn ghost" href="courses.html">← Explore More Courses</a>
+      <a class="btn ghost" href="courses.html">← View All Courses</a>
     </div>
   `;
 
@@ -220,5 +253,13 @@ if (targetUid) {
   });
 }
 </script>
+
+<nav class="bottom noprint" aria-label="App">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="courses.html"><span>📖</span>Courses</a>
+  <a href="live.html"><span>🎥</span>Live</a>
+  <a href="community.html"><span>👥</span>Community</a>
+  <a href="dashboard.html"><span>👤</span>Profile</a>
+</nav>
 </body>
 </html>

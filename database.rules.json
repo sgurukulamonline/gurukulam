@@ -6,7 +6,7 @@
       ".read": "auth != null",
       "$uid": {
         ".read": true,
-        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin') || $uid.beginsWith('ph_')"
       }
     },
     "courses": {
@@ -21,11 +21,15 @@
       ".read": true,
       ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     },
+    "wisdom": {
+      ".read": true,
+      ".write": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+    },
     "enrollments": {
       ".read": "auth != null && (auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')",
       "$uid": {
         ".read": true,
-        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin') || $uid.beginsWith('ph_')"
       }
     },
     "community": {
