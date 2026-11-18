@@ -45,6 +45,16 @@ nav.top a:hover{color:var(--gold)}
 @media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
 
 /* Hero */
+
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+.course{display:flex;flex-direction:column;height:100%;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;border:1px solid var(--line)}
+.course:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(74,31,14,.16)}
+.course .pic{height:150px;overflow:hidden;background:#e8c98f;flex-shrink:0}
+.course .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.course .body{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
+.course .body h3{font-size:1.15rem;color:var(--brown);line-height:1.3;margin-bottom:8px;flex:1}
+.course .body .tags{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+
 .hero{position:relative;min-height:420px;display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center/cover no-repeat}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,10,3,.88) 0%,rgba(40,15,5,.6) 38%,rgba(0,0,0,.05) 75%)}
 .hero .in{position:relative;z-index:2;width:100%;max-width:none;margin:0;padding:56px clamp(18px,4vw,56px)}
@@ -78,7 +88,7 @@ section{padding:34px 0 8px}
 .path .body{padding:14px 16px 16px}
 .path h3{font-size:1.3rem;color:var(--maroon)}
 .path .age{color:var(--muted);font-size:.88rem}
-.path .te{font-size:.78rem;margin-top:6px;max-width:150px;color:var(--text)}
+.path .te{font-size:.78rem;margin-top:6px;max-width:calc(100% - 48px);color:var(--text);line-height:1.4}
 .path .go{position:absolute;right:14px;bottom:14px;width:38px;height:38px;border-radius:50%;background:var(--maroon);color:var(--cream);display:grid;place-items:center}
 
 /* Topics */
@@ -163,13 +173,16 @@ footer h3{font-size:1.6rem;color:var(--cream)}
 footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
 /* Bottom nav */
-.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--brown);display:flex;justify-content:space-around;
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(46,18,8,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-top:1px solid rgba(217,154,39,0.25);box-shadow:0 -4px 20px rgba(0,0,0,0.25);display:flex;justify-content:space-around;
   padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
-.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0;position:relative}
-.bottom a span{display:block;font-size:1.3rem}
+.bottom a{flex:1;text-align:center;color:#d9b88f;font-size:.66rem;padding:4px 0;position:relative;transition:transform .15s ease,color .15s ease;-webkit-tap-highlight-color:transparent}
+.bottom a:active{transform:scale(0.92)}
+.bottom a span{display:block;font-size:1.3rem;margin-bottom:2px;transition:transform .2s ease}
 .bottom a.on{color:var(--gold);font-weight:600}
-.bottom a.on::after{content:"";position:absolute;left:25%;right:25%;bottom:-2px;height:2px;background:var(--gold)}
-@media(min-width:900px){.bottom{max-width:720px;margin:0 auto 12px;border-radius:22px}}
+.bottom a.on span{transform:translateY(-2px)}
+.bottom a.on::after{content:"";position:absolute;left:28%;right:28%;bottom:0px;height:2.5px;border-radius:2px;background:var(--gold);box-shadow:0 0 8px rgba(217,154,39,0.8)}
+@media(min-width:900px){.bottom{max-width:720px;margin:0 auto 14px;border-radius:24px;border:1px solid rgba(217,154,39,0.3)}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 /* Quick Access (merged with topics) */
@@ -201,19 +214,43 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   .wrap{padding:0 14px}
   .bar{height:60px;gap:8px}
   .logo svg{width:34px;height:34px}
-  .logo b{font-size:1.18rem}
-  .logo small{font-size:.5rem;letter-spacing:.12em}
-  .lang button{padding:4px 8px;font-size:.72rem}
-  .avatar{width:36px;height:36px;font-size:.95rem}
+  .logo b{font-size:1.1rem;line-height:1.15}
+  .logo small{font-size:.48rem;letter-spacing:.1em}
+  .lang button{padding:4px 7px;font-size:.7rem}
+  .avatar{width:34px;height:34px;font-size:.9rem}
   #homeNotifBtn{font-size:1.15rem;padding:2px 4px}
   
-  .hero{min-height:360px}
-  .hero .in{padding:36px 14px 44px}
-  .hero h1{font-size:2.1rem;line-height:1.18}
-  .hero p.te{font-size:1.05rem;margin:10px 0 2px}
-  .hero .rule{margin:4px 0 16px}
-  .cta{padding:11px 20px;font-size:.92rem}
-  .story{margin-left:0;margin-top:10px;font-size:.85rem;display:flex}
+  .hero{min-height:350px}
+  .hero .in{padding:32px 14px 40px}
+  .hero h1{font-size:1.95rem;line-height:1.2}
+  .hero p.te{font-size:1.02rem;margin:8px 0 2px}
+  .hero .rule{margin:4px 0 14px}
+  
+  .hero-actions{flex-direction:column;align-items:stretch;gap:10px;margin-top:16px}
+  .hero-actions .cta,
+  .hero-actions .story,
+  .hero-actions .replay-intro-btn{width:100%!important;margin:0!important;justify-content:center;text-align:center}
+  .cta{padding:12px 20px;font-size:.92rem}
+  .story{padding:10px 18px;font-size:.85rem}
+  .replay-intro-btn{padding:9px 16px;font-size:.82rem}
+
+  .paths{grid-template-columns:1fr!important;gap:14px!important}
+  .path .pic{height:160px}
+  .path .body{padding:12px 14px 14px}
+  .path h3{font-size:1.2rem}
+  .path .age{font-size:.84rem}
+  .path .te{font-size:.76rem;max-width:calc(100% - 46px)}
+
+  .courses{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}
+  .course .pic{height:105px}
+  .course .body{padding:8px 10px 10px}
+  .course .body h3{font-size:.88rem;line-height:1.22;margin-bottom:4px}
+  .course .tags{font-size:.68rem}
+  .more-card{min-height:175px!important;padding:12px 8px!important}
+  .more-card div{width:42px!important;height:42px!important;font-size:1.25rem!important;margin-bottom:6px!important}
+  .more-card h3{font-size:1rem!important;margin-bottom:3px!important}
+  .more-card p{font-size:.72rem!important;margin-bottom:8px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .more-card span{font-size:.72rem!important;padding:3px 8px!important}
   
   .sec-h h2{font-size:1.6rem}
   .sec-h p{font-size:.82rem}
@@ -612,8 +649,11 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <h1 id="heroH1">Ancient Wisdom<br>Modern Learning<br>Timeless Values</h1>
       <p class="te" id="heroSub">భారతీయ జీవిత విధానం తరతరాలకు…</p>
       <div class="rule"></div>
-      <a class="cta" href="courses.html">Browse Courses <span aria-hidden="true">→</span></a>
-      <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button><button class="replay-intro-btn" id="btnReplayIntro"><span>ॐ</span> Replay Intro</button>
+      <div class="hero-actions">
+        <a class="cta" href="courses.html">Browse Courses <span aria-hidden="true">→</span></a>
+        <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
+        <button class="replay-intro-btn" id="btnReplayIntro"><span>ॐ</span> Replay Intro</button>
+      </div>
     </div>
   </div>
 

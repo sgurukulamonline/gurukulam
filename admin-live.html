@@ -56,6 +56,19 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .toast{position:fixed;bottom:24px;right:24px;background:#15803d;color:#fff;padding:12px 20px;border-radius:12px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);display:none;z-index:9999}
 .toast.show{display:block;animation:slideUp .3s ease}
 @keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:768px){
+  .top{padding:10px 14px}
+  .top b{font-size:1.2rem}
+  .top span a:not(:first-child):not(:last-child){display:none}
+  .wrap{padding:14px 10px 60px}
+  .form{grid-template-columns:1fr!important}
+  .row{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 0}
+  .row>span:last-child{width:100%;display:flex;flex-wrap:wrap;gap:6px}
+  .row>span:last-child button, .row>span:last-child a{flex:1;text-align:center}
+}
+
 </style>
 </head>
 <body>

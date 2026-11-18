@@ -130,6 +130,25 @@ button{font:inherit;cursor:pointer;border:0}
 .muted{color:var(--muted);font-size:.85rem}
 .tag{padding:2px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .tag.admin{background:var(--maroon);color:var(--cream)}
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:768px){
+  .top{padding:10px 14px}
+  .top b{font-size:1.2rem}
+  .top span{gap:8px}
+  .top span a:not(:first-child):not(:last-child){display:none}
+  .wrap{padding:16px 12px 60px}
+  .wrap>h1{font-size:1.85rem}
+  .stats{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .stat{padding:12px 10px}
+  .stat b{font-size:1.8rem}
+  .admin-grid{grid-template-columns:1fr;gap:14px;margin-bottom:24px}
+  .admin-card{padding:18px 16px;border-radius:16px}
+  .row{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 0}
+  .row>span:last-child{width:100%;display:flex;flex-wrap:wrap;gap:6px}
+  .row>span:last-child button, .row>span:last-child a{flex:1;text-align:center}
+}
+
 </style>
 </head>
 <body>

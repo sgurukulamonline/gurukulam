@@ -63,6 +63,16 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .msg-head b{color:var(--maroon);font-size:.92rem}
 .msg-head .time{font-size:.75rem;color:var(--muted)}
 .msg-text{font-size:.9rem;color:var(--brown);line-height:1.45;word-break:break-word}
+
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:768px){
+  .top{padding:10px 14px}
+  .top b{font-size:1.2rem}
+  .top span a:not(:first-child):not(:last-child){display:none}
+  .wrap{padding:14px 10px 60px}
+  .msgs{height:340px}
+}
+
 </style>
 </head>
 <body>
