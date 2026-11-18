@@ -285,6 +285,11 @@ button{font:inherit;cursor:pointer;border:0}
   .photo-caption{padding:10px 12px;font-size:.84rem}
 }
 
+
+footer{margin-top:44px;background:var(--brown);color:var(--sand);padding:34px 0 110px;text-align:center}
+footer h3{font-size:1.6rem;color:var(--cream);font-family:'Cormorant Garamond',serif}
+footer p{font-size:.82rem;opacity:.8;margin-top:6px}
+
 </style>
 </head>
 <body>
@@ -296,7 +301,7 @@ button{font:inherit;cursor:pointer;border:0}
     <a href="courses.html">Courses</a>
     <a href="live.html">Live</a>
     <a href="community.html">Community</a>
-    
+    <a href="login.html" id="courseUserLink" style="font-weight:600">Login</a>
   </span>
 </div>
 
@@ -316,6 +321,16 @@ const path = () => `enrollments/${user.uid}/${id}`;
 
 onAuthStateChanged(auth, async u => {
   user = u;
+  const link = document.getElementById("courseUserLink");
+  if (link) {
+    if (u) {
+      link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Dashboard";
+      link.href = "dashboard.html";
+    } else {
+      link.textContent = "Login";
+      link.href = "login.html";
+    }
+  }
   await load();
 });
 
@@ -756,6 +771,19 @@ box.addEventListener("click", async e => {
   }
 });
 </script>
+<footer>
+  <div class="wrap">
+    <h3>Sanathana Gurukulam</h3>
+    <p>Empowering minds with timeless Indian wisdom, heritage, and values.</p>
+    <div style="margin-top:16px;display:flex;justify-content:center;gap:20px;font-size:0.85rem">
+      <a href="privacy.html" style="color:var(--sand)">Privacy Policy</a>
+      <span style="opacity:0.5">•</span>
+      <a href="delete-account.html" style="color:var(--sand)">Delete Account</a>
+    </div>
+    <p style="font-size:0.75rem;opacity:0.6;margin-top:16px">© 2026 Sanathana Gurukulam. All rights reserved.</p>
+  </div>
+</footer>
+
 <nav class="bottom" aria-label="App">
   <a href="index.html"><span>🏠</span>Home</a>
   <a class="on" href="courses.html"><span>📖</span>Courses</a>

@@ -40,6 +40,8 @@ export const DEFAULT_COURSES = [
     desc: "Understand the timeless spiritual wisdom of the Bhagavad Gita explained simply with daily life applications.",
     type: "free",
     lessons: 12,
+    ageGroups: ["kids", "adults", "bala", "sadhaka"],
+    ageGroup: "kids,adults",
     imageUrl: "images/bhagavth gita.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
@@ -75,6 +77,8 @@ export const DEFAULT_COURSES = [
     desc: "Learn to read, pronounce, and understand Samskritam vocabulary, mantras, and shlokas with correct intonation.",
     type: "free",
     lessons: 24,
+    ageGroups: ["kids", "adults", "bala", "sadhaka"],
+    ageGroup: "kids,adults",
     imageUrl: "images/sanskrit basics.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
@@ -103,6 +107,8 @@ export const DEFAULT_COURSES = [
     desc: "Discover the authentic civilizational heritage, historical milestones, and contributions of ancient Bharat.",
     type: "free",
     lessons: 28,
+    ageGroups: ["kids", "adults", "bala", "sadhaka"],
+    ageGroup: "kids,adults",
     imageUrl: "images/india history.png",
     videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
     published: true,
@@ -131,6 +137,8 @@ export const DEFAULT_COURSES = [
     desc: "An in-depth exploration of Valmiki Ramayana, character ethics, dharma, and leadership virtues.",
     type: "free",
     lessons: 32,
+    ageGroups: ["kids", "adults", "bala", "sadhaka"],
+    ageGroup: "kids,adults",
     imageUrl: "images/ramayanam.png",
     videoUrl: "",
     published: true,
@@ -142,6 +150,8 @@ export const DEFAULT_COURSES = [
     desc: "Daily guided asanas, pranayama, and mindfulness routines for physical vitality and spiritual calm.",
     type: "free",
     lessons: 20,
+    ageGroups: ["adults", "sadhaka", "yuva"],
+    ageGroup: "adults",
     imageUrl: "",
     videoUrl: "",
     published: true,
@@ -153,6 +163,8 @@ export const DEFAULT_COURSES = [
     desc: "Learn the proper chanting, stotra cadence, and profound philosophical meanings of the 1,000 sacred names.",
     type: "free",
     lessons: 10,
+    ageGroups: ["adults", "sadhaka", "jnana"],
+    ageGroup: "adults",
     imageUrl: "",
     videoUrl: "",
     published: true,
@@ -164,6 +176,8 @@ export const DEFAULT_COURSES = [
     desc: "Foundational overview of the four Vedas, Upanishads, Vedic vision of reality, and cultural ethos.",
     type: "free",
     lessons: 18,
+    ageGroups: ["adults", "sadhaka", "jnana"],
+    ageGroup: "adults",
     imageUrl: "",
     videoUrl: "",
     published: true,
@@ -175,6 +189,8 @@ export const DEFAULT_COURSES = [
     desc: "Understand the sacred geometry, Agama shastras, and spiritual symbolism behind ancient Indian temples.",
     type: "free",
     lessons: 16,
+    ageGroups: ["adults", "sadhaka"],
+    ageGroup: "adults",
     imageUrl: "",
     videoUrl: "",
     published: true,
@@ -993,10 +1009,10 @@ export const getCourseIcon = id => {
 
 // Calculate accurate lesson count whether lessons is an array, number, or lessonCount field
 export function getCourseLessonCount(c) {
-  if (!c) return 0;
-  if (Array.isArray(c.lessons)) return c.lessons.length;
-  if (typeof c.lessons === "number") return c.lessons;
-  if (c.lessonCount) return Number(c.lessonCount);
+  if (!c) return 10;
+  if (Array.isArray(c.lessons) && c.lessons.length > 0) return c.lessons.length;
+  if (typeof c.lessons === "number" && c.lessons > 0) return c.lessons;
+  if (c.lessonCount && Number(c.lessonCount) > 0) return Number(c.lessonCount);
   return 10;
 }
 

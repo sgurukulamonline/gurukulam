@@ -500,10 +500,15 @@ async function load() {
       
       const lesCount = Array.isArray(c.lessons) ? c.lessons.length : (typeof c.lessons === "number" ? c.lessons : 1);
       const relTime = c.releaseTime ? ` · Release: ${when(c.releaseTime)}` : "";
-      const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
+      const rawAges = Array.isArray(c.ageGroups) && c.ageGroups.length
         ? c.ageGroups
-        : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
-      const ageLabels = ages.map(a => a.charAt(0).toUpperCase() + a.slice(1)).join(", ");
+        : (c.ageGroup ? (c.ageGroup === 'all' ? ['kids','adults'] : c.ageGroup.split(',').map(s=>s.trim())) : ['kids','adults']);
+      const hasKidsTag = rawAges.some(a => ['kids','bala'].includes(String(a).toLowerCase()));
+      const hasAdultsTag = rawAges.some(a => ['adults','yuva','sadhaka','jnana','all'].includes(String(a).toLowerCase()));
+      const ageParts = [];
+      if (hasKidsTag) ageParts.push('Kids (5–15)');
+      if (hasAdultsTag) ageParts.push('Adults (16+)');
+      const ageLabels = ageParts.length ? ageParts.join(', ') : 'All Ages';
 
       const lessonsSummary = Array.isArray(c.lessons) && c.lessons.length
         ? c.lessons.map(l => l.title || 'Lesson').slice(0, 3).join(" • ") + (c.lessons.length > 3 ? "..." : "")
@@ -539,7 +544,7 @@ const resetCourseForm = () => {
   $("cPinned").checked = false;
   $("cReleaseTime").value = "";
   document.querySelectorAll(".course-age-cb").forEach(cb => {
-    cb.checked = (cb.value === "bala");
+    cb.checked = true;
   });
   currentLessons = [];
   renderLessonsBuilder();
@@ -556,7 +561,7 @@ $("cForm").onsubmit = async e => {
   const editId = f.editId;
 
   const checkedAges = Array.from(document.querySelectorAll('.course-age-cb:checked')).map(cb => cb.value);
-  const selectedAgeGroups = checkedAges.length ? checkedAges : ["bala", "yuva", "sadhaka", "jnana"];
+  const selectedAgeGroups = checkedAges.length ? checkedAges : ["kids", "adults"];
 
   // Flatten all lesson blocks for legacy fallback
   const flatBlocks = [];
@@ -634,11 +639,15 @@ document.addEventListener("click", async e => {
       $("cDesc").value = course.desc || "";
       $("cType").value = course.type || "free";
       
-      const courseAges = Array.isArray(course.ageGroups) && course.ageGroups.length
+      const rawCourseAges = Array.isArray(course.ageGroups) && course.ageGroups.length
         ? course.ageGroups
-        : (course.ageGroup ? (course.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : course.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
+        : (course.ageGroup ? (course.ageGroup === 'all' ? ['kids','adults'] : course.ageGroup.split(',').map(s=>s.trim())) : ['kids','adults']);
+      const isForKids = rawCourseAges.some(a => ['kids','bala'].includes(String(a).toLowerCase()));
+      const isForAdults = rawCourseAges.some(a => ['adults','yuva','sadhaka','jnana','all'].includes(String(a).toLowerCase()));
       document.querySelectorAll('.course-age-cb').forEach(cb => {
-        cb.checked = courseAges.includes(cb.value);
+        if (cb.value === 'kids') cb.checked = isForKids;
+        else if (cb.value === 'adults') cb.checked = isForAdults;
+        else cb.checked = rawCourseAges.includes(cb.value);
       });
 
       if (course.releaseTime) {

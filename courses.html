@@ -235,7 +235,15 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 <footer>
   <h3>Sanathana Gurukulam</h3>
   <p>Ancient wisdom • Modern learning • Timeless values</p>
-  <p>© 2026 Sanathana Gurukulam. All rights reserved.</p>
+  <p style="margin-top:6px;font-size:0.85rem">
+    <a href="index.html" style="color:var(--sand);text-decoration:none">Home</a> · 
+    <a href="courses.html" style="color:var(--sand);text-decoration:none">Courses</a> · 
+    <a href="live.html" style="color:var(--sand);text-decoration:none">Live Classes</a> · 
+    <a href="community.html" style="color:var(--sand);text-decoration:none">Community</a> · 
+    <a href="privacy.html" style="color:var(--sand);text-decoration:none;font-weight:600">Privacy Policy</a> · 
+    <a href="delete-account.html" style="color:var(--sand);text-decoration:none;font-weight:600">Account Deletion</a>
+  </p>
+  <p style="margin-top:8px;font-size:0.78rem;opacity:0.75">© 2026 Sanathana Gurukulam · Reflection Media and Advertising. All rights reserved.</p>
 </footer>
 <nav class="bottom" aria-label="App">
   <a href="index.html"><span>🏠</span>Home</a>
@@ -295,17 +303,32 @@ if (initialPath && pathNames[initialPath]) {
   document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === initialPath));
 }
 
+function matchesCourseAgeGroup(c, targetGroup) {
+  if (!targetGroup || targetGroup === "all") return true;
+  const rawAges = Array.isArray(c.ageGroups) && c.ageGroups.length
+    ? c.ageGroups.map(s => String(s).toLowerCase())
+    : (c.ageGroup ? (c.ageGroup === 'all' ? ['kids', 'adults', 'bala', 'yuva', 'sadhaka', 'jnana'] : c.ageGroup.split(',').map(s => s.trim().toLowerCase())) : ['kids', 'adults', 'bala', 'yuva', 'sadhaka', 'jnana']);
+  
+  if (rawAges.includes('all')) return true;
+  if (rawAges.includes(targetGroup.toLowerCase())) return true;
+  
+  if (targetGroup === 'kids' || targetGroup === 'bala') {
+    return rawAges.includes('kids') || rawAges.includes('bala');
+  }
+  if (targetGroup === 'adults' || targetGroup === 'yuva' || targetGroup === 'sadhaka' || targetGroup === 'jnana') {
+    return rawAges.includes('adults') || rawAges.includes('sadhaka') || rawAges.includes('yuva') || rawAges.includes('jnana');
+  }
+  return false;
+}
+
 // Render courses matching filter & search
 function render() {
   const q = ((searchInput?.value || "") || (mobileSearchInput?.value || "")).trim().toLowerCase();
+  const targetGroup = activeFilter !== "all" ? activeFilter : (initialPath || "all");
   let filtered = allCourses.filter(c => {
     if (c.published === false) return false;
-    const targetGroup = activeFilter !== "all" ? activeFilter : initialPath;
     if (targetGroup && targetGroup !== "all") {
-      const ages = Array.isArray(c.ageGroups) && c.ageGroups.length
-        ? c.ageGroups
-        : (c.ageGroup ? (c.ageGroup === 'all' ? ['bala','yuva','sadhaka','jnana'] : c.ageGroup.split(',').map(s=>s.trim())) : ['bala','yuva','sadhaka','jnana']);
-      if (!ages.includes('all') && !ages.includes(targetGroup)) return false;
+      if (!matchesCourseAgeGroup(c, targetGroup)) return false;
     }
     if (q) {
       const matchTitle = (c.title || "").toLowerCase().includes(q);
@@ -377,6 +400,15 @@ document.querySelectorAll(".chip").forEach(b => {
     document.querySelectorAll(".chip").forEach(x => x.classList.remove("on"));
     b.classList.add("on");
     activeFilter = b.dataset.f;
+    const pt = document.getElementById("pageTitle");
+    const ps = document.getElementById("pageSub");
+    if (pathNames[activeFilter]) {
+      if (pt) pt.textContent = pathNames[activeFilter];
+      if (ps) ps.innerHTML = `Curated lessons for ${pathNames[activeFilter]} · <a href="courses.html" style="color:var(--maroon);text-decoration:underline;font-weight:600">View All Courses →</a>`;
+    } else {
+      if (pt) pt.textContent = "All Courses";
+      if (ps) ps.textContent = "Learn at your own pace with structured lessons";
+    }
     render();
   };
 });

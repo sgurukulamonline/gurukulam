@@ -51,9 +51,9 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
 
-/* Fixed 4 Age Group Cards Overview */
+/* Fixed 2 Sections Overview */
 .fixed-paths-preview{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:22px;
 }
 .path-preview-card{
   background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;
@@ -75,7 +75,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;
 }
 .age-check-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:10px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:10px;
 }
 .age-box{
   position:relative;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;
@@ -140,14 +140,14 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
       <h1 style="font-size:2.4rem;color:var(--maroon)">🎯 Age Groups Content Manager</h1>
-      <p class="muted">The 4 age group sections below are fixed permanently as on the homepage. Use the checklist to select 1, 2, or any sections and publish content simultaneously.</p>
+      <p class="muted">Manage the 2 learning sections below (Kids &amp; Adults). Use the checklist to assign content to Kids, Adults, or both simultaneously.</p>
     </div>
   </div>
 
-  <!-- The 4 Fixed Age Group Sections Overview -->
-  <div class="fixed-paths-preview" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+  <!-- The 2 Fixed Age Group Sections Overview -->
+  <div class="fixed-paths-preview">
     <div class="path-preview-card">
-      <img src="images/Bala%20Gurukulam.png" alt="Kids Gurukulam">
+      <img src="images/Bala%20Gurukulam.png" alt="Kids Gurukulam" onerror="this.src='images/bhagavth gita.png'">
       <div>
         <div class="path-preview-title">👶 Kids Gurukulam</div>
         <div class="path-preview-age">Ages 5 – 15</div>
@@ -155,37 +155,11 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
       </div>
     </div>
     <div class="path-preview-card">
-      <img src="images/Sadhaka%20Gurukulam.png" alt="Adults Gurukulam">
+      <img src="images/Sadhaka%20Gurukulam.png" alt="Adults Gurukulam" onerror="this.src='images/bhagavth gita.png'">
       <div>
         <div class="path-preview-title">🕉️ Adults Gurukulam</div>
         <div class="path-preview-age">Ages 16+</div>
         <div class="path-preview-sub">ఆధ్యాత్మికం • సాధన • జీవన విధానం</div>
-      </div>
-    </div>
-  </div>
-    </div>
-    <div class="path-preview-card">
-      <img src="images/Yuva%20Gurukulam.png" alt="Yuva">
-      <div>
-        <div class="path-preview-title">Yuva Gurukulam</div>
-        <div class="path-preview-age">Ages 13 – 25</div>
-        <div class="path-preview-sub">జ్ఞానం • నాయకత్వం</div>
-      </div>
-    </div>
-    <div class="path-preview-card">
-      <img src="images/Sadhaka%20Gurukulam.png" alt="Sadhaka">
-      <div>
-        <div class="path-preview-title">Sadhaka Gurukulam</div>
-        <div class="path-preview-age">Ages 26 – 55</div>
-        <div class="path-preview-sub">ఆధ్యాత్మికం • కుటుంబం</div>
-      </div>
-    </div>
-    <div class="path-preview-card">
-      <img src="images/Jnana%20Gurukulam.png" alt="Jnana">
-      <div>
-        <div class="path-preview-title">Jnana Gurukulam</div>
-        <div class="path-preview-age">Ages 56+</div>
-        <div class="path-preview-sub">భక్తి • ఆత్మజ్ఞానం</div>
       </div>
     </div>
   </div>
@@ -201,7 +175,7 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
       <div class="age-check-wrapper">
         <div class="age-check-hdr">
           <span style="font-size:1rem;font-weight:700;color:var(--maroon)">
-            ☑️ Target Age Groups Checklist (Select 1, 2, or Any):
+            ☑️ Target Age Groups Checklist (Select 1, 2, or Both):
           </span>
           <div style="display:flex;gap:6px">
             <button type="button" class="btn ghost sm" id="btnSelectAll">✓ Select All</button>
@@ -209,10 +183,10 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
           </div>
         </div>
         <p class="muted" style="font-size:.82rem;margin-bottom:8px">
-          💡 Check 1, 2, or any: Whatever boxes you check, this same lesson/course will automatically appear in all of those selected age group sections!
+          💡 Check whichever sections apply: this lesson/course will automatically appear in all selected sections across the website!
         </p>
 
-        <div class="age-check-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        <div class="age-check-grid">
           <label class="age-box checked" id="card-kids">
             <input type="checkbox" name="targetAges" value="kids" class="age-cb" checked>
             <div class="age-box-body">
@@ -228,36 +202,6 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
               <div class="age-box-title">🕉️ Adults Section</div>
               <div class="age-box-range">Ages 16+</div>
               <div class="age-box-sub">ఆధ్యాత్మికం • సాధన • జీవన విధానం</div>
-            </div>
-          </label>
-        </div>
-      </div>
-          </label>
-
-          <label class="age-box" id="card-yuva">
-            <input type="checkbox" name="targetAges" value="yuva" class="age-cb">
-            <div class="age-box-body">
-              <div class="age-box-title">🏹 Yuva Gurukulam</div>
-              <div class="age-box-range">Ages 13 – 25</div>
-              <div class="age-box-sub">జ్ఞానం • నాయకత్వం</div>
-            </div>
-          </label>
-
-          <label class="age-box" id="card-sadhaka">
-            <input type="checkbox" name="targetAges" value="sadhaka" class="age-cb">
-            <div class="age-box-body">
-              <div class="age-box-title">🕉️ Sadhaka Gurukulam</div>
-              <div class="age-box-range">Ages 26 – 55</div>
-              <div class="age-box-sub">ఆధ్యాత్మికం • కుటుంబం</div>
-            </div>
-          </label>
-
-          <label class="age-box" id="card-jnana">
-            <input type="checkbox" name="targetAges" value="jnana" class="age-cb">
-            <div class="age-box-body">
-              <div class="age-box-title">🪷 Jnana Gurukulam</div>
-              <div class="age-box-range">Ages 56+</div>
-              <div class="age-box-sub">భక్తి • ఆత్మజ్ఞానం</div>
             </div>
           </label>
         </div>
@@ -309,10 +253,8 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
     <!-- Filter Tabs -->
     <div class="filter-tabs">
       <button class="filter-btn active" data-filter="all">All Content (<span id="fAll">0</span>)</button>
-      <button class="filter-btn" data-filter="bala">👶 Bala Gurukulam (<span id="fBala">0</span>)</button>
-      <button class="filter-btn" data-filter="yuva">🏹 Yuva Gurukulam (<span id="fYuva">0</span>)</button>
-      <button class="filter-btn" data-filter="sadhaka">🕉️ Sadhaka Gurukulam (<span id="fSadhaka">0</span>)</button>
-      <button class="filter-btn" data-filter="jnana">🪷 Jnana Gurukulam (<span id="fJnana">0</span>)</button>
+      <button class="filter-btn" data-filter="kids">👶 Kids Section (<span id="fKids">0</span>)</button>
+      <button class="filter-btn" data-filter="adults">🕉️ Adults Section (<span id="fAdults">0</span>)</button>
     </div>
 
     <div id="contentList">
@@ -443,38 +385,44 @@ async function loadAll() {
 // Compute counts for filter pills
 function getAgesArray(course) {
   if (Array.isArray(course.ageGroups) && course.ageGroups.length) {
-    return course.ageGroups;
+    return course.ageGroups.map(s => String(s).toLowerCase());
   }
   if (course.ageGroup) {
-    if (course.ageGroup === "all") return ["bala", "yuva", "sadhaka", "jnana"];
-    return course.ageGroup.split(",").map(s => s.trim());
+    if (course.ageGroup === "all") return ["kids", "adults", "bala", "yuva", "sadhaka", "jnana"];
+    return course.ageGroup.split(",").map(s => s.trim().toLowerCase());
   }
-  return ["bala", "yuva", "sadhaka", "jnana"];
+  return ["kids", "adults", "bala", "yuva", "sadhaka", "jnana"];
+}
+
+function courseHasKids(course) {
+  const ages = getAgesArray(course);
+  return ages.includes("all") || ages.includes("kids") || ages.includes("bala");
+}
+
+function courseHasAdults(course) {
+  const ages = getAgesArray(course);
+  return ages.includes("all") || ages.includes("adults") || ages.includes("sadhaka") || ages.includes("yuva") || ages.includes("jnana");
 }
 
 function updateCounts() {
-  let cBala = 0, cYuva = 0, cSadhaka = 0, cJnana = 0;
+  let cKids = 0, cAdults = 0;
   windowCourses.forEach(c => {
-    const ages = getAgesArray(c);
-    if (ages.includes("bala")) cBala++;
-    if (ages.includes("yuva")) cYuva++;
-    if (ages.includes("sadhaka")) cSadhaka++;
-    if (ages.includes("jnana")) cJnana++;
+    if (courseHasKids(c)) cKids++;
+    if (courseHasAdults(c)) cAdults++;
   });
 
   $("fAll").textContent = windowCourses.length;
-  $("fBala").textContent = cBala;
-  $("fYuva").textContent = cYuva;
-  $("fSadhaka").textContent = cSadhaka;
-  $("fJnana").textContent = cJnana;
+  $("fKids").textContent = cKids;
+  $("fAdults").textContent = cAdults;
 }
 
 // Render content items with in-card checklist controls
 function renderContentList() {
   let filtered = windowCourses.filter(c => {
     if (activeFilter === "all") return true;
-    const ages = getAgesArray(c);
-    return ages.includes(activeFilter);
+    if (activeFilter === "kids") return courseHasKids(c);
+    if (activeFilter === "adults") return courseHasAdults(c);
+    return true;
   });
 
   if (!filtered.length) {
@@ -489,11 +437,8 @@ function renderContentList() {
   }
 
   $("contentList").innerHTML = filtered.map(c => {
-    const ages = getAgesArray(c);
-    const hasBala = ages.includes("bala");
-    const hasYuva = ages.includes("yuva");
-    const hasSadhaka = ages.includes("sadhaka");
-    const hasJnana = ages.includes("jnana");
+    const hasKids = courseHasKids(c);
+    const hasAdults = courseHasAdults(c);
 
     const vSrc = c.videoUrl ? parseVideoSource(c.videoUrl) : null;
     const img = c.imageUrl || (vSrc?.thumbnailUrl ? vSrc.thumbnailUrl : "images/Bala%20Gurukulam.png");
@@ -514,16 +459,10 @@ function renderContentList() {
             <div style="background:#fcf8f0;padding:8px 12px;border-radius:10px;border:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
               <span style="font-size:.78rem;font-weight:700;color:var(--maroon)">Assigned Sections:</span>
               <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
-                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="bala" ${hasBala ? 'checked' : ''} style="width:auto"> 👶 Bala
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="kids" ${hasKids ? 'checked' : ''} style="width:auto"> 👶 Kids (Ages 5–15)
               </label>
               <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
-                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="yuva" ${hasYuva ? 'checked' : ''} style="width:auto"> 🏹 Yuva
-              </label>
-              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
-                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="sadhaka" ${hasSadhaka ? 'checked' : ''} style="width:auto"> 🕉️ Sadhaka
-              </label>
-              <label style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer">
-                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="jnana" ${hasJnana ? 'checked' : ''} style="width:auto"> 🪷 Jnana
+                <input type="checkbox" class="in-card-cb" data-id="${c.id}" data-val="adults" ${hasAdults ? 'checked' : ''} style="width:auto"> 🕉️ Adults (Ages 16+)
               </label>
             </div>
           </div>
@@ -544,7 +483,7 @@ function renderContentList() {
       const card = cb.closest(".row");
       const checkedVals = Array.from(card.querySelectorAll(".in-card-cb:checked")).map(x => x.dataset.val);
       
-      const newAges = checkedVals.length ? checkedVals : ["bala", "yuva", "sadhaka", "jnana"];
+      const newAges = checkedVals.length ? checkedVals : ["kids", "adults"];
       
       try {
         await update(ref(db, "courses/" + courseId), {
@@ -627,11 +566,10 @@ function resetContentForm() {
   $("btnSubmitContent").textContent = "➕ Publish Content to Selected Age Group Sections";
   $("btnCancelEdit").style.display = "none";
   $("ytPreview").style.display = "none";
-  // Reset checklist to Bala checked
+  // Reset checklist to both checked
   document.querySelectorAll(".age-cb").forEach(cb => {
-    cb.checked = (cb.value === "bala");
-    if (cb.checked) cb.closest(".age-box")?.classList.add("checked");
-    else cb.closest(".age-box")?.classList.remove("checked");
+    cb.checked = true;
+    cb.closest(".age-box")?.classList.add("checked");
   });
 }
 $("btnCancelEdit").onclick = resetContentForm;
@@ -675,9 +613,9 @@ document.addEventListener("click", async e => {
       }
 
       // Pre-check the checklist
-      const ages = getAgesArray(course);
       document.querySelectorAll(".age-cb").forEach(cb => {
-        cb.checked = ages.includes(cb.value);
+        if (cb.value === "kids") cb.checked = courseHasKids(course);
+        else if (cb.value === "adults") cb.checked = courseHasAdults(course);
         if (cb.checked) cb.closest(".age-box")?.classList.add("checked");
         else cb.closest(".age-box")?.classList.remove("checked");
       });
