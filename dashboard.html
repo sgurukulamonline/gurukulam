@@ -272,6 +272,14 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
   .dash-sec-chips button{flex:0 0 auto;white-space:nowrap}
 }
 
+
+footer{margin-top:48px;background:var(--brown);color:var(--sand);padding:36px 16px calc(115px + env(safe-area-inset-bottom, 16px));text-align:center}
+footer h3{font-size:1.6rem;color:var(--cream);font-family:'Cormorant Garamond',serif}
+footer p{font-size:.82rem;opacity:.8;margin-top:6px}
+footer .footer-links{margin-top:14px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 16px;font-size:0.85rem}
+footer .footer-links a{color:var(--sand);text-decoration:none;transition:color .2s}
+footer .footer-links a:hover{color:var(--gold)}
+
 </style>
 </head>
 <body>
@@ -505,17 +513,24 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 
 
 <footer>
-  <h3>Sanathana Gurukulam</h3>
-  <p>Ancient wisdom • Modern learning • Timeless values</p>
-  <p style="margin-top:6px;font-size:0.85rem">
-    <a href="index.html" style="color:var(--sand);text-decoration:none">Home</a> · 
-    <a href="courses.html" style="color:var(--sand);text-decoration:none">Courses</a> · 
-    <a href="live.html" style="color:var(--sand);text-decoration:none">Live Classes</a> · 
-    <a href="community.html" style="color:var(--sand);text-decoration:none">Community</a> · 
-    <a href="privacy.html" style="color:var(--sand);text-decoration:none;font-weight:600">Privacy Policy</a> · 
-    <a href="delete-account.html" style="color:var(--sand);text-decoration:none;font-weight:600">Account Deletion</a>
-  </p>
-  <p style="margin-top:8px;font-size:0.78rem;opacity:0.75">© 2026 Sanathana Gurukulam · Reflection Media and Advertising. All rights reserved.</p>
+  <div class="wrap">
+    <h3>Sanathana Gurukulam</h3>
+    <p>Ancient wisdom • Modern learning • Timeless values</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <span style="opacity:0.4">•</span>
+      <a href="courses.html">Courses</a>
+      <span style="opacity:0.4">•</span>
+      <a href="live.html">Live Classes</a>
+      <span style="opacity:0.4">•</span>
+      <a href="community.html">Community</a>
+      <span style="opacity:0.4">•</span>
+      <a href="privacy.html" style="font-weight:600">Privacy Policy</a>
+      <span style="opacity:0.4">•</span>
+      <a href="delete-account.html" style="font-weight:600">Account Deletion</a>
+    </div>
+    <p style="margin-top:16px;font-size:0.75rem;opacity:0.65">© 2026 Sanathana Gurukulam · Reflection Media and Advertising. All rights reserved.</p>
+  </div>
 </footer>
 <!-- Floating Feedback Toast -->
 <div id="toast">
