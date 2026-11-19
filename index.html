@@ -27,12 +27,13 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .te{font-family:'Noto Sans Telugu',sans-serif}
 
 /* Header */
-header{position:sticky;top:0;z-index:50;background:rgba(252,244,226,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;gap:14px;height:68px}
+header{position:sticky;top:0;z-index:50;background:rgba(252,244,226,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:6px 0}
 .logo{display:flex;align-items:center;gap:10px}
-.logo svg{width:44px;height:44px}
-.logo b{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--maroon);line-height:1;display:block}
-.logo small{font-size:.58rem;letter-spacing:.18em;color:var(--muted)}
+.logo svg{width:44px;height:44px;flex-shrink:0}
+.logo span{display:flex;flex-direction:column;justify-content:center;padding-top:4px}
+.logo b{font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--maroon);line-height:1.06;display:block}
+.logo small{font-size:.54rem;letter-spacing:.16em;color:var(--muted);margin-top:2px;display:block}
 .search{flex:1;max-width:380px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#ecd9b0;border-radius:30px;padding:9px 16px;font-size:.85rem;color:var(--muted)}
 .search input{border:0;background:none;width:100%;font:inherit;color:var(--text);outline:none}
 nav.top{display:none;gap:22px;font-size:.88rem;font-weight:500}
@@ -46,7 +47,22 @@ nav.top a:hover{color:var(--gold)}
 
 /* Hero */
 
-.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+.hero-actions{display:flex;align-items:center;margin-top:20px}
+.hero-play-btn{
+  width:64px;height:64px;border-radius:50%;background:#ffffff;color:var(--maroon);
+  border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.35), 0 0 0 5px rgba(255,255,255,.25);
+  transition:transform .25s ease,box-shadow .25s ease,background .2s ease;
+  animation:playPulse 2.8s infinite;-webkit-tap-highlight-color:transparent;
+}
+.hero-play-btn svg{width:26px;height:26px;margin-left:3px}
+.hero-play-btn:hover{transform:scale(1.1);background:#fff8ea;box-shadow:0 12px 30px rgba(0,0,0,.45), 0 0 0 7px rgba(217,154,39,.4)}
+.hero-play-btn:active{transform:scale(0.95)}
+@keyframes playPulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.45),0 8px 24px rgba(0,0,0,.35)}
+  70%{box-shadow:0 0 0 16px rgba(255,255,255,0),0 8px 24px rgba(0,0,0,.35)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0),0 8px 24px rgba(0,0,0,.35)}
+}
 .course{display:flex;flex-direction:column;height:100%;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;border:1px solid var(--line)}
 .course:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(74,31,14,.16)}
 .course .pic{height:150px;overflow:hidden;background:#e8c98f;flex-shrink:0}
@@ -212,27 +228,24 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 /* Mobile Alignment & Polish */
 @media(max-width:560px){
   .wrap{padding:0 14px}
-  .bar{height:60px;gap:8px}
-  .logo svg{width:34px;height:34px}
-  .logo b{font-size:1.1rem;line-height:1.15}
-  .logo small{font-size:.48rem;letter-spacing:.1em}
+  .bar{min-height:64px;height:auto;padding:8px 0;gap:8px}
+  .logo svg{width:38px;height:38px;flex-shrink:0}
+  .logo span{padding-top:6px} /* moves text noticeably down from top boundary */
+  .logo b{font-size:1.08rem;line-height:1.08}
+  .logo small{font-size:.46rem;letter-spacing:.08em;margin-top:2px}
   .lang button{padding:4px 7px;font-size:.7rem}
   .avatar{width:34px;height:34px;font-size:.9rem}
   #homeNotifBtn{font-size:1.15rem;padding:2px 4px}
   
-  .hero{min-height:350px}
-  .hero .in{padding:32px 14px 40px}
+  .hero{min-height:340px}
+  .hero .in{padding:28px 14px 36px}
   .hero h1{font-size:1.95rem;line-height:1.2}
   .hero p.te{font-size:1.02rem;margin:8px 0 2px}
   .hero .rule{margin:4px 0 14px}
   
-  .hero-actions{flex-direction:column;align-items:stretch;gap:10px;margin-top:16px}
-  .hero-actions .cta,
-  .hero-actions .story,
-  .hero-actions .replay-intro-btn{width:100%!important;margin:0!important;justify-content:center;text-align:center}
-  .cta{padding:12px 20px;font-size:.92rem}
-  .story{padding:10px 18px;font-size:.85rem}
-  .replay-intro-btn{padding:9px 16px;font-size:.82rem}
+  .hero-actions{margin-top:16px;display:flex;justify-content:flex-start}
+  .hero-play-btn{width:56px;height:56px;box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 0 4px rgba(255,255,255,.25)}
+  .hero-play-btn svg{width:22px;height:22px;margin-left:2.5px}
 
   .paths{grid-template-columns:1fr!important;gap:14px!important}
   .path .pic{height:160px}
@@ -650,9 +663,9 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <p class="te" id="heroSub">భారతీయ జీవిత విధానం తరతరాలకు…</p>
       <div class="rule"></div>
       <div class="hero-actions">
-        <a class="cta" href="courses.html">Browse Courses <span aria-hidden="true">→</span></a>
-        <button class="story" id="btnStory"><i>▶</i>Watch Our Story</button>
-        <button class="replay-intro-btn" id="btnReplayIntro"><span>ॐ</span> Replay Intro</button>
+        <button class="hero-play-btn" id="btnStory" aria-label="Watch Video Story" title="Watch Video Story">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
       </div>
     </div>
   </div>
