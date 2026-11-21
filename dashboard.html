@@ -423,10 +423,7 @@ footer .footer-links a:hover{color:var(--gold)}
   <div class="panel">
     <div class="panel-head" style="flex-wrap:wrap;gap:8px">
       <h2 style="margin:0">Upcoming Live Classes</h2>
-      <div style="display:flex;gap:8px">
-        <a id="dashAdminLiveBtn" href="admin-live.html" class="btn sm" style="display:none;background:var(--maroon);color:#fff">➕ Add Live Class</a>
-        <a href="live.html" class="btn sm ghost">Live Schedule</a>
-      </div>
+      <a href="live.html" class="btn sm ghost">Live Schedule</a>
     </div>
     <div id="live"></div>
   </div>
@@ -628,8 +625,6 @@ function renderProfile() {
   if (role === "admin") {
     $("userRole").classList.add("admin");
     $("adminLink").hidden = false;
-    const dalb = $("dashAdminLiveBtn");
-    if (dalb) dalb.style.display = "inline-flex";
   }
   $("pSubTitle").textContent = (role === "admin" ? "Administrator" : "Learner") + " · Sanathana Gurukulam";
   
