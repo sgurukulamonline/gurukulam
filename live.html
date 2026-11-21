@@ -74,7 +74,20 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
 </style></head><body>
 <div class="top"><b><a href="index.html">Sanathana Gurukulam</a></b><span><a href="index.html">Home</a><a href="courses.html">Courses</a><a href="live.html" style="color:var(--gold)">Live Classes</a><a href="community.html">Community</a><a href="login.html" id="liveUserLink" style="font-weight:600">Login</a></span></div>
-<div class="wrap"><h1>Live Classes &amp; Satsangs</h1><div class="panel"><h2>Upcoming &amp; Live Now</h2><div id="up"></div></div><div class="panel"><h2>Past Sessions Archive</h2><div id="past"></div></div></div>
+<div class="wrap">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+    <h1 style="margin:0">Live Classes &amp; Satsangs</h1>
+    <a id="adminLiveScheduleBtn" href="admin-live.html" class="btn sm gold" style="display:none;font-weight:600">➕ Schedule New Live Class</a>
+  </div>
+  <div class="panel">
+    <h2>Upcoming &amp; Live Now</h2>
+    <div id="up"></div>
+  </div>
+  <div class="panel">
+    <h2>Past Sessions Archive</h2>
+    <div id="past"></div>
+  </div>
+</div>
 <footer>
   <div class="wrap">
     <h3>Sanathana Gurukulam</h3>
@@ -96,14 +109,25 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 <script type="module">
-import { list, esc, DEFAULT_LIVE, auth, onAuthStateChanged } from "./firebase-init.js";
+import { list, esc, auth, onAuthStateChanged, ensureProfile, db, ref, remove } from "./firebase-init.js";
 
-onAuthStateChanged(auth, u => {
+let isAdmin = false;
+
+onAuthStateChanged(auth, async u => {
   const link = document.getElementById("liveUserLink");
+  const adminBtn = document.getElementById("adminLiveScheduleBtn");
   if (link) {
     if (u) {
       link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Dashboard";
       link.href = "dashboard.html";
+      try {
+        const prof = await ensureProfile(u);
+        if (prof && prof.role === "admin") {
+          isAdmin = true;
+          if (adminBtn) adminBtn.style.display = "inline-flex";
+          renderClasses();
+        }
+      } catch(e) {}
     } else {
       link.textContent = "Login";
       link.href = "login.html";
@@ -129,24 +153,54 @@ const row = (c, live, upcomingBadge) => `<div class="row">
     ${live ? '<span class="badge">● LIVE NOW</span>' : upcomingBadge ? `<span class="badge upcoming">${upcomingBadge}</span>` : ""}
     <br><span class="muted">${esc(c.teacher || "Acharya")} · ${when(c.startsAt)}</span>
   </span>
-  ${live || c.startsAt > Date.now() ? (/^https?:\/\//.test(c.link || "") ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">${live ? "Join Live Class" : "Enter Room"}</a>` : "") : ""}
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    ${live || c.startsAt > Date.now() ? (/^https?:\/\//.test(c.link || "") ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">${live ? "Join Live Class" : "Enter Room"}</a>` : "") : ""}
+    ${isAdmin ? `<button class="btn sm danger btn-delete-live" data-id="${c.id}" style="background:#dc2626;color:#fff;padding:6px 12px;font-size:0.78rem">🗑️ Delete</button>` : ""}
+  </div>
 </div>`;
 
-(async () => {
+async function renderClasses() {
   try {
     let all = await list("liveClasses");
-    if (!all) all = []; const now = Date.now(), WIN = 2 * 3600e3; let up = all.filter(c => (c.startsAt || 0) + WIN > now).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0)); let past = all.filter(c => (c.startsAt || 0) + WIN <= now).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)); const isLive = c => (c.startsAt || 0) <= now && now < (c.startsAt || 0) + WIN;
+    if (!all) all = [];
+    const now = Date.now(), WIN = 2 * 3600e3;
+    let up = all.filter(c => (c.startsAt || 0) + WIN > now).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
+    let past = all.filter(c => (c.startsAt || 0) + WIN <= now).sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0));
+    const isLive = c => (c.startsAt || 0) <= now && now < (c.startsAt || 0) + WIN;
 
     document.getElementById("up").innerHTML = up.map(c => {
       const live = isLive(c);
       const diffBadge = !live ? formatDiff(c.startsAt, now) : "";
       return row(c, live, diffBadge);
-    }).join("") || '<p class="muted">No upcoming live classes scheduled at this time. Please check back later.</p>';
+    }).join("") || `
+      <div style="text-align:center;padding:36px 16px;background:rgba(217,154,39,0.05);border:1px dashed var(--line);border-radius:14px">
+        <span style="font-size:2.2rem;display:block;margin-bottom:8px">🎥</span>
+        <h3 style="font-size:1.15rem;margin-bottom:4px;color:var(--brown)">No upcoming live</h3>
+        <p class="muted" style="margin:0;font-size:0.86rem">No live sessions are currently scheduled. Please check back later.</p>
+      </div>
+    `;
 
-    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted">No past session recordings available.</p>';
+    document.getElementById("past").innerHTML = past.map(c => row(c, false, "")).join("") || '<p class="muted" style="padding:14px 0">No past session recordings available.</p>';
   } catch (e) {
     document.getElementById("up").innerHTML = '<p class="muted">Could not load classes.</p>';
   }
-})();
+}
+
+// Interactive Delete Handler for Admins
+document.addEventListener("click", async e => {
+  const btn = e.target.closest(".btn-delete-live");
+  if (!btn) return;
+  const classId = btn.dataset.id;
+  if (!classId) return;
+  if (!confirm("Are you sure you want to delete this live class?")) return;
+  try {
+    await remove(ref(db, "liveClasses/" + classId));
+    renderClasses();
+  } catch(err) {
+    alert("Could not delete class: " + err.message);
+  }
+});
+
+renderClasses();
 </script>
 </body></html>

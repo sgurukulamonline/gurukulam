@@ -358,13 +358,15 @@ let currentLiveClasses = [];
 
 async function loadLive() {
   try {
-    const ls = await list("liveClasses");
-    currentLiveClasses = ls || [];
-
-    // Check if legacy mock items exist
+    // Automatically purge any legacy mock classes on load
     const legacyMockIds = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
-    const hasMock = currentLiveClasses.some(c => legacyMockIds.includes(c.id) || (c.title && c.title.includes("Bhagavad Gita – Chapter 2")));
-    $("btnCleanMock").style.display = hasMock ? "inline-flex" : "none";
+    for (const mid of legacyMockIds) {
+      try { await remove(ref(db, `liveClasses/${mid}`)); } catch(e) {}
+    }
+
+    const ls = await list("liveClasses");
+    currentLiveClasses = (ls || []).filter(c => !legacyMockIds.includes(c.id) && !(c.title && c.title.includes("Bhagavad Gita – Chapter 2")));
+    $("btnCleanMock").style.display = "none";
 
     $("lList").innerHTML = currentLiveClasses.sort((a, b) => (b.startsAt || 0) - (a.startsAt || 0)).map(c => `
       <div class="row">

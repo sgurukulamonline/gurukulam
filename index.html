@@ -1010,7 +1010,10 @@ function bindWisdomControls() {
 // Subscribe to realtime liveClasses updates
 onValue(ref(db, "liveClasses"), snap => {
   const v = snap.val() || {};
-  currentLiveClasses = Object.entries(v).map(([id, d]) => ({ id, ...d }));
+  const legacyMocks = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
+  currentLiveClasses = Object.entries(v)
+    .filter(([id, d]) => !legacyMocks.includes(id) && !(d && d.title && d.title.includes("Bhagavad Gita – Chapter 2")))
+    .map(([id, d]) => ({ id, ...d }));
   renderLiveAndWisdom();
 });
 

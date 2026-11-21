@@ -230,15 +230,6 @@ export const DEFAULT_NOTIFICATIONS = [
     icon: "🕉️",
     link: "course.html?id=bhagavad-gita",
     createdAt: Date.now() - 3600000 * 4
-  },
-  {
-    id: "n_live_class",
-    title: "Upcoming Live Sanskrit Session",
-    message: "Acharya Veda Prakash is hosting a live chanting and pronunciation session. All sadhakas are welcome.",
-    type: "live",
-    icon: "🎥",
-    link: "live.html",
-    createdAt: Date.now() - 3600000
   }
 ];
 
@@ -644,6 +635,12 @@ export async function list(path) {
   try {
     const snap = await get(ref(db, path));
     const v = snap.val() || {};
+    const legacyMocks = ["live-gita", "live-sanskrit", "live-yoga", "live-vishnu"];
+    if (path === "liveClasses") {
+      return Object.entries(v)
+        .filter(([id, d]) => !legacyMocks.includes(id) && !(d && d.title && d.title.includes("Bhagavad Gita – Chapter 2")))
+        .map(([id, d]) => ({ id, ...d }));
+    }
     return Object.entries(v).map(([id, d]) => ({ id, ...d }));
   } catch (err) {
     console.warn(`list(${path}) error:`, err);

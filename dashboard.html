@@ -421,9 +421,12 @@ footer .footer-links a:hover{color:var(--gold)}
 
   <!-- Live Classes -->
   <div class="panel">
-    <div class="panel-head">
-      <h2>Upcoming Live Classes</h2>
-      <a href="live.html" class="btn sm ghost">Live Schedule</a>
+    <div class="panel-head" style="flex-wrap:wrap;gap:8px">
+      <h2 style="margin:0">Upcoming Live Classes</h2>
+      <div style="display:flex;gap:8px">
+        <a id="dashAdminLiveBtn" href="admin-live.html" class="btn sm" style="display:none;background:var(--maroon);color:#fff">➕ Add Live Class</a>
+        <a href="live.html" class="btn sm ghost">Live Schedule</a>
+      </div>
     </div>
     <div id="live"></div>
   </div>
@@ -625,6 +628,8 @@ function renderProfile() {
   if (role === "admin") {
     $("userRole").classList.add("admin");
     $("adminLink").hidden = false;
+    const dalb = $("dashAdminLiveBtn");
+    if (dalb) dalb.style.display = "inline-flex";
   }
   $("pSubTitle").textContent = (role === "admin" ? "Administrator" : "Learner") + " · Sanathana Gurukulam";
   
@@ -963,12 +968,18 @@ async function load() {
     $("live").innerHTML = live.map(c => `
       <div class="row">
         <span>
-          <b>${esc(c.title)}</b> ${c.startsAt <= now + 3600000 && c.startsAt >= now - 3600000 ? '<span class="tag" style="background:#ef4444;color:#fff">● LIVE</span>' : ''}
+          <b>${esc(c.title)}</b> ${c.startsAt <= now + 3600000 && c.startsAt >= now - 3600000 ? '<span class="tag" style="background:#ef4444;color:#fff">● LIVE NOW</span>' : ''}
           <br><span class="muted">${esc(c.teacher || "Instructor")} · ${when(c.startsAt)}</span>
         </span>
         ${c.link ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">Join Class →</a>` : ''}
       </div>
-    `).join("") || '<p class="muted">No upcoming live classes scheduled at the moment.</p>';
+    `).join("") || `
+      <div style="text-align:center;padding:26px 14px;background:rgba(217,154,39,0.04);border:1px dashed var(--line);border-radius:14px">
+        <span style="font-size:1.8rem;display:block;margin-bottom:6px">🎥</span>
+        <p style="margin:0;font-weight:600;font-size:0.95rem;color:var(--brown)">No upcoming live</p>
+        <small class="muted">New sessions scheduled by Acharyas will appear here</small>
+      </div>
+    `;
 
     // Update Stats
     $("sE").textContent = mine.length;
