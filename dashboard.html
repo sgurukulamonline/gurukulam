@@ -952,7 +952,7 @@ async function load() {
       get(ref(db, "enrollments/" + me.uid))
     ]);
 
-    courses = cs && cs.length ? cs.filter(c => c.published !== false) : [...DEFAULT_COURSES];
+    courses = cs && cs.length ? cs.filter(c => c.published !== false) : [];
     enr = en.val() || {};
 
     const prog = c => (enr[c.id] && typeof enr[c.id].progress === "number") ? enr[c.id].progress : 0;
@@ -1041,7 +1041,7 @@ document.addEventListener("click", async e => {
     toast("Enrolled successfully! May Saraswati bless your study. 🙏", "📖");
   } else if (stepId) {
     b.disabled = true;
-    const c = courses.find(x => x.id === stepId) || DEFAULT_COURSES.find(x => x.id === stepId);
+    const c = courses.find(x => x.id === stepId);
     const totalLessons = getCourseLessonCount(c);
     const doneObj = { ...(enr[stepId]?.done || {}) };
     

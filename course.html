@@ -433,7 +433,7 @@ async function load() {
   }
 
   const snap = await get(ref(db, "courses/" + id));
-  course = snap.val() || DEFAULT_COURSES.find(x => x.id === id);
+  course = snap.val();
 
   if (!course) {
     box.innerHTML = `<div style="text-align:center;padding:40px">

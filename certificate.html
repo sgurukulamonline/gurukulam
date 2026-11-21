@@ -164,7 +164,7 @@ async function verifyAndRender(targetUserId, recipientName) {
     get(ref(db, "users/" + targetUserId))
   ]);
 
-  const course = c.val() || DEFAULT_COURSES.find(x => x.id === id);
+  const course = c.val();
   const enr = e.val();
   const userProfile = u.val();
   const studentName = recipientName || userProfile?.name || userProfile?.displayName || "Sadhaka";

@@ -33,169 +33,13 @@ const hasRealFirebase = Boolean(
 // -------------------------------------------------------------
 // DEFAULT DATA SET FOR GURUKULAM
 // -------------------------------------------------------------
-export const DEFAULT_COURSES = [
-  {
-    id: "bhagavad-gita",
-    title: "Bhagavad Gita for Beginners",
-    desc: "Understand the timeless spiritual wisdom of the Bhagavad Gita explained simply with daily life applications.",
-    type: "free",
-    lessons: 12,
-    ageGroups: ["kids", "adults", "bala", "sadhaka"],
-    ageGroup: "kids,adults",
-    imageUrl: "images/bhagavth gita.png",
-    videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
-    published: true,
-    pinned: true,
-    pinOrder: 1,
-    releaseTime: 1727800000000,
-    sections: [
-      {
-        id: "sec_gita_1",
-        type: "video",
-        title: "Introduction to Gita Wisdom",
-        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
-      },
-      {
-        id: "sec_gita_2",
-        type: "image",
-        title: "Vedic Wisdom Concept Map",
-        url: "images/bhagavth gita.png",
-        caption: "Sacred map of Kurukshetra & Arjuna Vishada Yoga"
-      },
-      {
-        id: "sec_gita_3",
-        type: "matter",
-        title: "Daily Swadhyaya Note",
-        text: "The Bhagavad Gita is the essence of all Upanishads. As the traditional meditation verse says: 'Sarvopanishado gavo, dogdha gopala-nandana' — All the Upanishads are the cows, the milker is Sri Krishna, the calf is Arjuna, and the nectar-like Gita is the supreme milk."
-      }
-    ],
-    createdAt: 1727800000000
-  },
-  {
-    id: "sanskrit-basics",
-    title: "Sanskrit Basics & Pronunciation",
-    desc: "Learn to read, pronounce, and understand Samskritam vocabulary, mantras, and shlokas with correct intonation.",
-    type: "free",
-    lessons: 24,
-    ageGroups: ["kids", "adults", "bala", "sadhaka"],
-    ageGroup: "kids,adults",
-    imageUrl: "images/sanskrit basics.png",
-    videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
-    published: true,
-    pinned: true,
-    pinOrder: 2,
-    releaseTime: 1727801000000,
-    sections: [
-      {
-        id: "sec_sans_1",
-        type: "video",
-        title: "Varnamala & Correct Akshara Pronunciation",
-        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
-      },
-      {
-        id: "sec_sans_2",
-        type: "matter",
-        title: "Introduction to Devanagari Aksharas",
-        text: "Sanskrit is known as the Devavani (language of the gods). Every sound originates from specific articulation points (Kanthya, Talavya, Murdhanya, Dantya, and Oshthya). Correct pronunciation aligns physical vibrations with inner calm."
-      }
-    ],
-    createdAt: 1727801000000
-  },
-  {
-    id: "indian-history",
-    title: "Indian History True Perspective",
-    desc: "Discover the authentic civilizational heritage, historical milestones, and contributions of ancient Bharat.",
-    type: "free",
-    lessons: 28,
-    ageGroups: ["kids", "adults", "bala", "sadhaka"],
-    ageGroup: "kids,adults",
-    imageUrl: "images/india history.png",
-    videoUrl: "https://www.youtube.com/watch?v=2b1z9CgH-Vw",
-    published: true,
-    pinned: true,
-    pinOrder: 3,
-    releaseTime: 1727802000000,
-    sections: [
-      {
-        id: "sec_hist_1",
-        type: "video",
-        title: "Bharat: Civilizational Roots & Timeless Heritage",
-        url: "https://www.youtube.com/watch?v=2b1z9CgH-Vw"
-      },
-      {
-        id: "sec_hist_2",
-        type: "matter",
-        title: "The Continuity of Sanathana Dharma",
-        text: "Unlike civilizations that vanished with time, the Sanathana culture of Bharat has maintained an unbroken chain of philosophical inquiry, scientific contributions, temple architecture, and cultural wisdom for thousands of years."
-      }
-    ],
-    createdAt: 1727802000000
-  },
-  {
-    id: "ramayanam",
-    title: "Ramayana Deep Study",
-    desc: "An in-depth exploration of Valmiki Ramayana, character ethics, dharma, and leadership virtues.",
-    type: "free",
-    lessons: 32,
-    ageGroups: ["kids", "adults", "bala", "sadhaka"],
-    ageGroup: "kids,adults",
-    imageUrl: "images/ramayanam.png",
-    videoUrl: "",
-    published: true,
-    createdAt: 1727803000000
-  },
-  {
-    id: "yoga-daily",
-    title: "Yoga for Daily Life",
-    desc: "Daily guided asanas, pranayama, and mindfulness routines for physical vitality and spiritual calm.",
-    type: "free",
-    lessons: 20,
-    ageGroups: ["adults", "sadhaka", "yuva"],
-    ageGroup: "adults",
-    imageUrl: "",
-    videoUrl: "",
-    published: true,
-    createdAt: 1727804000000
-  },
-  {
-    id: "vishnu-sahasranamam",
-    title: "Vishnu Sahasranamam Chanting & Meaning",
-    desc: "Learn the proper chanting, stotra cadence, and profound philosophical meanings of the 1,000 sacred names.",
-    type: "free",
-    lessons: 10,
-    ageGroups: ["adults", "sadhaka", "jnana"],
-    ageGroup: "adults",
-    imageUrl: "",
-    videoUrl: "",
-    published: true,
-    createdAt: 1727805000000
-  },
-  {
-    id: "intro-vedas",
-    title: "Introduction to the Vedas",
-    desc: "Foundational overview of the four Vedas, Upanishads, Vedic vision of reality, and cultural ethos.",
-    type: "free",
-    lessons: 18,
-    ageGroups: ["adults", "sadhaka", "jnana"],
-    ageGroup: "adults",
-    imageUrl: "",
-    videoUrl: "",
-    published: true,
-    createdAt: 1727806000000
-  },
-  {
-    id: "temple-culture",
-    title: "Temple Culture & Architecture",
-    desc: "Understand the sacred geometry, Agama shastras, and spiritual symbolism behind ancient Indian temples.",
-    type: "free",
-    lessons: 16,
-    ageGroups: ["adults", "sadhaka"],
-    ageGroup: "adults",
-    imageUrl: "",
-    videoUrl: "",
-    published: true,
-    createdAt: 1727807000000
-  }
+// Courses start clean and empty until the admin adds them from the dashboard
+export const DEFAULT_COURSES = [];
+
+export const LEGACY_SAMPLE_COURSE_IDS = [
+  "bhagavad-gita", "sanskrit-basics", "indian-history", "ramayanam",
+  "yoga-daily", "vishnu-sahasranamam", "intro-vedas", "temple-culture",
+  "vedas-intro", "ramayana"
 ];
 
 export const DEFAULT_LIVE = [];
@@ -293,13 +137,9 @@ function initMockDB() {
       "learner-1": { name: "Learner", email: "learner@gurukulam.org", role: "learner", createdAt: Date.now() },
       "admin-1": { name: "Admin", email: "admin@gurukulam.org", role: "admin", createdAt: Date.now() }
     },
-    enrollments: {
-      "learner-1": {
-        "bhagavad-gita": { progress: 35, enrolledAt: Date.now() - 86400000 * 3, done: { L1: true, L2: true, L3: true, L4: true } }
-      }
-    }
+    enrollments: {}
   };
-  DEFAULT_COURSES.forEach(c => { initial.courses[c.id] = c; });
+  // Courses start clean and empty until added by admin
   // No mock live classes seeded - only admin scheduled classes appear
   DEFAULT_NOTIFICATIONS.forEach(n => { initial.notifications[n.id] = n; });
   DEFAULT_PATHS.forEach(p => { initial.learningPaths[p.id] = p; });
@@ -308,6 +148,18 @@ function initMockDB() {
 }
 
 let mockDB = initMockDB();
+
+// Clean up any legacy sample courses from existing localStorage
+if (mockDB && mockDB.courses) {
+  let coursesCleaned = false;
+  for (const cid of LEGACY_SAMPLE_COURSE_IDS) {
+    if (mockDB.courses[cid]) {
+      delete mockDB.courses[cid];
+      coursesCleaned = true;
+    }
+  }
+  if (coursesCleaned) localStorage.setItem(LS_DB_KEY, JSON.stringify(mockDB));
+}
 
 // Ensure mock notifications exist in existing localStorage
 if (mockDB && (!mockDB.notifications || !Object.keys(mockDB.notifications).length)) {
@@ -435,28 +287,44 @@ if (hasRealFirebase) {
     realApp = initializeApp(firebaseConfig);
     realAuth = getAuth(realApp);
     realDb = getDatabase(realApp);
+    cleanLegacySampleCourses().catch(() => {});
     seedDefaultDataIfEmpty().catch(() => {});
   } catch (err) {
     console.warn("Could not initialize real Firebase, falling back to local mode:", err);
   }
 }
 
-export async function seedDefaultDataIfEmpty() {
+export async function cleanLegacySampleCourses() {
   if (!realDb) return;
   try {
     const snap = await fbGet(fbRef(realDb, "courses"));
-    if (!snap.exists() || !snap.val() || Object.keys(snap.val()).length === 0) {
-      console.log("Seeding initial Gurukulam catalog to Firebase Realtime Database...");
-      const initialCourses = {};
-      DEFAULT_COURSES.forEach(c => { initialCourses[c.id] = c; });
-      await fbSet(fbRef(realDb, "courses"), initialCourses);
+    if (snap.exists() && snap.val()) {
+      const all = snap.val();
+      for (const id of LEGACY_SAMPLE_COURSE_IDS) {
+        if (all[id] && !all[id].isCustomUserCourse && !all[id].createdByAdmin) {
+          await fbRemove(fbRef(realDb, "courses/" + id)).catch(() => {});
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Clean legacy sample courses check:", err);
+  }
+}
 
-      // Live classes start empty - populated strictly by admin in Firebase
+export async function seedDefaultDataIfEmpty() {
+  if (!realDb) return;
+  try {
+    // Courses are kept strictly clean and empty - populated only when admin adds them from dashboard
 
+    const notifSnap = await fbGet(fbRef(realDb, "notifications"));
+    if (!notifSnap.exists() || !notifSnap.val() || Object.keys(notifSnap.val()).length === 0) {
       const initialNotifs = {};
       DEFAULT_NOTIFICATIONS.forEach(n => { initialNotifs[n.id] = n; });
       await fbSet(fbRef(realDb, "notifications"), initialNotifs);
+    }
 
+    const commSnap = await fbGet(fbRef(realDb, "community"));
+    if (!commSnap.exists() || !commSnap.val() || Object.keys(commSnap.val()).length === 0) {
       await fbSet(fbRef(realDb, "community"), DEFAULT_COMMUNITY);
     }
 
@@ -641,10 +509,15 @@ export async function list(path) {
         .filter(([id, d]) => !legacyMocks.includes(id) && !(d && d.title && d.title.includes("Bhagavad Gita – Chapter 2")))
         .map(([id, d]) => ({ id, ...d }));
     }
+    if (path === "courses") {
+      return Object.entries(v)
+        .filter(([id, d]) => !LEGACY_SAMPLE_COURSE_IDS.includes(id) || d?.isCustomUserCourse || d?.createdByAdmin)
+        .map(([id, d]) => ({ id, ...d }));
+    }
     return Object.entries(v).map(([id, d]) => ({ id, ...d }));
   } catch (err) {
     console.warn(`list(${path}) error:`, err);
-    if (path === "courses") return [...DEFAULT_COURSES];
+    if (path === "courses") return [];
     if (path === "liveClasses") return [];
     if (path === "notifications") return [...DEFAULT_NOTIFICATIONS];
     return [];
@@ -690,7 +563,11 @@ export async function syncLocalProgressToCloud(user) {
 
       // Union of completed lessons
       const mergedDone = { ...(localData.done || {}), ...(cloudData.done || {}) };
-      const courseObj = DEFAULT_COURSES.find(c => c.id === cid) || {};
+      let courseObj = {};
+      try {
+        const cSnap = await get(ref(db, "courses/" + cid));
+        if (cSnap.exists()) courseObj = cSnap.val() || {};
+      } catch(e) {}
       const totalLessons = getCourseLessonCount(courseObj);
       const count = Object.keys(mergedDone).length;
       const mergedProgress = Math.max(localData.progress || 0, cloudData.progress || 0, Math.min(100, Math.round(count / totalLessons * 100)));
@@ -1017,7 +894,15 @@ export function getCourseLessonCount(c) {
 export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = false) {
   try {
     let cs = (await list("courses")).filter(c => c.published !== false);
-    if (!cs.length) cs = [...DEFAULT_COURSES];
+    const sec = el ? el.closest("section") : null;
+
+    if (!cs.length) {
+      if (sec) sec.style.display = "none";
+      if (el) el.innerHTML = "";
+      return;
+    }
+
+    if (sec) sec.style.display = "";
 
     if (onlyPinned) {
       // Sort pinned courses first, by pinOrder or releaseTime
@@ -1054,7 +939,10 @@ export async function loadCourses(el, limit, onlyPinned = false, showMoreCard = 
 
     el.innerHTML = html;
   } catch (e) {
-    console.warn("Using built-in course list:", e.code || e);
+    console.warn("Could not load courses from database:", e.code || e);
+    const sec = el ? el.closest("section") : null;
+    if (sec) sec.style.display = "none";
+    if (el) el.innerHTML = "";
   }
 }
 

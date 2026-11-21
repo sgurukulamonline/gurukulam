@@ -385,7 +385,7 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 async function loadAll() {
   try {
     const cs = await list("courses");
-    windowCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
+    windowCourses = (cs && cs.length) ? cs : [];
 
     updateCounts();
     renderContentList();

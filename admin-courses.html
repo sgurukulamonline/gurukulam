@@ -507,7 +507,7 @@ async function load() {
     }
 
     const cs = await list("courses");
-    window._adminCourses = (cs && cs.length) ? cs : [...DEFAULT_COURSES];
+    window._adminCourses = (cs && cs.length) ? cs : [];
 
     $("cList").innerHTML = window._adminCourses.map(c => {
       const isPinned = c.pinned === true || c.pinned === "true";
@@ -599,7 +599,9 @@ $("cForm").onsubmit = async e => {
     published: f.published === "1",
     lessons: currentLessons,
     lessonCount: currentLessons.length,
-    sections: flatBlocks
+    sections: flatBlocks,
+    isCustomUserCourse: true,
+    createdByAdmin: true
   };
 
   // Find first video in any lesson for cover videoUrl
