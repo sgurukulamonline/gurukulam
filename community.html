@@ -174,7 +174,6 @@ requireUser((u, p) => {
 
 function renderMsgs(v) {
   $("msgs").innerHTML = Object.entries(v).map(([k, m]) => {
-    const timeStr = m.at ? new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
     const canDelete = prof?.role === "admin" || (me && m.uid === me.uid);
     const safeName = sanitizeSeekerName(m.name);
     const avatar = m.avatar || "🕉️";
@@ -191,7 +190,7 @@ function renderMsgs(v) {
           ${leaderBadge}
           ${adminBadge}
         </span>
-        <span><span class="time">${timeStr}</span> ${canDelete ? `<button class="x" data-del="${k}" title="Delete message">✕</button>` : ""}</span>
+        ${canDelete ? `<button class="x" data-del="${k}" title="Delete message">✕</button>` : ""}
       </small>
       <div style="margin-top:2px;word-break:break-word">${esc(m.text || "")}</div>
     </div>`;
