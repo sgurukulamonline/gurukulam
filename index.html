@@ -27,23 +27,39 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .te{font-family:'Noto Sans Telugu',sans-serif}
 
 /* Header */
-header{position:sticky;top:0;z-index:50;background:rgba(252,244,226,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
-.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:6px 0}
-.logo{display:flex;align-items:center;gap:10px}
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(252,244,226,.94);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:max(8px, env(safe-area-inset-top, 8px)) max(18px, env(safe-area-inset-right, 18px)) 8px max(18px, env(safe-area-inset-left, 18px));
+}
+.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:4px 8px;box-sizing:border-box}
+.logo{display:flex;align-items:center;gap:10px;margin-left:6px;flex-shrink:0}
 .logo svg{width:44px;height:44px;flex-shrink:0}
-.logo span{display:flex;flex-direction:column;justify-content:center;padding-top:4px}
+.logo span{display:flex;flex-direction:column;justify-content:center;padding-top:2px}
 .logo b{font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--maroon);line-height:1.06;display:block}
 .logo small{font-size:.54rem;letter-spacing:.16em;color:var(--muted);margin-top:2px;display:block}
-.search{flex:1;max-width:380px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#ecd9b0;border-radius:30px;padding:9px 16px;font-size:.85rem;color:var(--muted)}
+.search{flex:1;max-width:360px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#ecd9b0;border-radius:30px;padding:9px 16px;font-size:.85rem;color:var(--muted)}
 .search input{border:0;background:none;width:100%;font:inherit;color:var(--text);outline:none}
-nav.top{display:none;gap:22px;font-size:.88rem;font-weight:500}
+nav.top{display:none;gap:20px;font-size:.88rem;font-weight:500}
 nav.top a:hover{color:var(--gold)}
-.lang{display:flex;border:1px solid var(--maroon);border-radius:20px;overflow:hidden;font-size:.78rem}
+.lang{display:flex;border:1px solid var(--maroon);border-radius:20px;overflow:hidden;font-size:.78rem;flex-shrink:0}
 .lang button{padding:5px 12px}
 .lang .on{background:var(--maroon);color:var(--cream)}
-.avatar{width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
-@media(min-width:900px){nav.top{display:flex}}
-@media(max-width:560px){.search{display:none}.bar{justify-content:space-between}}
+.avatar{
+  width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);
+  display:grid;place-items:center;font-size:1.1rem;margin-right:6px;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(74,31,14,.18);transition:transform .15s ease;
+}
+.avatar:hover{transform:scale(1.05)}
+@media(min-width:980px){nav.top{display:flex}}
+@media(max-width:880px){.search{display:none}}
+@media(max-width:768px){
+  header{padding:max(8px, env(safe-area-inset-top, 8px)) max(14px, env(safe-area-inset-right, 14px)) 6px max(14px, env(safe-area-inset-left, 14px))}
+  .bar{padding:4px 6px;gap:10px}
+}
+@media(max-width:560px){.bar{justify-content:space-between}}
 
 /* Hero */
 
@@ -235,15 +251,20 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
 /* Mobile Alignment & Polish */
 @media(max-width:560px){
-  .wrap{padding:0 14px}
-  .bar{min-height:64px;height:auto;padding:8px 0;gap:8px}
-  .logo svg{width:38px;height:38px;flex-shrink:0}
-  .logo span{padding-top:6px} /* moves text noticeably down from top boundary */
-  .logo b{font-size:1.08rem;line-height:1.08}
-  .logo small{font-size:.46rem;letter-spacing:.08em;margin-top:2px}
-  .lang button{padding:4px 7px;font-size:.7rem}
-  .avatar{width:34px;height:34px;font-size:.9rem}
-  #homeNotifBtn{font-size:1.15rem;padding:2px 4px}
+  header{
+    padding:max(10px, env(safe-area-inset-top, 10px)) max(14px, env(safe-area-inset-right, 14px)) 8px max(14px, env(safe-area-inset-left, 14px));
+  }
+  .wrap{padding:0 12px}
+  .bar{min-height:60px;height:auto;padding:4px 4px;gap:8px;box-sizing:border-box}
+  .logo{margin-left:6px;gap:8px;flex-shrink:1;min-width:0}
+  .logo svg{width:36px;height:36px;flex-shrink:0}
+  .logo span{padding-top:2px;flex-shrink:1;min-width:0}
+  .logo b{font-size:1.04rem;line-height:1.06;white-space:nowrap}
+  .logo small{font-size:.44rem;letter-spacing:.06em;margin-top:1px;white-space:nowrap}
+  .lang{flex-shrink:0;margin-left:auto}
+  .lang button{padding:4px 6px;font-size:.68rem}
+  .avatar{width:36px;height:36px;font-size:.92rem;margin-right:6px;flex-shrink:0}
+  #homeNotifBtn{font-size:1.15rem;padding:2px 4px;flex-shrink:0}
   
   .hero{aspect-ratio:auto;min-height:420px;background-position:72% bottom}
   .hero .in{padding:28px 14px 36px}
