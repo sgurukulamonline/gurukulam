@@ -112,7 +112,7 @@ onAuthStateChanged(auth, u => {
   const link = document.getElementById("liveUserLink");
   if (link) {
     if (u) {
-      link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Dashboard";
+      link.textContent = u.displayName ? ("Namaste " + u.displayName.split(" ")[0]) : "Profile";
       link.href = "dashboard.html";
     } else {
       link.textContent = "Login";
