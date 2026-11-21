@@ -176,10 +176,12 @@ window.handleOtpSuccess = async (data) => {
     verifiedEmail = data.email || "";
   }
 
-  const cleanDigits = String(verifiedPhone).replace(/\D/g, "");
+  const rawDigits = String(verifiedPhone).replace(/\D/g, "");
+  // Canonical 10-digit phone normalization for guaranteed cross-device & cross-provider sync
+  const cleanDigits = rawDigits.length >= 10 ? rawDigits.slice(-10) : rawDigits;
   const uid = cleanDigits ? ("ph_" + cleanDigits) : ("ph_" + Date.now().toString(36));
   const displayName = cleanDigits ? ("Sadhaka (" + cleanDigits.slice(-4) + ")") : "Sadhaka";
-  const formattedPhone = cleanDigits ? ("+91 " + cleanDigits.slice(-10)) : (verifiedPhone || "");
+  const formattedPhone = cleanDigits ? ("+91 " + cleanDigits) : (verifiedPhone || "");
   const email = verifiedEmail || "";
 
   const userObj = {
@@ -194,7 +196,11 @@ window.handleOtpSuccess = async (data) => {
   setMockUser(userObj);
 
   try {
-    await ensureProfile(userObj);
+    const existingProfile = await ensureProfile(userObj);
+    if (existingProfile && existingProfile.name && existingProfile.name !== userObj.displayName) {
+      userObj.displayName = existingProfile.name;
+      setMockUser(userObj);
+    }
   } catch (err) {
     console.warn("ensureProfile fallback:", err);
   }
