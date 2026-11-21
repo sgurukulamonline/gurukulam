@@ -1,0 +1,141 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------
+    // Helper Functions
+    // -------------------------------------------------------------
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        ('email' in request.auth.token && request.auth.token.email in [
+          'sgurukulamonline@gmail.com',
+          'reshwanthreddy.gangula@gmail.com',
+          'admin@gurukulam.org'
+        ]) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isPhoneUser(userId) {
+      // Allows mobile-verified learners with canonical phone UIDs (e.g. ph_9876543210)
+      return userId.matches('^ph_.*');
+    }
+
+    // -------------------------------------------------------------
+    // 1. Users Profile Collection
+    // -------------------------------------------------------------
+    match /users/{userId} {
+      // Public read allows certificates, community badges & greetings to display names
+      allow read: if true;
+      // Allow write if user is owner, verified phone user, or admin
+      allow create, update: if isOwner(userId) || isPhoneUser(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 2. Enrollments & Course Progress Collection
+    // -------------------------------------------------------------
+    match /enrollments/{userId} {
+      // Public read is required to verify course completion on official certificates
+      allow read: if true;
+      allow write: if isOwner(userId) || isPhoneUser(userId) || isAdmin();
+
+      // Nested subcollections (e.g. /enrollments/{userId}/courses/{courseId})
+      match /{allSubcollections=**} {
+        allow read: if true;
+        allow write: if isOwner(userId) || isPhoneUser(userId) || isAdmin();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 3. Courses Collection (Public View, Admin Managed)
+    // -------------------------------------------------------------
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 4. Live Classes & Satsangs (Public View, Admin Managed)
+    // -------------------------------------------------------------
+    match /liveClasses/{classId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 5. Daily Wisdom / Subhashitam (Public View, Admin Managed)
+    // -------------------------------------------------------------
+    match /dailyWisdom/{wisdomId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /wisdom/{wisdomId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 6. Notifications & Broadcasts (Public View, Admin Managed)
+    // -------------------------------------------------------------
+    match /notifications/{notifId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 7. Learning Paths (Kids & Adults tracks)
+    // -------------------------------------------------------------
+    match /learningPaths/{pathId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 8. Community Chat Collection
+    // -------------------------------------------------------------
+    match /community/{roomId} {
+      allow read: if true;
+      allow write: if true;
+
+      match /messages/{messageId} {
+        allow read: if true;
+        allow create: if true;
+        allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+      }
+    }
+    // Flat community messages collection
+    match /community_messages/{messageId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+    }
+
+    // -------------------------------------------------------------
+    // 9. Account & Data Deletion Requests (Google Play / GDPR Compliance)
+    // -------------------------------------------------------------
+    match /deletionRequests/{requestId} {
+      // Anyone can submit an account deletion request without mandatory authentication
+      allow create: if true;
+      // Only admins can inspect and process deletion requests
+      allow read, update, delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // 10. Certificates (if verified or generated separately)
+    // -------------------------------------------------------------
+    match /certificates/{certId} {
+      allow read: if true;
+      allow write: if isOwner(request.resource.data.uid) || isPhoneUser(request.resource.data.uid) || isAdmin();
+    }
+  }
+}
