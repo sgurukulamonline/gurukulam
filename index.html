@@ -306,13 +306,13 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 
 
 /* ============================================================= */
-/* Super Cool Cinematic "Divya Prakasha" Website Intro           */
+/* Super Cool 3D Model & Cinematic Typography Website Intro      */
 /* ============================================================= */
 #sgIntroOverlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background: radial-gradient(ellipse at 50% 48%, #260b04 0%, #150502 55%, #080201 100%);
+  background: radial-gradient(ellipse at 50% 50%, #1e0903 0%, #100402 55%, #050101 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -321,273 +321,512 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.8s ease;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  transition: opacity 0.85s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.85s ease;
+  user-select: none;
 }
 #sgIntroOverlay.intro-bloom-out {
   opacity: 0;
-  transform: scale(1.15);
-  filter: blur(12px) brightness(1.25);
+  filter: blur(14px) brightness(1.35);
   pointer-events: none;
+}
+#sgIntroOverlay.intro-bloom-out .intro-3d-stage {
+  transform: translateZ(280px) scale(1.22) rotateX(0deg) rotateY(0deg) !important;
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.8s ease;
 }
 #sgIntroOverlay.intro-hidden {
   display: none !important;
 }
 
-/* Ambient Cosmic Gold Aura */
-.intro-portal-auras {
+/* Ambient Cosmic Gold Atmosphere & Particle Canvas */
+#sgIntroParticlesCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.intro-ambient-auras {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   pointer-events: none;
   overflow: hidden;
+  z-index: 1;
 }
-.intro-glow-core {
+
+.intro-divine-glow {
   position: absolute;
-  width: 520px;
-  height: 520px;
+  width: 650px;
+  height: 650px;
   max-width: 95vw;
   max-height: 95vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(230, 169, 53, 0.28) 0%, rgba(122, 46, 22, 0.16) 45%, transparent 72%);
-  filter: blur(40px);
-  animation: introAuraPulse 3.5s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(235, 172, 58, 0.22) 0%, rgba(140, 52, 25, 0.14) 50%, transparent 72%);
+  filter: blur(45px);
+  animation: introAuraPulse 3.8s ease-in-out infinite alternate;
 }
 @keyframes introAuraPulse {
-  0% { transform: scale(0.85); opacity: 0.6; }
+  0% { transform: scale(0.9); opacity: 0.65; }
   100% { transform: scale(1.25); opacity: 1; }
 }
 
-/* Concentric Expanding Halo Waves */
-.intro-halo-ring {
+/* Rotating Sacred Mandala Halo */
+.intro-sacred-mandala {
   position: absolute;
-  width: 320px;
-  height: 320px;
+  width: 580px;
+  height: 580px;
+  max-width: 92vw;
+  max-height: 92vw;
   border-radius: 50%;
-  border: 1px solid rgba(217, 154, 39, 0.35);
-  box-shadow: 0 0 30px rgba(217, 154, 39, 0.2), inset 0 0 20px rgba(217, 154, 39, 0.1);
-  animation: introHaloExpand 4s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
+  border: 1px dashed rgba(217, 154, 39, 0.35);
+  animation: introMandalaSpin 40s linear infinite;
+  pointer-events: none;
 }
-.intro-halo-ring:nth-child(2) {
-  animation-delay: 1.3s;
-}
-.intro-halo-ring:nth-child(3) {
-  animation-delay: 2.6s;
-}
-@keyframes introHaloExpand {
-  0% { transform: scale(0.5); opacity: 0.9; }
-  80% { opacity: 0.3; }
-  100% { transform: scale(1.9); opacity: 0; }
-}
-
-/* Sacred Geometric Rotating Mandala */
-.intro-mandala-svg {
+.intro-sacred-mandala::before {
+  content: '';
   position: absolute;
-  width: 380px;
-  height: 380px;
-  max-width: 85vw;
-  max-height: 85vw;
-  animation: introMandalaSpin 30s linear infinite;
-  opacity: 0.35;
-  filter: drop-shadow(0 0 16px rgba(217, 154, 39, 0.45));
+  inset: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 201, 143, 0.25);
 }
 @keyframes introMandalaSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* Golden Stardust Particles */
-.intro-stardust {
+/* Concentric Expanding Golden Rings */
+.intro-halo-wave {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: 
-    radial-gradient(2px 2px at 15% 25%, rgba(255, 235, 190, 0.9), transparent),
-    radial-gradient(1.5px 1.5px at 35% 75%, rgba(217, 154, 39, 0.8), transparent),
-    radial-gradient(2px 2px at 60% 30%, rgba(255, 248, 234, 0.85), transparent),
-    radial-gradient(1.5px 1.5px at 80% 65%, rgba(217, 154, 39, 0.75), transparent),
-    radial-gradient(2.5px 2.5px at 50% 85%, rgba(255, 215, 130, 0.8), transparent),
-    radial-gradient(1.5px 1.5px at 90% 20%, rgba(247, 232, 200, 0.7), transparent),
-    radial-gradient(2px 2px at 25% 60%, rgba(217, 154, 39, 0.85), transparent);
-  background-size: 400px 300px;
-  opacity: 0.65;
-  animation: introDustDrift 20s linear infinite;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 154, 39, 0.3);
+  box-shadow: 0 0 25px rgba(217, 154, 39, 0.2);
+  animation: introHaloWave 4.2s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
 }
-@keyframes introDustDrift {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-300px); }
+.intro-halo-wave:nth-child(2) { animation-delay: 1.4s; }
+.intro-halo-wave:nth-child(3) { animation-delay: 2.8s; }
+@keyframes introHaloWave {
+  0% { transform: scale(0.65); opacity: 0.9; }
+  80% { opacity: 0.25; }
+  100% { transform: scale(2.1); opacity: 0; }
 }
 
-/* Center Content Architecture */
-.intro-center-stage {
+/* ============================================================= */
+/* 3D Model Stage & Diorama Shrine                               */
+/* ============================================================= */
+.intro-3d-stage {
   position: relative;
-  z-index: 3;
-  text-align: center;
-  padding: 0 24px;
-  max-width: 680px;
+  z-index: 5;
+  width: 320px;
+  height: 568px;
+  max-width: 86vw;
+  max-height: 80vh;
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease-out;
+  animation: introStageEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
+}
+@keyframes introStageEntrance {
+  0% {
+    opacity: 0;
+    transform: translateZ(-250px) rotateY(-22deg) rotateX(15deg) scale(0.75);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0px) rotateY(0deg) rotateX(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* 3D Tablet Frame & Slab */
+.intro-tablet-slab {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  transform-style: preserve-3d;
+}
+
+/* Front Face: High-Res Sacred Artwork */
+.intro-tablet-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background-image: url('images/gurukulam-3d-model.jpg');
+  background-size: cover;
+  background-position: center;
+  transform: translateZ(14px);
+  box-shadow: 
+    0 24px 50px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(217, 154, 39, 0.35),
+    inset 0 0 25px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(217, 154, 39, 0.75);
+  overflow: hidden;
+}
+
+/* Dynamic Specular Sheen (Moves with Mouse / Device Tilt) */
+.intro-specular-glare {
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 248, 220, 0.4) 0%, rgba(217, 154, 39, 0.15) 30%, transparent 65%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+/* 3D Extruded Golden Edges (Provides Tangible Physical Thickness) */
+.intro-tablet-edge {
+  position: absolute;
+  background: linear-gradient(135deg, #a16f19 0%, #ffd700 25%, #d4af37 50%, #7a4f0b 75%, #d4af37 100%);
+  border: 1px solid rgba(255, 225, 140, 0.5);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+}
+.intro-edge-top {
+  top: 0; left: 0; width: 100%; height: 28px;
+  transform-origin: top center;
+  transform: rotateX(90deg) translateZ(0px);
+  border-radius: 12px 12px 0 0;
+}
+.intro-edge-bottom {
+  bottom: 0; left: 0; width: 100%; height: 28px;
+  transform-origin: bottom center;
+  transform: rotateX(-90deg) translateZ(0px);
+  border-radius: 0 0 12px 12px;
+}
+.intro-edge-left {
+  top: 0; left: 0; width: 28px; height: 100%;
+  transform-origin: center left;
+  transform: rotateY(-90deg) translateZ(0px);
+  border-radius: 12px 0 0 12px;
+}
+.intro-edge-right {
+  top: 0; right: 0; width: 28px; height: 100%;
+  transform-origin: center right;
+  transform: rotateY(90deg) translateZ(0px);
+  border-radius: 0 12px 12px 0;
+}
+
+/* Back Face of 3D Tablet */
+.intro-tablet-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(circle, #2e0f06 0%, #150502 100%);
+  border: 2px solid rgba(217, 154, 39, 0.8);
+  transform: translateZ(-14px) rotateY(180deg);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+}
+.intro-back-om {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 5rem;
+  color: #ffd700;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+/* 3D Golden Filigree Corners */
+.intro-corner-filigree {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border: 3px solid #ffd700;
+  pointer-events: none;
+  z-index: 6;
+  filter: drop-shadow(0 0 8px rgba(217, 154, 39, 0.8));
+  transform: translateZ(24px);
+}
+.intro-corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
+.intro-corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; border-top-right-radius: 12px; }
+.intro-corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; border-bottom-left-radius: 12px; }
+.intro-corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
+
+/* 3D Golden Crown / Lotus Arch Finial */
+.intro-crown-arch {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%) translateZ(28px);
+  padding: 4px 18px;
+  background: linear-gradient(135deg, #a16f19, #ffd700, #a16f19);
+  border-radius: 16px;
+  font-size: 1.15rem;
+  color: #1a0602;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6), 0 0 20px rgba(255,215,0,0.6);
+  border: 1px solid #fff;
+  z-index: 7;
+}
+
+/* ============================================================= */
+/* Living Special Effects & Light Ray Sweep                      */
+/* ============================================================= */
+
+/* Living Diya Flame Glow Flare */
+.intro-diya-flame-spark {
+  position: absolute;
+  top: 15.8%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(26px);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 230, 0.95) 0%, rgba(255, 180, 50, 0.75) 40%, rgba(255, 100, 0, 0.25) 70%, transparent 90%);
+  filter: blur(4px);
+  pointer-events: none;
+  animation: introDiyaPulse 1.8s ease-in-out infinite alternate;
+  z-index: 4;
+}
+@keyframes introDiyaPulse {
+  0% { transform: translate(-50%, -50%) translateZ(26px) scale(0.85); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) translateZ(26px) scale(1.35); opacity: 1; filter: blur(2px) drop-shadow(0 0 16px #ffcc00); }
+}
+
+/* Living Temple Bell Interaction Zone */
+.intro-bell-target {
+  position: absolute;
+  top: 40%;
+  left: 12%;
+  width: 42px;
+  height: 50px;
+  transform: translateZ(28px);
+  cursor: pointer;
+  z-index: 6;
+  border-radius: 50%;
+}
+.intro-bell-target:hover, .intro-bell-target:active {
+  animation: introBellSwing 0.6s ease-in-out;
+}
+@keyframes introBellSwing {
+  0%, 100% { transform: translateZ(28px) rotate(0deg); }
+  25% { transform: translateZ(28px) rotate(14deg); }
+  50% { transform: translateZ(28px) rotate(-12deg); }
+  75% { transform: translateZ(28px) rotate(6deg); }
+}
+
+/* ============================================================= */
+/* 3D Holographic Typography & Reveal Effects                    */
+/* ============================================================= */
+.intro-3d-text-layer {
+  position: absolute;
+  top: 17%;
+  left: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transform: translateZ(46px);
+  pointer-events: none;
+  z-index: 5;
+  text-align: center;
+  padding: 0 16px;
 }
 
-/* Sacred Central Emblem */
-.intro-sacred-emblem {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 246, 224, 0.2) 0%, rgba(122, 46, 22, 0.6) 75%, rgba(46, 15, 6, 0.9) 100%);
-  border: 2px solid rgba(217, 154, 39, 0.75);
-  display: grid;
-  place-items: center;
-  margin-bottom: 18px;
-  box-shadow: 
-    0 0 40px rgba(217, 154, 39, 0.55),
-    inset 0 0 20px rgba(255, 230, 160, 0.35);
-  animation: introEmblemBloom 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* Divine Golden Light Ray Sweep across Title */
+.intro-sweep-ray {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 215, 0, 0.4) 65%, transparent 80%);
+  transform: skewX(-25deg);
+  animation: introRaySweep 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
 }
-@keyframes introEmblemBloom {
-  0% { opacity: 0; transform: scale(0.4) rotate(-30deg); filter: blur(10px); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }
-}
-.intro-om-icon {
-  font-family: 'Noto Serif Devanagari', serif;
-  font-size: 2.9rem;
-  color: #FFF6DF;
-  line-height: 1;
-  text-shadow: 0 0 20px rgba(255, 220, 130, 0.9), 0 2px 4px rgba(0,0,0,0.5);
-  animation: introOmFloat 3s ease-in-out infinite alternate;
-}
-@keyframes introOmFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-3px); }
+@keyframes introRaySweep {
+  0% { left: -110%; }
+  45%, 100% { left: 140%; }
 }
 
-/* Sanskrit Shloka */
-.intro-shloka {
-  font-family: 'Noto Serif Devanagari', serif;
-  font-size: clamp(0.92rem, 2.5vw, 1.1rem);
-  color: #F7E8C8;
-  letter-spacing: 0.16em;
-  opacity: 0;
-  animation: introRise 0.9s 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-  margin-bottom: 8px;
-  text-shadow: 0 0 16px rgba(217, 154, 39, 0.65);
-}
-
-/* Liquid Gold Shining Title */
-.intro-brand-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.4rem, 7vw, 4.2rem);
+/* 3D Embossed Title: SANATHANA */
+.intro-title-sanathana {
+  font-family: 'Cinzel Decorative', 'Cormorant Garamond', 'Georgia', serif;
+  font-size: clamp(1.6rem, 5.2vw, 2.3rem);
   font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: 0.05em;
-  background: linear-gradient(110deg, #E8C98F 5%, #FFFDF7 25%, #D99A27 50%, #FFFDF7 75%, #E8C98F 95%);
-  background-size: 200% 100%;
+  letter-spacing: 0.16em;
+  line-height: 1.05;
+  margin: 0;
+  background: linear-gradient(115deg, #FFE8A3 0%, #FFFFFF 25%, #E6AF37 50%, #996A17 75%, #FFE8A3 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  animation: introRise 0.9s 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, introGoldSweep 3.6s linear infinite;
-  opacity: 0;
-  margin: 0;
-}
-@keyframes introGoldSweep {
-  0% { background-position: 150% 0; }
-  100% { background-position: -150% 0; }
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.75));
+  animation: introTitleReveal 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both, introGoldShimmer 3.6s linear infinite;
 }
 
-/* Tagline & Pillars */
-.intro-brand-tagline {
+/* 3D Embossed Title: GURUKULAM */
+.intro-title-gurukulam {
+  font-family: 'Cinzel Decorative', 'Cormorant Garamond', 'Georgia', serif;
+  font-size: clamp(1.4rem, 4.6vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.05;
+  margin: 2px 0 0 0;
+  background: linear-gradient(115deg, #FFE8A3 0%, #FFFFFF 25%, #E6AF37 50%, #996A17 75%, #FFE8A3 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.75));
+  animation: introTitleReveal 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both, introGoldShimmer 3.6s linear infinite;
+}
+
+@keyframes introTitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateZ(50px) scale(1.18);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0px) scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes introGoldShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Blooming Lotus Divider */
+.intro-lotus-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+  width: 80%;
+  animation: introLotusBloom 0.9s 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.intro-lotus-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+.intro-lotus-icon {
+  font-size: 1.25rem;
+  color: #ffd700;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+  animation: introLotusSpin 6s ease-in-out infinite alternate;
+}
+@keyframes introLotusBloom {
+  0% { opacity: 0; transform: scale(0.4); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes introLotusSpin {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); filter: drop-shadow(0 0 14px #ffea70); }
+}
+
+/* Pillars: LEARN • PRACTICE • LIVE */
+.intro-pillars-text {
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(0.72rem, 2vw, 0.85rem);
-  color: #D99A27;
-  letter-spacing: 0.32em;
+  font-size: clamp(0.68rem, 2vw, 0.82rem);
   font-weight: 600;
-  margin-top: 10px;
-  opacity: 0;
-  animation: introRise 0.8s 0.65s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.32em;
+  color: #FFF6DF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(217, 154, 39, 0.85);
+  animation: introPillarsReveal 0.9s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes introPillarsReveal {
+  0% { opacity: 0; letter-spacing: 0.12em; transform: translateY(8px); }
+  100% { opacity: 1; letter-spacing: 0.32em; transform: translateY(0); }
 }
 
-.intro-brand-sub {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(0.8rem, 2.4vw, 0.95rem);
-  color: #E8C98F;
-  letter-spacing: 0.06em;
-  margin-top: 8px;
-  opacity: 0;
-  animation: introRise 0.8s 0.85s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+/* ============================================================= */
+/* Floating 3D Action Controls & Exit Prompt                     */
+/* ============================================================= */
+.intro-controls-stage {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 8;
+  transform: translateZ(52px);
+  pointer-events: auto;
 }
 
-@keyframes introRise {
-  0% { opacity: 0; transform: translateY(18px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Sleek Floating Enter Prompt */
-.intro-enter-pill {
-  margin-top: 32px;
+.intro-enter-btn-3d {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 24px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 11px 28px;
+  border-radius: 35px;
+  background: linear-gradient(135deg, rgba(217, 154, 39, 0.3) 0%, rgba(122, 46, 22, 0.5) 50%, rgba(217, 154, 39, 0.3) 100%);
+  border: 1.5px solid #ffd700;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(217, 154, 39, 0.4),
+    inset 0 0 15px rgba(255, 235, 150, 0.25);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(217, 154, 39, 0.45);
-  color: #FFF6DF;
-  font-size: 0.86rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 0 12px rgba(217, 154, 39, 0.2);
-  opacity: 0;
-  animation: introRise 0.8s 1.05s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, introPillBreath 2.5s ease-in-out infinite alternate;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease;
+  animation: introBtnPulse 2.8s ease-in-out infinite alternate;
 }
-.intro-enter-pill:hover {
-  background: rgba(217, 154, 39, 0.25);
-  border-color: var(--gold);
-  transform: scale(1.05);
+.intro-enter-btn-3d:hover {
+  transform: scale(1.08) translateZ(10px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 215, 0, 0.75);
+  background: linear-gradient(135deg, rgba(217, 154, 39, 0.5) 0%, rgba(160, 60, 25, 0.65) 50%, rgba(217, 154, 39, 0.5) 100%);
 }
-@keyframes introPillBreath {
-  0% { box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 0 0 rgba(217,154,39,0.4); }
-  100% { box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 0 8px rgba(217,154,39,0); }
+@keyframes introBtnPulse {
+  0% { box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 16px rgba(217,154,39,0.3); }
+  100% { box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 30px rgba(255,215,0,0.6); }
 }
-.intro-enter-pill span {
-  font-size: 1.15rem;
-  color: #D99A27;
+.intro-enter-btn-3d span {
+  font-size: 1.18rem;
+  color: #ffd700;
 }
 
-/* Mobile responsive polish */
-@media(max-width: 560px) {
-  .intro-sacred-emblem {
-    width: 78px;
-    height: 78px;
-    margin-bottom: 14px;
+.intro-3d-hint {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.74rem;
+  color: #E8C98F;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  animation: introHintFade 1.2s 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes introHintFade {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 0.85; transform: translateY(0); }
+}
+
+@media(max-width: 480px) {
+  .intro-3d-stage {
+    width: 290px;
+    height: 516px;
   }
-  .intro-om-icon {
-    font-size: 2.3rem;
+  .intro-title-sanathana {
+    font-size: 1.55rem;
+    letter-spacing: 0.14em;
   }
-  .intro-shloka {
-    font-size: 0.85rem;
-    letter-spacing: 0.12em;
+  .intro-title-gurukulam {
+    font-size: 1.35rem;
+    letter-spacing: 0.18em;
   }
-  .intro-brand-title {
-    font-size: 2.15rem;
+  .intro-pillars-text {
+    font-size: 0.64rem;
+    letter-spacing: 0.24em;
   }
-  .intro-brand-tagline {
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    margin-top: 6px;
-  }
-  .intro-brand-sub {
-    font-size: 0.78rem;
-    margin-top: 6px;
-  }
-  .intro-enter-pill {
-    margin-top: 24px;
-    padding: 8px 20px;
-    font-size: 0.8rem;
+  .intro-enter-btn-3d {
+    padding: 9px 22px;
+    font-size: 0.84rem;
   }
 }
 
@@ -595,47 +834,77 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 </head>
 <body>
 
-<!-- Super Cool Cinematic Divya Prakasha Intro -->
+<!-- Super Cool 3D Model & Cinematic Typography Intro -->
 <div id="sgIntroOverlay" role="dialog" aria-modal="true" aria-label="Welcome to Sanathana Gurukulam">
-  <div class="intro-portal-auras">
-    <div class="intro-glow-core"></div>
-    <div class="intro-halo-ring"></div>
-    <div class="intro-halo-ring"></div>
-    <div class="intro-halo-ring"></div>
-    
-    <!-- Intricate Sacred Lotus Mandala SVG -->
-    <svg class="intro-mandala-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="95" stroke="#D99A27" stroke-width="0.8" stroke-dasharray="4 3"/>
-      <circle cx="100" cy="100" r="82" stroke="#E8C98F" stroke-width="0.6"/>
-      <circle cx="100" cy="100" r="68" stroke="#D99A27" stroke-width="0.8" stroke-dasharray="2 3"/>
-      <circle cx="100" cy="100" r="52" stroke="#E8C98F" stroke-width="0.6"/>
-      <!-- 12 Symmetrical Sacred Rays -->
-      <path d="M100 5 L100 195 M5 100 L195 100 M33 33 L167 167 M167 33 L33 167" stroke="#D99A27" stroke-width="0.5" opacity="0.6"/>
-      <!-- Lotus Petals -->
-      <path d="M100 18 Q115 55 100 85 Q85 55 100 18Z" stroke="#D99A27" stroke-width="0.7" fill="rgba(217,154,39,0.04)"/>
-      <path d="M100 182 Q115 145 100 115 Q85 145 100 182Z" stroke="#D99A27" stroke-width="0.7" fill="rgba(217,154,39,0.04)"/>
-      <path d="M18 100 Q55 115 85 100 Q55 85 18 100Z" stroke="#D99A27" stroke-width="0.7" fill="rgba(217,154,39,0.04)"/>
-      <path d="M182 100 Q145 115 115 100 Q145 85 182 100Z" stroke="#D99A27" stroke-width="0.7" fill="rgba(217,154,39,0.04)"/>
-      <path d="M42 42 Q75 60 70 90 Q45 80 42 42Z" stroke="#E8C98F" stroke-width="0.7" fill="rgba(217,154,39,0.03)"/>
-      <path d="M158 158 Q125 140 130 110 Q155 120 158 158Z" stroke="#E8C98F" stroke-width="0.7" fill="rgba(217,154,39,0.03)"/>
-      <path d="M158 42 Q140 75 110 70 Q120 45 158 42Z" stroke="#E8C98F" stroke-width="0.7" fill="rgba(217,154,39,0.03)"/>
-      <path d="M42 158 Q60 125 90 130 Q80 155 42 158Z" stroke="#E8C98F" stroke-width="0.7" fill="rgba(217,154,39,0.03)"/>
-    </svg>
-    <div class="intro-stardust"></div>
+  <!-- Dynamic 3D Particle Canvas for Ambient Temple Prana & Embers -->
+  <canvas id="sgIntroParticlesCanvas"></canvas>
+
+  <!-- Ambient Cosmic Aura & Rotating Sacred Mandala -->
+  <div class="intro-ambient-auras">
+    <div class="intro-divine-glow"></div>
+    <div class="intro-sacred-mandala"></div>
+    <div class="intro-halo-wave"></div>
+    <div class="intro-halo-wave"></div>
+    <div class="intro-halo-wave"></div>
   </div>
 
-  <div class="intro-center-stage">
-    <div class="intro-sacred-emblem">
-      <div class="intro-om-icon">ॐ</div>
+  <!-- 3D Interactive Model Stage & Diorama Shrine -->
+  <div class="intro-3d-stage" id="intro3dStage">
+    <!-- 3D Crown Finial -->
+    <div class="intro-crown-arch">ॐ</div>
+
+    <!-- 3D Golden Filigree Corners -->
+    <div class="intro-corner-filigree intro-corner-tl"></div>
+    <div class="intro-corner-filigree intro-corner-tr"></div>
+    <div class="intro-corner-filigree intro-corner-bl"></div>
+    <div class="intro-corner-filigree intro-corner-br"></div>
+
+    <!-- 3D Physical Volumetric Tablet Slab -->
+    <div class="intro-tablet-slab">
+      <!-- 3D Extruded Brushed Gold Edges -->
+      <div class="intro-tablet-edge intro-edge-top"></div>
+      <div class="intro-tablet-edge intro-edge-bottom"></div>
+      <div class="intro-tablet-edge intro-edge-left"></div>
+      <div class="intro-tablet-edge intro-edge-right"></div>
+
+      <!-- Front Face with High-Res Artwork & Specular Glare -->
+      <div class="intro-tablet-front">
+        <div class="intro-specular-glare" id="introSpecularGlare"></div>
+
+        <!-- Living Diya Flame Glow Pulse -->
+        <div class="intro-diya-flame-spark"></div>
+
+        <!-- Interactive Temple Bell Trigger -->
+        <div class="intro-bell-target" id="introBellTarget" title="Ring the sacred temple bell"></div>
+      </div>
+
+      <!-- Back Face of 3D Tablet -->
+      <div class="intro-tablet-back">
+        <div class="intro-back-om">ॐ</div>
+      </div>
     </div>
 
-    <div class="intro-shloka">॥ असतो मा सद्गमय • तमसो मा ज्योतिर्गमय ॥</div>
-    <h1 class="intro-brand-title">Sanathana Gurukulam</h1>
-    <div class="intro-brand-tagline">LEARN • PRACTICE • LIVE</div>
-    <p class="intro-brand-sub">Ancient Wisdom • Modern Learning • Timeless Values</p>
+    <!-- 3D Holographic Typography & Divine Light Sweep -->
+    <div class="intro-3d-text-layer">
+      <div class="intro-sweep-ray"></div>
+      <h1 class="intro-title-sanathana">SANATHANA</h1>
+      <h2 class="intro-title-gurukulam">GURUKULAM</h2>
+      
+      <div class="intro-lotus-divider">
+        <div class="intro-lotus-line"></div>
+        <div class="intro-lotus-icon">🪷</div>
+        <div class="intro-lotus-line"></div>
+      </div>
 
-    <div class="intro-enter-pill">
-      <span>ॐ</span> Tap anywhere to enter
+      <div class="intro-pillars-text">LEARN • PRACTICE • LIVE</div>
+    </div>
+
+    <!-- Floating 3D Action Controls -->
+    <div class="intro-controls-stage">
+      <button class="intro-enter-btn-3d" id="btnEnter3D">
+        <span>ॐ</span> Enter Gurukulam <span>→</span>
+      </button>
+      <div class="intro-3d-hint">✦ Tilt or move to explore in 3D • Tap anywhere to enter ✦</div>
     </div>
   </div>
 </div>
@@ -1212,104 +1481,233 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
 
 // =============================================================
 // =============================================================
-// Super Cool Cinematic Divya Prakasha Intro Controller
 // =============================================================
-const introOverlay = document.getElementById('sgIntroOverlay');
-let introDismissed = false;
-let introTimer = null;
+// Super Cool 3D Model & Cinematic Typography Intro Controller
+// =============================================================
+(function init3DIntro() {
+  const introOverlay = document.getElementById('sgIntroOverlay');
+  const stage = document.getElementById('intro3dStage');
+  const glare = document.getElementById('introSpecularGlare');
+  const canvas = document.getElementById('sgIntroParticlesCanvas');
+  const bellTarget = document.getElementById('introBellTarget');
+  const btnEnter = document.getElementById('btnEnter3D');
 
-// Synthesize soothing cosmic Vedic temple chime with Web Audio API
-function playSacredChime() {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    if (ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
-    }
-
-    // Sacred cosmic Om frequencies (136.1Hz Om fundamental + harmonics)
-    const tones = [
-      { f: 136.1, gain: 0.28, decay: 3.5, type: 'sine' },
-      { f: 272.2, gain: 0.16, decay: 2.8, type: 'sine' },
-      { f: 408.3, gain: 0.09, decay: 2.2, type: 'triangle' },
-      { f: 544.4, gain: 0.05, decay: 1.8, type: 'sine' }
-    ];
-
-    const now = ctx.currentTime;
-    tones.forEach(t => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = t.type;
-      osc.frequency.setValueAtTime(t.f, now);
-
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(t.gain, now + 0.18);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + t.decay);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + t.decay + 0.1);
-    });
-  } catch (e) {}
-}
-
-function dismissIntro(playSound = true) {
-  if (introDismissed) return;
-  introDismissed = true;
-  if (introTimer) {
-    clearTimeout(introTimer);
-    introTimer = null;
-  }
-
-  if (playSound) {
-    playSacredChime();
-  }
-
-  if (!introOverlay || introOverlay.classList.contains('intro-hidden')) return;
-
-  introOverlay.classList.add('intro-bloom-out');
-  setTimeout(() => {
-    introOverlay.classList.add('intro-hidden');
-    introOverlay.classList.remove('intro-bloom-out');
-  }, 780);
-}
-
-function startIntro() {
   if (!introOverlay) return;
-  introDismissed = false;
-  introOverlay.classList.remove('intro-hidden', 'intro-bloom-out');
 
-  // Automatic smooth cinematic reveal after 2.3s
-  if (introTimer) clearTimeout(introTimer);
-  introTimer = setTimeout(() => {
-    dismissIntro(false);
-  }, 2350);
-}
+  let introDismissed = false;
+  let autoTimer = null;
+  let rotX = 0, rotY = 0, targetRotX = 0, targetRotY = 0;
+  let animFrameId = null;
 
-// Tap or click ANYWHERE on the screen to instantly bloom into the site!
-introOverlay?.addEventListener('click', () => {
-  dismissIntro(true);
-});
+  // Synthesize rich Vedic Temple Bell & Om Chime with Web Audio API
+  function playSacredBell(pitch = 1) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') ctx.resume().catch(() => {});
 
-// Keyboard controls (Space, Enter, Escape)
-document.addEventListener('keydown', e => {
-  if (introOverlay && !introOverlay.classList.contains('intro-hidden')) {
-    if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
-      dismissIntro(true);
+      const now = ctx.currentTime;
+      // Authentic temple brass bell acoustic harmonics
+      const partials = [
+        { ratio: 1.0 * pitch, gain: 0.35, decay: 3.8 },
+        { ratio: 2.76 * pitch, gain: 0.22, decay: 2.6 },
+        { ratio: 5.4 * pitch, gain: 0.14, decay: 1.8 },
+        { ratio: 8.9 * pitch, gain: 0.08, decay: 1.2 }
+      ];
+
+      partials.forEach(p => {
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432 * p.ratio, now);
+
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(p.gain, now + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + p.decay + 0.1);
+      });
+    } catch (e) {}
+  }
+
+  // Interactive Temple Bell Touch
+  bellTarget?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    playSacredBell(1.15);
+  });
+
+  // 3D Gyroscope & Mouse Physics Engine
+  function update3DPhysics() {
+    rotX += (targetRotX - rotX) * 0.08;
+    rotY += (targetRotY - rotY) * 0.08;
+
+    if (stage) {
+      stage.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+    }
+    if (glare) {
+      const gx = 50 + rotY * 1.8;
+      const gy = 50 - rotX * 1.8;
+      glare.style.setProperty('--gx', `${gx}%`);
+      glare.style.setProperty('--gy', `${gy}%`);
+    }
+
+    if (!introDismissed) {
+      animFrameId = requestAnimationFrame(update3DPhysics);
     }
   }
-});
 
-// Run on initial visit; skip on internal page navigation unless ?intro=1
-const isInternalNav = document.referrer && document.referrer.includes(location.host) && sessionStorage.getItem('sg_intro_shown');
-if (isInternalNav && !new URLSearchParams(location.search).has('intro')) {
-  introOverlay.classList.add('intro-hidden');
-} else {
-  startIntro();
-  sessionStorage.setItem('sg_intro_shown', '1');
-}
+  // Mouse Movement Parallax
+  window.addEventListener('mousemove', (e) => {
+    if (introDismissed || !introOverlay || introOverlay.classList.contains('intro-hidden')) return;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx;
+    const dy = (e.clientY - cy) / cy;
+    targetRotY = dx * 16;  // up to +/-16 deg Y-axis
+    targetRotX = -dy * 14; // up to +/-14 deg X-axis
+  });
+
+  // Touch Move Parallax for Mobile
+  window.addEventListener('touchmove', (e) => {
+    if (introDismissed || !e.touches || !e.touches[0]) return;
+    const touch = e.touches[0];
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (touch.clientX - cx) / cx;
+    const dy = (touch.clientY - cy) / cy;
+    targetRotY = dx * 18;
+    targetRotX = -dy * 15;
+  }, { passive: true });
+
+  // Mobile Device Orientation Gyroscope
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', (e) => {
+      if (introDismissed || e.gamma === null || e.beta === null) return;
+      targetRotY = Math.max(-20, Math.min(20, e.gamma * 0.5));
+      targetRotX = Math.max(-18, Math.min(18, (e.beta - 45) * 0.4));
+    }, { passive: true });
+  }
+
+  // Ambient 3D Golden Stardust & Ember Particle System
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = Array.from({ length: 65 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      z: Math.random() * 2 + 0.5,
+      radius: Math.random() * 2.2 + 0.8,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: -(Math.random() * 0.8 + 0.4),
+      alpha: Math.random() * 0.7 + 0.3,
+      pulse: Math.random() * Math.PI * 2
+    }));
+
+    function drawParticles() {
+      if (introDismissed) return;
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.x += p.vx * p.z;
+        p.y += p.vy * p.z;
+        p.pulse += 0.04;
+        const currentAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+
+        if (p.y < -10) {
+          p.y = height + 10;
+          p.x = Math.random() * width;
+        }
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * p.z, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 215, 100, ${currentAlpha.toFixed(2)})`;
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(drawParticles);
+    }
+    requestAnimationFrame(drawParticles);
+  }
+
+  // Dismiss / Enter Transition
+  function dismissIntro(playSound = true) {
+    if (introDismissed) return;
+    introDismissed = true;
+    if (autoTimer) {
+      clearTimeout(autoTimer);
+      autoTimer = null;
+    }
+    if (animFrameId) {
+      cancelAnimationFrame(animFrameId);
+    }
+
+    if (playSound) {
+      playSacredBell(1.0);
+    }
+
+    if (!introOverlay || introOverlay.classList.contains('intro-hidden')) return;
+
+    introOverlay.classList.add('intro-bloom-out');
+    setTimeout(() => {
+      introOverlay.classList.add('intro-hidden');
+      introOverlay.classList.remove('intro-bloom-out');
+    }, 820);
+  }
+
+  // Tap anywhere on overlay or click the button to enter
+  introOverlay.addEventListener('click', () => {
+    dismissIntro(true);
+  });
+  btnEnter?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dismissIntro(true);
+  });
+
+  // Keyboard accessibility (Space, Enter, Esc)
+  document.addEventListener('keydown', (e) => {
+    if (introOverlay && !introOverlay.classList.contains('intro-hidden')) {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        dismissIntro(true);
+      }
+    }
+  });
+
+  // Launch Intro & Auto-dismiss after 4.2s
+  function startIntro() {
+    introDismissed = false;
+    introOverlay.classList.remove('intro-hidden', 'intro-bloom-out');
+    requestAnimationFrame(update3DPhysics);
+
+    if (autoTimer) clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => {
+      dismissIntro(false);
+    }, 4200);
+  }
+
+  // Check navigation history (only show on initial entrance or ?intro=1)
+  const isInternalNav = document.referrer && document.referrer.includes(location.host) && sessionStorage.getItem('sg_intro_shown');
+  if (isInternalNav && !new URLSearchParams(location.search).has('intro')) {
+    introOverlay.classList.add('intro-hidden');
+  } else {
+    startIntro();
+    sessionStorage.setItem('sg_intro_shown', '1');
+  }
+})();
 
 </script>
 </body>
