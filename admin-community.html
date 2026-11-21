@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Community Management – Sanathana Gurukulam</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --cream:#F7E8C8;--sand:#E8C98F;--maroon:#7A2E16;--brown:#4A1F0E;--gold:#D99A27;
@@ -15,7 +15,7 @@ body{
   font-family:'Poppins',sans-serif;color:var(--brown);
   background:radial-gradient(circle at 20% 0,#fff6e0,var(--cream) 60%);min-height:100vh;
 }
-h1,h2,h3{font-family:'Cormorant Garamond',serif}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0}
 input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brown);width:100%}
@@ -42,11 +42,14 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .top span{display:flex;gap:14px;align-items:center;font-size:.88rem}
 .top a:hover{color:var(--gold)}
 
-.wrap{max-width:1050px;margin:0 auto;padding:26px 18px 60px}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
 .panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:24px;border:1px solid var(--line)}
 .panel h2{font-size:1.6rem;color:var(--maroon);margin-bottom:14px}
 .muted{color:var(--muted);font-size:.85rem}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
+.tag.leader{background:#fef08a;color:#854d0e}
+.tag.admin{background:var(--maroon);color:var(--cream)}
+.tag.blocked{background:#fee2e2;color:#991b1b}
 .back-nav{display:inline-flex;align-items:center;gap:8px;color:var(--maroon);font-weight:600;font-size:.92rem;margin-bottom:16px}
 .back-nav:hover{text-decoration:underline}
 
@@ -55,14 +58,27 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .stat-box b{font-size:1.8rem;color:var(--maroon);display:block}
 .stat-box span{font-size:.85rem;color:var(--muted)}
 
-.msg-feed{max-height:550px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--line)}
-.msg-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:12px 14px;border-radius:12px;background:#fbf6ec;border:1px solid var(--line)}
+.msg-feed{max-height:580px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:16px;background:#fff;border-radius:14px;border:1px solid var(--line)}
+.msg-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:12px 14px;border-radius:12px;background:#fbf6ec;border:1px solid var(--line);transition:background .2s}
+.msg-item:hover{background:#f8eed9}
 .msg-item.admin-post{background:#fff3d4;border-color:var(--gold)}
 .msg-main{flex:1;min-width:0}
-.msg-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
-.msg-head b{color:var(--maroon);font-size:.92rem}
+.msg-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
 .msg-head .time{font-size:.75rem;color:var(--muted)}
 .msg-text{font-size:.9rem;color:var(--brown);line-height:1.45;word-break:break-word}
+
+/* Author chip clickable */
+.author-chip{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:3px 10px;
+  border-radius:12px;background:#f3dfb2;border:1px solid rgba(122,46,22,.2);
+  transition:all .15s ease;
+}
+.author-chip:hover{
+  background:#edd298;transform:translateY(-1px);box-shadow:0 2px 6px rgba(122,46,22,.15);
+}
+.author-chip b{color:var(--maroon);font-size:.92rem}
+
+.filter-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 
 html,body{overflow-x:hidden;max-width:100%}
 @media(max-width:768px){
@@ -70,9 +86,21 @@ html,body{overflow-x:hidden;max-width:100%}
   .top b{font-size:1.2rem}
   .top span a:not(:first-child):not(:last-child){display:none}
   .wrap{padding:14px 10px 60px}
-  .msgs{height:340px}
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .msg-item{flex-direction:column;gap:10px}
 }
 
+/* Modal styles */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(46,18,8,0.72);backdrop-filter:blur(6px);
+  z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal-card{
+  background:#FFF8EA;border:1.5px solid var(--line);border-radius:22px;padding:26px;
+  width:100%;max-width:540px;box-shadow:0 18px 48px rgba(0,0,0,0.3);position:relative;
+  max-height:90vh;overflow-y:auto;
+}
 </style>
 </head>
 <body>
@@ -94,7 +122,7 @@ html,body{overflow-x:hidden;max-width:100%}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
     <div>
       <h1 style="font-size:2.4rem;color:var(--maroon)">👥 Community Management</h1>
-      <p class="muted">Oversee and moderate the unified Gurukulam Community discussion.</p>
+      <p class="muted">Oversee messages, click any seeker to inspect phone/profile, promote Leaders, or block abusive members.</p>
     </div>
     <div style="display:flex;gap:10px">
       <a class="btn sm ghost" href="community.html" target="_blank">Open Live Community ↗</a>
@@ -104,15 +132,19 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="stats-bar">
     <div class="stat-box">
       <b id="totalMsgsCount">0</b>
-      <span>Total Messages Recorded</span>
+      <span>Total Messages</span>
     </div>
     <div class="stat-box">
-      <b>🕉️ Unified</b>
-      <span>Gurukulam Community</span>
+      <b id="totalLeadersCount" style="color:#d97706">0</b>
+      <span>Community Leaders</span>
+    </div>
+    <div class="stat-box">
+      <b id="totalBlockedCount" style="color:#dc2626">0</b>
+      <span>Blocked Seekers</span>
     </div>
     <div class="stat-box">
       <b style="color:#16a34a">Active</b>
-      <span>Realtime Sync Status</span>
+      <span>Realtime Sync</span>
     </div>
   </div>
 
@@ -131,9 +163,17 @@ html,body{overflow-x:hidden;max-width:100%}
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
       <div>
         <h2 style="margin:0">Active Community Messages</h2>
-        <p class="muted">Live discussion stream with 1-click message moderation/deletion.</p>
+        <p class="muted">Click on any seeker's name to view their private mobile number, promote them to Leader, or block them.</p>
       </div>
       <span class="tag" id="statusTag">Listening Live</span>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="filterTabs">
+      <button type="button" class="btn sm gold" data-filter="all">All Messages (<span id="countAll">0</span>)</button>
+      <button type="button" class="btn sm ghost" data-filter="leaders">⭐ Leaders (<span id="countLeaders">0</span>)</button>
+      <button type="button" class="btn sm ghost" data-filter="blocked">🚫 Blocked Seekers (<span id="countBlocked">0</span>)</button>
+      <button type="button" class="btn sm ghost" data-filter="admin">🛡️ Admin Posts (<span id="countAdmin">0</span>)</button>
     </div>
 
     <div class="msg-feed" id="msgFeed" aria-live="polite">
@@ -142,14 +182,85 @@ html,body{overflow-x:hidden;max-width:100%}
   </div>
 </div>
 
+<!-- Seeker Info & Moderation Modal -->
+<div class="modal-overlay" id="userInfoModal">
+  <div class="modal-card">
+    <button class="modal-close" id="closeUserModal" type="button" style="position:absolute;top:16px;right:18px;font-size:1.4rem;background:none;border:0;color:var(--muted);cursor:pointer">✕</button>
+    
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+      <div id="mAvatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#f3dfb2,#e8c98f);display:grid;place-items:center;font-size:2rem;box-shadow:0 4px 12px rgba(122,46,22,.15);border:1px solid rgba(122,46,22,.2);flex-shrink:0">🕉️</div>
+      <div style="flex:1;min-width:0">
+        <h3 id="mName" style="font-family:'Cormorant Garamond',serif;font-size:1.85rem;color:var(--maroon);line-height:1.15;word-break:break-word">Seeker Name</h3>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap">
+          <span id="mRoleBadge" class="tag">Learner</span>
+          <span id="mBlockBadge" class="tag" style="background:#dcfce7;color:#166534">Active (Allowed to chat)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px;font-size:.9rem">
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">📱 Real Mobile Phone:</span>
+        <b id="mPhone" style="color:var(--maroon);font-family:monospace;font-size:1.05rem">+91 ----------</b>
+      </div>
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">🆔 Account UID:</span>
+        <span id="mUid" style="font-family:monospace;font-size:.85rem;color:var(--brown)">ph_...</span>
+      </div>
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">🎯 Learning Track:</span>
+        <b id="mTrack" style="color:var(--brown)">Both (All)</b>
+      </div>
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">📚 Enrolled Courses:</span>
+        <b id="mCourses" style="color:var(--brown)">0 Courses</b>
+      </div>
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line)">
+        <span style="color:var(--muted);display:block;margin-bottom:4px;font-size:.8rem">✨ Sacred Sankalpa:</span>
+        <p id="mSankalpa" style="font-style:italic;color:var(--brown);font-size:.86rem;line-height:1.4">None recorded</p>
+      </div>
+      <div style="background:#fff;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">📅 Registered Date:</span>
+        <span id="mJoined" style="font-size:.86rem;color:var(--brown)">-</span>
+      </div>
+    </div>
+
+    <!-- Moderation Controls -->
+    <div style="background:#f5e7c8;border-radius:14px;padding:16px;border:1px solid rgba(122,46,22,.2)">
+      <h4 style="font-size:1.15rem;color:var(--maroon);margin-bottom:10px;font-weight:700">Acharya Moderation Actions</h4>
+      <div style="display:flex;gap:10px;flex-direction:column">
+        <!-- Make Leader Toggle -->
+        <button type="button" class="btn gold" id="btnToggleLeader" style="justify-content:center">
+          ⭐ Promote to Community Leader
+        </button>
+        <!-- Block/Unblock Toggle -->
+        <button type="button" class="btn danger" id="btnToggleBlock" style="justify-content:center">
+          🚫 Block from Community Chat
+        </button>
+        <!-- Delete All Messages -->
+        <button type="button" class="btn ghost sm" id="btnDeleteUserMsgs" style="justify-content:center;color:#dc2626;border-color:#dc2626">
+          🗑️ Delete All Messages by This Seeker
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-import { db, requireAdmin, adminLogout, esc, ref, push, remove, onValue, query, limitToLast } from "./firebase-init.js";
+import { db, requireAdmin, adminLogout, esc, ref, get, update, push, remove, onValue, query, limitToLast } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 $("out").onclick = adminLogout;
 
 const COMMUNITY_ROOM = "community";
 let activeAdmin = null;
+let allRawEntries = [];
+let cachedUsers = {};
+let activeFilter = "all";
+
+let currentSelectedUid = null;
+let currentSelectedUser = null;
 
 requireAdmin((u, p) => {
   activeAdmin = u;
@@ -157,71 +268,361 @@ requireAdmin((u, p) => {
   listenToFeed();
 });
 
-function listenToFeed() {
-  const feed = $("msgFeed");
-  const countEl = $("totalMsgsCount");
+function formatPhoneDisplay(uid, uData) {
+  let rawPhone = uData?.phone || uData?.phoneNumber || "";
+  if (!rawPhone && uid && uid.startsWith("ph_")) {
+    const digits = uid.replace(/^ph_/, "");
+    if (digits.length === 10) {
+      rawPhone = "+91 " + digits.slice(0, 5) + " " + digits.slice(5);
+    } else {
+      rawPhone = digits;
+    }
+  }
+  if (!rawPhone) return "No phone number recorded";
+  const clean = rawPhone.replace(/\D/g, "");
+  if (clean.length === 10) {
+    return "+91 " + clean.slice(0, 5) + " " + clean.slice(5);
+  } else if (clean.length === 12 && clean.startsWith("91")) {
+    return "+91 " + clean.slice(2, 7) + " " + clean.slice(7);
+  }
+  return rawPhone;
+}
 
-  onValue(query(ref(db, "community/" + COMMUNITY_ROOM), limitToLast(120)), snap => {
+function listenToFeed() {
+  onValue(query(ref(db, "community/" + COMMUNITY_ROOM), limitToLast(150)), async snap => {
     const data = snap.val() || {};
-    renderAdminFeed(data);
+    allRawEntries = Object.entries(data);
+    await preloadUsers(allRawEntries);
+    applyFilterAndRender();
   }, err => {
     console.warn("Falling back to gita room if community empty:", err);
-    onValue(query(ref(db, "community/gita"), limitToLast(120)), snap => {
-      renderAdminFeed(snap.val() || {});
+    onValue(query(ref(db, "community/gita"), limitToLast(150)), async snap => {
+      allRawEntries = Object.entries(snap.val() || {});
+      await preloadUsers(allRawEntries);
+      applyFilterAndRender();
     });
   });
 }
 
-function renderAdminFeed(data) {
+async function preloadUsers(entries) {
+  const uids = [...new Set(entries.map(([k, m]) => m.uid).filter(Boolean))];
+  const missing = uids.filter(uid => !cachedUsers[uid]);
+  if (!missing.length) return;
+
+  await Promise.all(missing.map(async uid => {
+    try {
+      const snap = await get(ref(db, "users/" + uid));
+      if (snap.exists() && snap.val()) {
+        cachedUsers[uid] = snap.val();
+      } else {
+        cachedUsers[uid] = { name: "Learner", role: "learner" };
+      }
+    } catch (e) {
+      cachedUsers[uid] = { name: "Learner", role: "learner" };
+    }
+  }));
+}
+
+function applyFilterAndRender() {
   const feed = $("msgFeed");
-  const countEl = $("totalMsgsCount");
-  const entries = Object.entries(data);
+  const countAllEl = $("countAll");
+  const countLeadersEl = $("countLeaders");
+  const countBlockedEl = $("countBlocked");
+  const countAdminEl = $("countAdmin");
 
-  countEl.textContent = entries.length;
+  // Compute metrics
+  let countLeaders = 0;
+  let countBlocked = 0;
+  let countAdmin = 0;
 
-  if (!entries.length) {
-    feed.innerHTML = '<p class="muted" style="text-align:center;padding:36px">No messages in the community yet.</p>';
+  const uniqueUids = new Set();
+  const leaderUids = new Set();
+  const blockedUids = new Set();
+
+  allRawEntries.forEach(([id, m]) => {
+    const uid = m.uid;
+    const uData = cachedUsers[uid] || {};
+    const isLeader = Boolean(m.isLeader || m.role === "leader" || uData.isLeader || uData.role === "leader");
+    const isBlocked = Boolean(uData.communityBlocked);
+    const isAdmin = Boolean(m.role === "admin" || uData.role === "admin" || (m.name && m.name.toLowerCase().includes("admin")));
+
+    if (uid) uniqueUids.add(uid);
+    if (isLeader) { countLeaders++; if (uid) leaderUids.add(uid); }
+    if (isBlocked) { countBlocked++; if (uid) blockedUids.add(uid); }
+    if (isAdmin) countAdmin++;
+  });
+
+  $("totalMsgsCount").textContent = allRawEntries.length;
+  $("totalLeadersCount").textContent = leaderUids.size;
+  $("totalBlockedCount").textContent = blockedUids.size;
+
+  countAllEl.textContent = allRawEntries.length;
+  countLeadersEl.textContent = countLeaders;
+  countBlockedEl.textContent = countBlocked;
+  countAdminEl.textContent = countAdmin;
+
+  // Filter list
+  let filtered = allRawEntries;
+  if (activeFilter === "leaders") {
+    filtered = allRawEntries.filter(([id, m]) => {
+      const uData = cachedUsers[m.uid] || {};
+      return m.isLeader || m.role === "leader" || uData.isLeader || uData.role === "leader";
+    });
+  } else if (activeFilter === "blocked") {
+    filtered = allRawEntries.filter(([id, m]) => {
+      const uData = cachedUsers[m.uid] || {};
+      return uData.communityBlocked === true;
+    });
+  } else if (activeFilter === "admin") {
+    filtered = allRawEntries.filter(([id, m]) => {
+      const uData = cachedUsers[m.uid] || {};
+      return m.role === "admin" || uData.role === "admin" || (m.name && m.name.toLowerCase().includes("admin"));
+    });
+  }
+
+  if (!filtered.length) {
+    feed.innerHTML = '<p class="muted" style="text-align:center;padding:36px">No messages found in this category.</p>';
     return;
   }
 
-  // Reverse so newest appears on top in moderation view
-  feed.innerHTML = entries.reverse().map(([id, m]) => {
+  // Reverse to show latest first
+  feed.innerHTML = [...filtered].reverse().map(([id, m]) => {
     const timeStr = m.at ? new Date(m.at).toLocaleString() : 'Just now';
-    const isSpecial = m.name?.toLowerCase().includes("admin") || m.uid?.includes("admin");
+    const uid = m.uid || '';
+    const uData = cachedUsers[uid] || {};
+    const isLeader = Boolean(m.isLeader || m.role === "leader" || uData.isLeader || uData.role === "leader");
+    const isBlocked = Boolean(uData.communityBlocked);
+    const isAdmin = Boolean(m.role === "admin" || uData.role === "admin" || (m.name && m.name.toLowerCase().includes("admin")));
+    const avatar = m.avatar || uData.avatar || uData.emblem || "🕉️";
+    const displayName = uData.name || m.name || "Learner";
+
     return `
-      <div class="msg-item ${isSpecial ? 'admin-post' : ''}">
+      <div class="msg-item ${isAdmin ? 'admin-post' : ''}">
         <div class="msg-main">
           <div class="msg-head">
-            <b>${esc(m.name || "Learner")}</b>
-            ${isSpecial ? '<span class="tag">Admin</span>' : ''}
+            <div class="author-chip" data-view="${esc(uid)}" data-name="${esc(displayName)}" title="Click to view seeker details & manage">
+              <span>${avatar}</span>
+              <b>${esc(displayName)}</b>
+              ${isLeader ? '<span class="tag leader">⭐ Leader</span>' : ''}
+              ${isAdmin ? '<span class="tag admin">🛡️ Admin</span>' : ''}
+              ${isBlocked ? '<span class="tag blocked">🚫 Blocked</span>' : ''}
+              <span style="font-size:.72rem;opacity:.7">🔍</span>
+            </div>
             <span class="time">${timeStr}</span>
-            <small class="muted" style="font-size:.7rem">(UID: ${esc((m.uid || '').slice(0, 10))}...)</small>
           </div>
           <div class="msg-text">${esc(m.text || "")}</div>
         </div>
-        <button class="btn danger sm" data-del="${id}" title="Delete inappropriate message">Delete</button>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn ghost sm" data-view="${esc(uid)}" data-name="${esc(displayName)}">👤 Info</button>
+          <button class="btn danger sm" data-del="${id}" title="Delete inappropriate message">Delete</button>
+        </div>
       </div>
     `;
   }).join("");
 }
 
-// Moderation Delete Action
-$("msgFeed").addEventListener("click", async e => {
-  const b = e.target.closest("button[data-del]");
-  if (!b) return;
-  const id = b.dataset.del;
-  if (!confirm("Are you sure you want to delete this community message permanently?")) return;
+// Filter Tabs Click
+$("filterTabs").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-filter]");
+  if (!btn) return;
+  activeFilter = btn.dataset.filter;
+  document.querySelectorAll("#filterTabs button").forEach(b => {
+    b.className = (b.dataset.filter === activeFilter) ? "btn sm gold" : "btn sm ghost";
+  });
+  applyFilterAndRender();
+});
 
-  try {
-    await remove(ref(db, `community/${COMMUNITY_ROOM}/${id}`));
-  } catch (err) {
+// Click handlers for Seeker Info & Delete
+document.addEventListener("click", async e => {
+  // 1. View Seeker Details
+  const viewBtn = e.target.closest("[data-view]");
+  if (viewBtn) {
+    const uid = viewBtn.dataset.view;
+    const fallbackName = viewBtn.dataset.name || "Seeker";
+    await openSeekerModal(uid, fallbackName);
+    return;
+  }
+
+  // 2. Delete single message
+  const delBtn = e.target.closest("button[data-del]");
+  if (delBtn) {
+    const id = delBtn.dataset.del;
+    if (!confirm("Are you sure you want to delete this community message permanently?")) return;
     try {
-      await remove(ref(db, `community/gita/${id}`));
-    } catch (e2) {
-      alert("Error deleting message: " + (e2.message || err.message));
+      await remove(ref(db, `community/${COMMUNITY_ROOM}/${id}`));
+    } catch (err) {
+      try {
+        await remove(ref(db, `community/gita/${id}`));
+      } catch (e2) {
+        alert("Error deleting message: " + (e2.message || err.message));
+      }
     }
   }
 });
+
+// Modal Logic
+async function openSeekerModal(uid, fallbackName) {
+  currentSelectedUid = uid;
+  const modal = $("userInfoModal");
+  modal.classList.add("open");
+
+  // Loading state
+  $("mName").textContent = "Loading Seeker Info…";
+  $("mPhone").textContent = "Fetching…";
+  $("mUid").textContent = uid || "Unknown UID";
+
+  let uData = cachedUsers[uid];
+  if (!uData || !uData.phone) {
+    try {
+      const snap = await get(ref(db, "users/" + uid));
+      if (snap.exists() && snap.val()) {
+        uData = snap.val();
+        cachedUsers[uid] = uData;
+      }
+    } catch(e) {}
+  }
+
+  // Fetch enrollments count
+  let courseCount = 0;
+  try {
+    const eSnap = await get(ref(db, "enrollments/" + uid));
+    if (eSnap.exists() && eSnap.val()) {
+      courseCount = Object.keys(eSnap.val()).length;
+    }
+  } catch(e) {}
+
+  currentSelectedUser = uData || { name: fallbackName, role: "learner" };
+  renderModalDetails(uid, currentSelectedUser, courseCount);
+}
+
+function renderModalDetails(uid, u, coursesCount) {
+  $("mName").textContent = u.name || "Sadhaka";
+  $("mAvatar").textContent = u.avatar || u.emblem || "🕉️";
+  $("mUid").textContent = uid;
+  
+  // Real Mobile Number (Exclusively revealed to Admin)
+  const phoneFormatted = formatPhoneDisplay(uid, u);
+  $("mPhone").textContent = phoneFormatted;
+
+  // Track & Sankalpa
+  $("mTrack").textContent = u.track ? (u.track + " Section") : "Both (All Tracks)";
+  $("mCourses").textContent = `${coursesCount} Enrolled Courses`;
+  $("mSankalpa").textContent = u.sankalpa || "“अथातो ब्रह्मजिज्ञासा — Swadhyaya & Gita Adhyayana”";
+  $("mJoined").textContent = u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "Recent";
+
+  // Badges & Buttons State
+  const isLeader = Boolean(u.isLeader || u.role === "leader");
+  const isBlocked = Boolean(u.communityBlocked);
+  const isAdmin = Boolean(u.role === "admin");
+
+  $("mRoleBadge").textContent = isAdmin ? "🛡️ Administrator" : (isLeader ? "⭐ Community Leader" : "Learner");
+  $("mRoleBadge").className = "tag " + (isAdmin ? "admin" : (isLeader ? "leader" : ""));
+
+  $("mBlockBadge").textContent = isBlocked ? "🚫 Blocked from Chat" : "✅ Active (Allowed to chat)";
+  $("mBlockBadge").className = "tag " + (isBlocked ? "blocked" : "");
+
+  // Button Texts & Actions
+  const btnLeader = $("btnToggleLeader");
+  if (isLeader) {
+    btnLeader.textContent = "Revoke Leader Privileges";
+    btnLeader.className = "btn ghost";
+  } else {
+    btnLeader.textContent = "⭐ Promote to Community Leader";
+    btnLeader.className = "btn gold";
+  }
+
+  const btnBlock = $("btnToggleBlock");
+  if (isBlocked) {
+    btnBlock.textContent = "✅ Unblock from Community Chat";
+    btnBlock.className = "btn gold";
+  } else {
+    btnBlock.textContent = "🚫 Block from Community Chat";
+    btnBlock.className = "btn danger";
+  }
+}
+
+// Close Modal
+$("closeUserModal").onclick = () => {
+  $("userInfoModal").classList.remove("open");
+};
+$("userInfoModal").onclick = e => {
+  if (e.target === $("userInfoModal")) {
+    $("userInfoModal").classList.remove("open");
+  }
+};
+
+// Toggle Leader Action
+$("btnToggleLeader").onclick = async () => {
+  if (!currentSelectedUid || !currentSelectedUser) return;
+  const isCurrentlyLeader = Boolean(currentSelectedUser.isLeader || currentSelectedUser.role === "leader");
+  const newLeaderState = !isCurrentlyLeader;
+  const newRole = newLeaderState ? "leader" : (currentSelectedUser.role === "admin" ? "admin" : "learner");
+
+  try {
+    await update(ref(db, "users/" + currentSelectedUid), {
+      isLeader: newLeaderState,
+      role: newRole
+    });
+    currentSelectedUser.isLeader = newLeaderState;
+    currentSelectedUser.role = newRole;
+    cachedUsers[currentSelectedUid] = currentSelectedUser;
+
+    renderModalDetails(currentSelectedUid, currentSelectedUser, 0);
+    applyFilterAndRender();
+    alert(newLeaderState ? "🌟 Seeker promoted to Community Leader! Their messages will display a ⭐ Leader badge." : "Leader privileges revoked.");
+  } catch(err) {
+    alert("Error updating leader status: " + err.message);
+  }
+};
+
+// Toggle Block Action
+$("btnToggleBlock").onclick = async () => {
+  if (!currentSelectedUid || !currentSelectedUser) return;
+  const isCurrentlyBlocked = Boolean(currentSelectedUser.communityBlocked);
+  const newBlockedState = !isCurrentlyBlocked;
+
+  try {
+    await update(ref(db, "users/" + currentSelectedUid), {
+      communityBlocked: newBlockedState
+    });
+    currentSelectedUser.communityBlocked = newBlockedState;
+    cachedUsers[currentSelectedUid] = currentSelectedUser;
+
+    renderModalDetails(currentSelectedUid, currentSelectedUser, 0);
+    applyFilterAndRender();
+    alert(newBlockedState ? "🚫 Seeker blocked from community chat. They cannot send any further messages." : "✅ Seeker unblocked. Chat access restored.");
+  } catch(err) {
+    alert("Error updating block status: " + err.message);
+  }
+};
+
+// Delete All Messages by this user
+$("btnDeleteUserMsgs").onclick = async () => {
+  if (!currentSelectedUid) return;
+  if (!confirm(`Are you sure you want to delete ALL messages sent by this seeker from the community?`)) return;
+
+  const matches = allRawEntries.filter(([id, m]) => m.uid === currentSelectedUid);
+  if (!matches.length) {
+    alert("No messages found from this user in recent feed.");
+    return;
+  }
+
+  let deletedCount = 0;
+  await Promise.all(matches.map(async ([id]) => {
+    try {
+      await remove(ref(db, `community/${COMMUNITY_ROOM}/${id}`));
+      deletedCount++;
+    } catch(e) {
+      try {
+        await remove(ref(db, `community/gita/${id}`));
+        deletedCount++;
+      } catch(e2) {}
+    }
+  }));
+
+  alert(`Deleted ${deletedCount} messages by this seeker.`);
+  $("userInfoModal").classList.remove("open");
+};
 
 // Admin Post Action
 $("adminPostForm").onsubmit = async e => {
@@ -233,8 +634,11 @@ $("adminPostForm").onsubmit = async e => {
   const payload = {
     uid: activeAdmin?.uid || "admin",
     name: "Gurukulam Acharya (Admin)",
+    avatar: "🕉️",
     text: txt,
-    at: Date.now()
+    at: Date.now(),
+    role: "admin",
+    isLeader: false
   };
 
   try {

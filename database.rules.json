@@ -4,7 +4,8 @@
     ".write": false,
 
     "users": {
-      ".read": "auth != null",
+      ".read": true,
+      ".indexOn": ["role", "isLeader", "communityBlocked", "createdAt"],
       "$uid": {
         ".read": true,
         ".write": "(auth != null && (auth.uid === $uid || auth.token.email === 'sgurukulamonline@gmail.com' || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org' || root.child('users').child(auth.uid).child('role').val() === 'admin')) || $uid.beginsWith('ph_') || $uid.beginsWith('admin_')"
@@ -56,11 +57,10 @@
       ".read": true,
       "$room": {
         ".read": true,
-        ".write": true,
-        ".indexOn": ["timestamp", "createdAt"],
+        ".indexOn": ["timestamp", "createdAt", "at"],
         "$messageId": {
           ".read": true,
-          ".write": true
+          ".write": "(!newData.exists()) || (newData.hasChildren(['uid', 'name', 'text']) && !newData.hasChild('phone') && !newData.hasChild('phoneNumber') && (root.child('users').child(newData.child('uid').val()).child('communityBlocked').val() != true) && (newData.child('uid').val().beginsWith('ph_') || newData.child('uid').val().beginsWith('admin_') || (auth != null && (root.child('users').child(auth.uid).child('role').val() === 'admin' || auth.token.email === 'sgurukulamonline@gmail.com' || auth.token.email === 'reshwanthreddy.gangula@gmail.com' || auth.token.email === 'admin@gurukulam.org'))))"
         }
       }
     },

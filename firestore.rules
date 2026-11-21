@@ -30,6 +30,12 @@ service cloud.firestore {
       return userId.matches('^ph_.*');
     }
 
+    function isNotCommunityBlocked(userId) {
+      return !exists(/databases/$(database)/documents/users/$(userId)) ||
+             !('communityBlocked' in get(/databases/$(database)/documents/users/$(userId)).data) ||
+             get(/databases/$(database)/documents/users/$(userId)).data.communityBlocked != true;
+    }
+
     // -------------------------------------------------------------
     // 1. Users Profile Collection
     // -------------------------------------------------------------
@@ -101,7 +107,7 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
-    // 8. Community Chat Collection
+    // 8. Community Chat Collection (Strict Phone-Login & Privacy Protection)
     // -------------------------------------------------------------
     match /community/{roomId} {
       allow read: if true;
@@ -109,14 +115,22 @@ service cloud.firestore {
 
       match /messages/{messageId} {
         allow read: if true;
-        allow create: if true;
+        // Strictly prevent leaking phone numbers in public community payload
+        // Require author to be a verified phone user or admin, and not blocked
+        allow create: if !('phone' in request.resource.data) &&
+                         !('phoneNumber' in request.resource.data) &&
+                         (isPhoneUser(request.resource.data.uid) || isAdmin()) &&
+                         isNotCommunityBlocked(request.resource.data.uid);
         allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
       }
     }
     // Flat community messages collection
     match /community_messages/{messageId} {
       allow read: if true;
-      allow create: if true;
+      allow create: if !('phone' in request.resource.data) &&
+                       !('phoneNumber' in request.resource.data) &&
+                       (isPhoneUser(request.resource.data.uid) || isAdmin()) &&
+                       isNotCommunityBlocked(request.resource.data.uid);
       allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
     }
 

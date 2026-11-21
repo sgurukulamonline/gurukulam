@@ -101,6 +101,8 @@ input,select,textarea{font:inherit;padding:10px 14px;border:1px solid var(--line
 .profile-info h1{font-size:2.3rem;color:var(--maroon);line-height:1.1}
 .tag{padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:600;background:#f1b36a;color:var(--brown)}
 .tag.admin{background:var(--maroon);color:var(--cream)}
+.tag.leader{background:#fef08a;color:#854d0e;border:1px solid #facc15}
+.tag.blocked{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
 .tag.verified{background:#dcfce7;color:#166534;border:1px solid #86efac;font-size:.7rem}
 .sub-title{color:var(--muted);font-size:.88rem;margin-bottom:12px}
 
@@ -443,6 +445,38 @@ footer .footer-links a:hover{color:var(--gold)}
     </div>
     <div class="grid" id="all"></div>
   </div>
+
+  <!-- Dedicated Admin Community Management Panel (Visible to Admins) -->
+  <div class="panel" id="adminCommunityPanel" style="display:none">
+    <div class="panel-head" style="flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div>
+        <h2 style="margin:0">👥 Community Moderation &amp; Leaders</h2>
+        <p class="muted" style="font-size:.85rem">Live community stream • Click any seeker to inspect phone number, promote to Leader, or block</p>
+      </div>
+      <a href="admin-community.html" class="btn sm gold">Open Full Community Hub ↗</a>
+    </div>
+
+    <!-- Quick stats inside panel -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+      <div style="background:#fff;padding:10px 12px;border-radius:12px;border:1px solid var(--line);text-align:center">
+        <b id="dashCommTotal" style="font-size:1.4rem;color:var(--maroon);display:block">0</b>
+        <span style="font-size:.76rem;color:var(--muted)">Messages</span>
+      </div>
+      <div style="background:#fff;padding:10px 12px;border-radius:12px;border:1px solid var(--line);text-align:center">
+        <b id="dashCommLeaders" style="font-size:1.4rem;color:#d97706;display:block">0</b>
+        <span style="font-size:.76rem;color:var(--muted)">⭐ Leaders</span>
+      </div>
+      <div style="background:#fff;padding:10px 12px;border-radius:12px;border:1px solid var(--line);text-align:center">
+        <b id="dashCommBlocked" style="font-size:1.4rem;color:#dc2626;display:block">0</b>
+        <span style="font-size:.76rem;color:var(--muted)">🚫 Blocked</span>
+      </div>
+    </div>
+
+    <!-- Live Moderation Message Feed -->
+    <div id="dashCommFeed" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:12px;background:#fff;border-radius:14px;border:1px solid var(--line)">
+      <p class="muted" style="text-align:center;padding:20px">Loading community messages…</p>
+    </div>
+  </div>
 </div>
 
 <!-- Edit Profile Modal -->
@@ -512,6 +546,58 @@ footer .footer-links a:hover{color:var(--gold)}
 </div>
 
 
+<!-- Admin Seeker Info Modal inside Dashboard -->
+<div class="modal-overlay" id="dashSeekerModal">
+  <div class="modal-box" style="max-width:520px;max-height:90vh;overflow-y:auto">
+    <button class="modal-close" id="closeDashSeekerModal" type="button">✕</button>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)">
+      <div id="dsmAvatar" style="width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#f3dfb2,#e8c98f);display:grid;place-items:center;font-size:1.8rem;border:1px solid rgba(122,46,22,.2);flex-shrink:0">🕉️</div>
+      <div style="flex:1;min-width:0">
+        <h3 id="dsmName" style="font-family:'Cormorant Garamond',serif;font-size:1.75rem;color:var(--maroon);line-height:1.15;word-break:break-word">Seeker Name</h3>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap">
+          <span id="dsmRoleBadge" class="tag">Learner</span>
+          <span id="dsmBlockBadge" class="tag" style="background:#dcfce7;color:#166534">Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:18px;font-size:.88rem">
+      <div style="background:#fff;padding:10px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">📱 Real Mobile Phone:</span>
+        <b id="dsmPhone" style="color:var(--maroon);font-family:monospace;font-size:1rem">+91 ----------</b>
+      </div>
+      <div style="background:#fff;padding:10px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">🆔 Account UID:</span>
+        <span id="dsmUid" style="font-family:monospace;font-size:.82rem;color:var(--brown)">ph_...</span>
+      </div>
+      <div style="background:#fff;padding:10px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">🎯 Learning Track:</span>
+        <b id="dsmTrack" style="color:var(--brown)">Both (All)</b>
+      </div>
+      <div style="background:#fff;padding:10px 14px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+        <span style="color:var(--muted)">📚 Enrolled Courses:</span>
+        <b id="dsmCourses" style="color:var(--brown)">0 Courses</b>
+      </div>
+      <div style="background:#fff;padding:10px 14px;border-radius:12px;border:1px solid var(--line)">
+        <span style="color:var(--muted);display:block;margin-bottom:4px;font-size:.78rem">✨ Sacred Sankalpa:</span>
+        <p id="dsmSankalpa" style="font-style:italic;color:var(--brown);font-size:.84rem;line-height:1.4">None recorded</p>
+      </div>
+    </div>
+
+    <div style="background:#f5e7c8;border-radius:14px;padding:14px;border:1px solid rgba(122,46,22,.2)">
+      <h4 style="font-size:1.1rem;color:var(--maroon);margin-bottom:10px;font-weight:700">Acharya Moderation Actions</h4>
+      <div style="display:flex;gap:8px;flex-direction:column">
+        <button type="button" class="btn gold sm" id="btnDashToggleLeader" style="justify-content:center;font-weight:600">
+          ⭐ Promote to Community Leader
+        </button>
+        <button type="button" class="btn danger sm" id="btnDashToggleBlock" style="justify-content:center;font-weight:600">
+          🚫 Block from Community Chat
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
     <h3>Sanathana Gurukulam</h3>
@@ -548,7 +634,7 @@ footer .footer-links a:hover{color:var(--gold)}
 </nav>
 
 <script type="module">
-import { db, requireUser, logout, esc, ref, get, set, update, list, onValue, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser, getCourseLessonCount } from "./firebase-init.js";
+import { db, requireUser, logout, esc, ref, get, set, update, remove, list, onValue, query, limitToLast, DEFAULT_COURSES, getCourseIcon, getMockUser, setMockUser, getCourseLessonCount } from "./firebase-init.js";
 
 const $ = id => document.getElementById(id);
 const when = t => new Date(t).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
@@ -620,12 +706,22 @@ function renderProfile() {
     $("pAvatar").textContent = emblem;
   }
 
+  const isLeader = Boolean(userProfile.isLeader || role === "leader");
+  const isBlocked = Boolean(userProfile.communityBlocked);
+
   $("pName").textContent = name;
-  $("userRole").textContent = role === "admin" ? "Administrator" : "Learner";
   if (role === "admin") {
-    $("userRole").classList.add("admin");
+    $("userRole").textContent = "Administrator";
+    $("userRole").className = "tag admin";
+    initAdminCommunitySection();
+  } else if (isLeader) {
+    $("userRole").textContent = "⭐ Community Leader";
+    $("userRole").className = "tag leader";
+  } else {
+    $("userRole").textContent = "Learner";
+    $("userRole").className = "tag";
   }
-  $("pSubTitle").textContent = (role === "admin" ? "Administrator" : "Learner") + " · Sanathana Gurukulam";
+  $("pSubTitle").textContent = (role === "admin" ? "Administrator" : (isLeader ? "Community Leader" : "Learner")) + " · Sanathana Gurukulam";
   
   // Phone display: show ONLY if real verified/entered phone exists and is not fake fallback
   const isFakePhone = !rawPhone || rawPhone === "+91 98765 43210" || rawPhone.toLowerCase() === "pending";
@@ -1085,7 +1181,258 @@ document.addEventListener("click", async e => {
       toast(`Lesson ${nextIdx} completed! (${newProgress}% total)`, "✨");
     }
   }
+
+  // Admin Dashboard Community moderation clicks
+  const dView = e.target.closest("[data-dash-view]");
+  if (dView) {
+    const uid = dView.dataset.dashView;
+    const name = dView.dataset.name || "Seeker";
+    openDashSeekerModal(uid, name);
+    return;
+  }
+  const dDel = e.target.closest("[data-dash-del]");
+  if (dDel) {
+    const id = dDel.dataset.dashDel;
+    if (confirm("Delete this community message?")) {
+      remove(ref(db, "community/community/" + id)).catch(() => {
+        remove(ref(db, "community/gita/" + id));
+      });
+      toast("Message deleted from community.", "🗑️");
+    }
+    return;
+  }
 });
+
+// -------------------------------------------------------------
+// DEDICATED ADMIN COMMUNITY SECTION (In Dashboard)
+// -------------------------------------------------------------
+let dashCachedUsers = {};
+let dashSelectedUid = null;
+let dashSelectedUser = null;
+let dashUnlistenComm = null;
+
+function formatDashPhone(uid, uData) {
+  let rawPhone = uData?.phone || uData?.phoneNumber || "";
+  if (!rawPhone && uid && uid.startsWith("ph_")) {
+    const digits = uid.replace(/^ph_/, "");
+    if (digits.length === 10) rawPhone = "+91 " + digits.slice(0, 5) + " " + digits.slice(5);
+    else rawPhone = digits;
+  }
+  if (!rawPhone) return "No phone recorded";
+  const clean = rawPhone.replace(/\D/g, "");
+  if (clean.length === 10) return "+91 " + clean.slice(0, 5) + " " + clean.slice(5);
+  else if (clean.length === 12 && clean.startsWith("91")) return "+91 " + clean.slice(2, 7) + " " + clean.slice(7);
+  return rawPhone;
+}
+
+function initAdminCommunitySection() {
+  const panel = $("adminCommunityPanel");
+  if (!panel) return;
+  panel.style.display = "block";
+
+  if (dashUnlistenComm) dashUnlistenComm();
+  dashUnlistenComm = onValue(query(ref(db, "community/community"), limitToLast(60)), async snap => {
+    const entries = Object.entries(snap.val() || {});
+    await preloadDashUsers(entries);
+    renderDashCommunityFeed(entries);
+  }, err => {
+    dashUnlistenComm = onValue(query(ref(db, "community/gita"), limitToLast(60)), async snap => {
+      const entries = Object.entries(snap.val() || {});
+      await preloadDashUsers(entries);
+      renderDashCommunityFeed(entries);
+    });
+  });
+}
+
+async function preloadDashUsers(entries) {
+  const uids = [...new Set(entries.map(([k, m]) => m.uid).filter(Boolean))];
+  const missing = uids.filter(uid => !dashCachedUsers[uid]);
+  if (!missing.length) return;
+  await Promise.all(missing.map(async uid => {
+    try {
+      const snap = await get(ref(db, "users/" + uid));
+      if (snap.exists() && snap.val()) dashCachedUsers[uid] = snap.val();
+      else dashCachedUsers[uid] = { name: "Learner", role: "learner" };
+    } catch(e) {
+      dashCachedUsers[uid] = { name: "Learner", role: "learner" };
+    }
+  }));
+}
+
+function renderDashCommunityFeed(entries) {
+  const feed = $("dashCommFeed");
+  if (!feed) return;
+
+  const leaderUids = new Set();
+  const blockedUids = new Set();
+
+  entries.forEach(([id, m]) => {
+    const u = dashCachedUsers[m.uid] || {};
+    if (m.isLeader || m.role === "leader" || u.isLeader || u.role === "leader") {
+      if (m.uid) leaderUids.add(m.uid);
+    }
+    if (u.communityBlocked) {
+      if (m.uid) blockedUids.add(m.uid);
+    }
+  });
+
+  if ($("dashCommTotal")) $("dashCommTotal").textContent = entries.length;
+  if ($("dashCommLeaders")) $("dashCommLeaders").textContent = leaderUids.size;
+  if ($("dashCommBlocked")) $("dashCommBlocked").textContent = blockedUids.size;
+
+  if (!entries.length) {
+    feed.innerHTML = '<p class="muted" style="text-align:center;padding:20px">No community messages yet.</p>';
+    return;
+  }
+
+  feed.innerHTML = [...entries].reverse().slice(0, 30).map(([id, m]) => {
+    const uid = m.uid || "";
+    const u = dashCachedUsers[uid] || {};
+    const displayName = u.name || m.name || "Learner";
+    const avatar = m.avatar || u.avatar || u.emblem || "🕉️";
+    const isLeader = Boolean(m.isLeader || m.role === "leader" || u.isLeader || u.role === "leader");
+    const isBlocked = Boolean(u.communityBlocked);
+    const isAdmin = Boolean(m.role === "admin" || u.role === "admin");
+    const timeStr = m.at ? new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;background:#fbf6ec;border:1px solid var(--line)">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+            <div data-dash-view="${esc(uid)}" data-name="${esc(displayName)}" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:2px 8px;border-radius:10px;background:#f3dfb2;border:1px solid rgba(122,46,22,.2)" title="Click to inspect phone number & manage">
+              <span>${avatar}</span>
+              <b style="color:var(--maroon);font-size:.86rem">${esc(displayName)}</b>
+              ${isLeader ? '<span class="tag leader" style="font-size:.62rem;padding:1px 5px">⭐ Leader</span>' : ''}
+              ${isAdmin ? '<span class="tag admin" style="font-size:.62rem;padding:1px 5px">🛡️ Admin</span>' : ''}
+              ${isBlocked ? '<span class="tag blocked" style="font-size:.62rem;padding:1px 5px">🚫 Blocked</span>' : ''}
+              <span style="font-size:.68rem;opacity:.65">🔍</span>
+            </div>
+            <span style="font-size:.72rem;color:var(--muted)">${timeStr}</span>
+          </div>
+          <div style="font-size:.86rem;color:var(--brown);line-height:1.4;word-break:break-word">${esc(m.text || "")}</div>
+        </div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <button class="btn ghost sm" data-dash-view="${esc(uid)}" data-name="${esc(displayName)}" style="padding:4px 8px;font-size:.74rem">👤 Info</button>
+          <button class="btn danger sm" data-dash-del="${id}" style="padding:4px 8px;font-size:.74rem">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// Open Seeker Modal in Dashboard
+async function openDashSeekerModal(uid, fallbackName) {
+  dashSelectedUid = uid;
+  const modal = $("dashSeekerModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+
+  $("dsmName").textContent = "Loading Seeker Info…";
+  $("dsmPhone").textContent = "Fetching…";
+  $("dsmUid").textContent = uid || "Unknown UID";
+
+  let uData = dashCachedUsers[uid];
+  if (!uData || !uData.phone) {
+    try {
+      const snap = await get(ref(db, "users/" + uid));
+      if (snap.exists() && snap.val()) {
+        uData = snap.val();
+        dashCachedUsers[uid] = uData;
+      }
+    } catch(e) {}
+  }
+
+  let courseCount = 0;
+  try {
+    const eSnap = await get(ref(db, "enrollments/" + uid));
+    if (eSnap.exists() && eSnap.val()) courseCount = Object.keys(eSnap.val()).length;
+  } catch(e) {}
+
+  dashSelectedUser = uData || { name: fallbackName, role: "learner" };
+  renderDashModalDetails(uid, dashSelectedUser, courseCount);
+}
+
+function renderDashModalDetails(uid, u, courseCount) {
+  $("dsmName").textContent = u.name || "Sadhaka";
+  $("dsmAvatar").textContent = u.avatar || u.emblem || "🕉️";
+  $("dsmUid").textContent = uid;
+  $("dsmPhone").textContent = formatDashPhone(uid, u);
+  $("dsmTrack").textContent = u.track ? (u.track + " Section") : "Both (All Tracks)";
+  $("dsmCourses").textContent = `${courseCount} Enrolled Courses`;
+  $("dsmSankalpa").textContent = u.sankalpa || "“अथातो ब्रह्मजिज्ञासा — Swadhyaya & Gita Adhyayana”";
+
+  const isLeader = Boolean(u.isLeader || u.role === "leader");
+  const isBlocked = Boolean(u.communityBlocked);
+  const isAdmin = Boolean(u.role === "admin");
+
+  $("dsmRoleBadge").textContent = isAdmin ? "🛡️ Administrator" : (isLeader ? "⭐ Community Leader" : "Learner");
+  $("dsmRoleBadge").className = "tag " + (isAdmin ? "admin" : (isLeader ? "leader" : ""));
+
+  $("dsmBlockBadge").textContent = isBlocked ? "🚫 Blocked from Chat" : "✅ Active (Allowed to chat)";
+  $("dsmBlockBadge").className = "tag " + (isBlocked ? "blocked" : "");
+
+  const btnLeader = $("btnDashToggleLeader");
+  if (isLeader) {
+    btnLeader.textContent = "Revoke Leader Privileges";
+    btnLeader.className = "btn ghost sm";
+  } else {
+    btnLeader.textContent = "⭐ Promote to Community Leader";
+    btnLeader.className = "btn gold sm";
+  }
+
+  const btnBlock = $("btnDashToggleBlock");
+  if (isBlocked) {
+    btnBlock.textContent = "✅ Unblock from Community Chat";
+    btnBlock.className = "btn gold sm";
+  } else {
+    btnBlock.textContent = "🚫 Block from Community Chat";
+    btnBlock.className = "btn danger sm";
+  }
+}
+
+$("closeDashSeekerModal").onclick = () => { $("dashSeekerModal").style.display = "none"; };
+$("dashSeekerModal").onclick = e => { if (e.target === $("dashSeekerModal")) $("dashSeekerModal").style.display = "none"; };
+
+$("btnDashToggleLeader").onclick = async () => {
+  if (!dashSelectedUid || !dashSelectedUser) return;
+  const isCurrentlyLeader = Boolean(dashSelectedUser.isLeader || dashSelectedUser.role === "leader");
+  const newLeaderState = !isCurrentlyLeader;
+  const newRole = newLeaderState ? "leader" : (dashSelectedUser.role === "admin" ? "admin" : "learner");
+
+  try {
+    await update(ref(db, "users/" + dashSelectedUid), {
+      isLeader: newLeaderState,
+      role: newRole
+    });
+    dashSelectedUser.isLeader = newLeaderState;
+    dashSelectedUser.role = newRole;
+    dashCachedUsers[dashSelectedUid] = dashSelectedUser;
+
+    renderDashModalDetails(dashSelectedUid, dashSelectedUser, 0);
+    toast(newLeaderState ? "🌟 Seeker promoted to Community Leader!" : "Leader privileges revoked.", "⭐");
+  } catch(err) {
+    alert("Error updating leader status: " + err.message);
+  }
+};
+
+$("btnDashToggleBlock").onclick = async () => {
+  if (!dashSelectedUid || !dashSelectedUser) return;
+  const isCurrentlyBlocked = Boolean(dashSelectedUser.communityBlocked);
+  const newBlockedState = !isCurrentlyBlocked;
+
+  try {
+    await update(ref(db, "users/" + dashSelectedUid), {
+      communityBlocked: newBlockedState
+    });
+    dashSelectedUser.communityBlocked = newBlockedState;
+    dashCachedUsers[dashSelectedUid] = dashSelectedUser;
+
+    renderDashModalDetails(dashSelectedUid, dashSelectedUser, 0);
+    toast(newBlockedState ? "🚫 Seeker blocked from community chat." : "✅ Seeker unblocked.", "🛡️");
+  } catch(err) {
+    alert("Error updating block status: " + err.message);
+  }
+};
 </script>
 </body>
 </html>

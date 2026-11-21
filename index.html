@@ -768,6 +768,13 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
           <input id="chatIn" placeholder="Write a message to the community…" aria-label="Message" required>
           <button type="submit">Send</button>
         </form>
+        <div id="chatAuthGate" style="display:none;padding:16px;text-align:center;background:var(--card);border-top:1px solid var(--line)">
+          <p style="font-size:.88rem;color:var(--brown);margin-bottom:8px">📱 Sign in with your mobile number to participate in community discussions</p>
+          <a class="btn gold sm" href="login.html?redirect=index.html%23community" style="font-weight:600;display:inline-flex;align-items:center;gap:6px">📱 Login with Mobile Number</a>
+        </div>
+        <div id="chatBlockedGate" style="display:none;padding:14px;text-align:center;background:#fee2e2;border-top:1px solid #ef4444;color:#991b1b;font-size:.88rem;font-weight:600">
+          🚫 Your community messaging privileges have been suspended.
+        </div>
       </div>
     </div>
   </div></section>
@@ -832,7 +839,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
 </nav>
 
 <script type="module">
-import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list, getMockUser } from "./firebase-init.js";
+import { loadCourses, auth, onAuthStateChanged, db, ref, onValue, push, esc, list, getMockUser, ensureProfile } from "./firebase-init.js";
 
 
 
@@ -1091,6 +1098,18 @@ storyModal?.addEventListener("click", e => {
 // Community chat on homepage (Unified Gurukulam Community)
 const COMMUNITY_ROOM = "community";
 let unlistenChat = null;
+let currentChatUser = null;
+let currentChatProfile = null;
+
+function sanitizeSeekerName(raw) {
+  if (!raw) return "Sadhaka";
+  const s = String(raw).trim();
+  // Strip any accidental 10-digit phone number or numbers with country codes to protect privacy
+  if (s.replace(/\D/g, "").length >= 7) {
+    return "Sadhaka";
+  }
+  return s;
+}
 
 function renderHomeMsgs(entries) {
   const box = document.getElementById("msgs");
@@ -1099,15 +1118,80 @@ function renderHomeMsgs(entries) {
     box.innerHTML = '<p class="muted" style="text-align:center;padding:24px">No messages in the community yet. Start the conversation!</p>';
     return;
   }
-  const curUid = auth.currentUser?.uid;
-  box.innerHTML = entries.slice(-15).map(([k, m]) => `
-    <div class="m ${m.uid === curUid ? 'me' : ''}">
-      <small>${esc(m.name || "Learner")}</small>
-      ${esc(m.text || "")}
-    </div>
-  `).join("");
+  const curUid = currentChatUser?.uid || auth.currentUser?.uid;
+  box.innerHTML = entries.slice(-25).map(([k, m]) => {
+    const isMe = curUid && m.uid === curUid;
+    const safeName = sanitizeSeekerName(m.name);
+    const avatar = m.avatar || "🕉️";
+    const isLeader = Boolean(m.isLeader || m.role === "leader");
+    const isAdmin = Boolean(m.role === "admin");
+    const leaderBadge = isLeader ? '<span style="background:#fef08a;color:#854d0e;padding:1px 6px;border-radius:10px;font-size:.65rem;font-weight:700;margin-left:4px">⭐ Leader</span>' : '';
+    const adminBadge = isAdmin ? '<span style="background:#7A2E16;color:#F7E8C8;padding:1px 6px;border-radius:10px;font-size:.65rem;font-weight:700;margin-left:4px">🛡️ Admin</span>' : '';
+
+    return `
+      <div class="m ${isMe ? 'me' : ''}">
+        <small style="display:flex;align-items:center;gap:4px">
+          <span>${avatar}</span>
+          <span>${esc(safeName)}</span>
+          ${leaderBadge}
+          ${adminBadge}
+        </small>
+        <div style="margin-top:2px;word-break:break-word">${esc(m.text || "")}</div>
+      </div>
+    `;
+  }).join("");
   box.scrollTop = box.scrollHeight;
 }
+
+function isMobileUser(user, profile) {
+  if (!user) return false;
+  if (user.role === "admin" || profile?.role === "admin") return true;
+  if (user.uid && user.uid.startsWith("ph_") && !user.uid.includes("seeker")) return true;
+  if (user.authProvider === "msg91_otp") return true;
+  const p1 = (user.phoneNumber || "").replace(/\D/g, "");
+  const p2 = (user.phone || "").replace(/\D/g, "");
+  const p3 = (profile?.phone || "").replace(/\D/g, "");
+  if (p1.length >= 10 || p2.length >= 10 || p3.length >= 10) return true;
+  return false;
+}
+
+function updateHomeChatGate() {
+  const form = document.getElementById("chatForm");
+  const authGate = document.getElementById("chatAuthGate");
+  const blockedGate = document.getElementById("chatBlockedGate");
+  if (!form || !authGate || !blockedGate) return;
+
+  const mobileOk = isMobileUser(currentChatUser, currentChatProfile);
+  const isBlocked = Boolean(currentChatProfile?.communityBlocked);
+
+  if (isBlocked) {
+    form.style.display = "none";
+    authGate.style.display = "none";
+    blockedGate.style.display = "block";
+  } else if (!mobileOk) {
+    form.style.display = "none";
+    authGate.style.display = "block";
+    blockedGate.style.display = "none";
+  } else {
+    form.style.display = "flex";
+    authGate.style.display = "none";
+    blockedGate.style.display = "none";
+  }
+}
+
+onAuthStateChanged(auth, async u => {
+  currentChatUser = u || (typeof getMockUser === "function" ? getMockUser() : null);
+  if (currentChatUser) {
+    try {
+      currentChatProfile = await ensureProfile(currentChatUser);
+    } catch(e) {
+      currentChatProfile = null;
+    }
+  } else {
+    currentChatProfile = null;
+  }
+  updateHomeChatGate();
+});
 
 function loadCommunityChat() {
   if (unlistenChat) unlistenChat();
@@ -1125,29 +1209,38 @@ function loadCommunityChat() {
 }
 loadCommunityChat();
 
-// Chat submit
+// Chat submit (Strict Mobile Phone User check, No phone data stored in public payload)
 document.getElementById("chatForm")?.addEventListener("submit", async e => {
   e.preventDefault();
   const input = document.getElementById("chatIn");
   const txt = input.value.trim();
   if (!txt) return;
-  const user = (typeof getMockUser === "function" ? getMockUser() : null) || auth.currentUser;
-  let senderName = user?.displayName || user?.name || "Seeker";
-  let uid = user?.uid;
-  if (!uid || (!uid.startsWith("ph_") && !uid.startsWith("admin_"))) {
-    let savedGuestId = localStorage.getItem("sg_guest_uid");
-    if (!savedGuestId) {
-      savedGuestId = "ph_seeker_" + Math.random().toString(36).slice(2, 10);
-      localStorage.setItem("sg_guest_uid", savedGuestId);
-    }
-    uid = savedGuestId;
+
+  const user = currentChatUser || (typeof getMockUser === "function" ? getMockUser() : null) || auth.currentUser;
+  if (!isMobileUser(user, currentChatProfile)) {
+    showToast("📱 Please sign in with your mobile number to chat in the community.");
+    setTimeout(() => { location.href = "login.html?redirect=index.html%23community"; }, 1200);
+    return;
+  }
+  if (currentChatProfile?.communityBlocked) {
+    showToast("🚫 Your community messaging access has been suspended.");
+    return;
   }
 
+  const senderName = sanitizeSeekerName(currentChatProfile?.name || user?.displayName || "Sadhaka");
+  const avatar = currentChatProfile?.avatar || currentChatProfile?.emblem || "🕉️";
+  const isLeader = Boolean(currentChatProfile?.isLeader || currentChatProfile?.role === "leader");
+  const role = currentChatProfile?.role || "learner";
+
+  // PRIVACY: under no circumstances store phone or phoneNumber in the public payload
   const payload = {
-    uid,
+    uid: user.uid,
     name: senderName,
+    avatar: avatar,
     text: txt,
-    at: Date.now()
+    at: Date.now(),
+    isLeader: isLeader,
+    role: role
   };
 
   try {
