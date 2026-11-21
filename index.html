@@ -1285,41 +1285,6 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
   let introDismissed = false;
   let autoTimer = null;
 
-  // Synthesize rich Vedic Temple Bell & Om Chime with Web Audio API
-  function playSacredBell(pitch = 1) {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-
-      const now = ctx.currentTime;
-      // Authentic temple brass bell acoustic harmonics
-      const partials = [
-        { ratio: 1.0 * pitch, gain: 0.35, decay: 3.8 },
-        { ratio: 2.76 * pitch, gain: 0.22, decay: 2.6 },
-        { ratio: 5.4 * pitch, gain: 0.14, decay: 1.8 },
-        { ratio: 8.9 * pitch, gain: 0.08, decay: 1.2 }
-      ];
-
-      partials.forEach(p => {
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(432 * p.ratio, now);
-
-        gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(p.gain, now + 0.02);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
-
-        osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + p.decay + 0.1);
-      });
-    } catch (e) {}
-  }
-
   // Full-Screen Ambient Golden Stardust & Ember Particle System
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -1372,16 +1337,12 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
   }
 
   // Dismiss / Enter Transition
-  function dismissIntro(playSound = true) {
+  function dismissIntro() {
     if (introDismissed) return;
     introDismissed = true;
     if (autoTimer) {
       clearTimeout(autoTimer);
       autoTimer = null;
-    }
-
-    if (playSound) {
-      playSacredBell(1.0);
     }
 
     if (!introOverlay || introOverlay.classList.contains('intro-hidden')) return;
@@ -1395,18 +1356,18 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
 
   // Tap anywhere on overlay or click the button to enter
   introOverlay.addEventListener('click', () => {
-    dismissIntro(true);
+    dismissIntro();
   });
   btnEnter?.addEventListener('click', (e) => {
     e.stopPropagation();
-    dismissIntro(true);
+    dismissIntro();
   });
 
   // Keyboard accessibility (Space, Enter, Esc)
   document.addEventListener('keydown', (e) => {
     if (introOverlay && !introOverlay.classList.contains('intro-hidden')) {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
-        dismissIntro(true);
+        dismissIntro();
       }
     }
   });
@@ -1418,7 +1379,7 @@ document.getElementById("btnHomeMarkRead")?.addEventListener("click", () => {
 
     if (autoTimer) clearTimeout(autoTimer);
     autoTimer = setTimeout(() => {
-      dismissIntro(false);
+      dismissIntro();
     }, 4500);
   }
 
