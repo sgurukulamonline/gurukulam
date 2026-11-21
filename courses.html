@@ -247,11 +247,6 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
         <input type="search" id="mobileCourseSearch" placeholder="Search courses, shlokas, topics…" aria-label="Search">
       </label>
     </div>
-    <div class="chips" id="chipsBox">
-      <button class="chip on" data-f="all">All Courses</button>
-      <button class="chip" data-f="kids">👶 Kids (Ages 5–15)</button>
-      <button class="chip" data-f="adults">🕉️ Adults (Ages 16+)</button>
-    </div>
   </div>
   <section>
     <div class="courses" id="coursesGrid">
@@ -321,13 +316,24 @@ const pathNames = {
   sadhaka: "🕉️ Adults Gurukulam (Ages 16+)",
   jnana: "🕉️ Adults Gurukulam (Ages 16+)"
 };
+
+const pathSubs = {
+  kids: "సంస్కారం • సంప్రదాయం • కథలు — Dedicated curriculum for young minds (Ages 5–15)",
+  adults: "ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం — Dedicated curriculum for seekers and adults (Ages 16+)",
+  bala: "సంస్కారం • సంప్రదాయం • కథలు — Dedicated curriculum for young minds (Ages 5–15)",
+  yuva: "ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం — Dedicated curriculum for seekers and adults (Ages 16+)",
+  sadhaka: "ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం — Dedicated curriculum for seekers and adults (Ages 16+)",
+  jnana: "ఆధ్యాత్మికం • సాధన • గీతా ధ్యానం — Dedicated curriculum for seekers and adults (Ages 16+)"
+};
+
 if (initialPath && pathNames[initialPath]) {
   const pt = document.getElementById("pageTitle");
   const ps = document.getElementById("pageSub");
   if (pt) pt.textContent = pathNames[initialPath];
-  if (ps) ps.innerHTML = `Curated lessons for ${pathNames[initialPath]} · <a href="courses.html" style="color:var(--maroon);text-decoration:underline;font-weight:600">View All Courses →</a>`;
+  if (ps) ps.textContent = pathSubs[initialPath] || `Curated lessons for ${pathNames[initialPath]}`;
   activeFilter = initialPath;
-  document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === initialPath));
+} else {
+  activeFilter = "all";
 }
 
 function matchesCourseAgeGroup(c, targetGroup) {
@@ -373,10 +379,9 @@ function render() {
       <button class="btn sm" id="resetBtn">View All Courses</button>
     </div>`;
     document.getElementById("resetBtn")?.addEventListener("click", () => {
-      activeFilter = "all";
+      activeFilter = initialPath || "all";
       if (searchInput) searchInput.value = "";
       if (mobileSearchInput) mobileSearchInput.value = "";
-      document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
       render();
     });
     return;
@@ -419,25 +424,6 @@ searchInput?.addEventListener("input", () => {
 mobileSearchInput?.addEventListener("input", () => {
   if (searchInput) searchInput.value = mobileSearchInput.value;
   render();
-});
-
-// Filter chips
-document.querySelectorAll(".chip").forEach(b => {
-  b.onclick = () => {
-    document.querySelectorAll(".chip").forEach(x => x.classList.remove("on"));
-    b.classList.add("on");
-    activeFilter = b.dataset.f;
-    const pt = document.getElementById("pageTitle");
-    const ps = document.getElementById("pageSub");
-    if (pathNames[activeFilter]) {
-      if (pt) pt.textContent = pathNames[activeFilter];
-      if (ps) ps.innerHTML = `Curated lessons for ${pathNames[activeFilter]} · <a href="courses.html" style="color:var(--maroon);text-decoration:underline;font-weight:600">View All Courses →</a>`;
-    } else {
-      if (pt) pt.textContent = "All Courses";
-      if (ps) ps.textContent = "Learn at your own pace with structured lessons";
-    }
-    render();
-  };
 });
 
 // Language switcher
