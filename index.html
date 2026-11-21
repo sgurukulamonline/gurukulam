@@ -32,32 +32,27 @@ header{
   background:rgba(252,244,226,.94);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
-  padding:max(8px, env(safe-area-inset-top, 8px)) max(18px, env(safe-area-inset-right, 18px)) 8px max(18px, env(safe-area-inset-left, 18px));
+  padding:max(10px, env(safe-area-inset-top, 10px)) clamp(20px, 3.5vw, 48px) 10px clamp(20px, 3.5vw, 48px);
 }
-.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:4px 8px;box-sizing:border-box}
-.logo{display:flex;align-items:center;gap:10px;margin-left:6px;flex-shrink:0}
+.bar{display:flex;align-items:center;justify-content:space-between;min-height:68px;height:auto;padding:4px 6px;max-width:1320px;margin:0 auto;box-sizing:border-box}
+.logo{display:flex;align-items:center;gap:10px;margin-left:4px;flex-shrink:0}
 .logo svg{width:44px;height:44px;flex-shrink:0}
 .logo span{display:flex;flex-direction:column;justify-content:center;padding-top:2px}
 .logo b{font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--maroon);line-height:1.06;display:block}
 .logo small{font-size:.54rem;letter-spacing:.16em;color:var(--muted);margin-top:2px;display:block}
-.search{flex:1;max-width:360px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#ecd9b0;border-radius:30px;padding:9px 16px;font-size:.85rem;color:var(--muted)}
-.search input{border:0;background:none;width:100%;font:inherit;color:var(--text);outline:none}
-nav.top{display:none;gap:20px;font-size:.88rem;font-weight:500}
-nav.top a:hover{color:var(--gold)}
+.header-right{display:flex;align-items:center;gap:12px;margin-left:auto}
 .lang{display:flex;border:1px solid var(--maroon);border-radius:20px;overflow:hidden;font-size:.78rem;flex-shrink:0}
 .lang button{padding:5px 12px}
 .lang .on{background:var(--maroon);color:var(--cream)}
 .avatar{
   width:42px;height:42px;border-radius:50%;background:var(--brown);color:var(--cream);
-  display:grid;place-items:center;font-size:1.1rem;margin-right:6px;flex-shrink:0;
+  display:grid;place-items:center;font-size:1.1rem;margin-right:4px;flex-shrink:0;
   box-shadow:0 2px 6px rgba(74,31,14,.18);transition:transform .15s ease;
 }
 .avatar:hover{transform:scale(1.05)}
-@media(min-width:980px){nav.top{display:flex}}
-@media(max-width:880px){.search{display:none}}
 @media(max-width:768px){
-  header{padding:max(8px, env(safe-area-inset-top, 8px)) max(14px, env(safe-area-inset-right, 14px)) 6px max(14px, env(safe-area-inset-left, 14px))}
-  .bar{padding:4px 6px;gap:10px}
+  header{padding:max(8px, env(safe-area-inset-top, 8px)) max(16px, env(safe-area-inset-right, 16px)) 8px max(16px, env(safe-area-inset-left, 16px))}
+  .bar{padding:4px 0;gap:10px}
 }
 @media(max-width:560px){.bar{justify-content:space-between}}
 
@@ -87,7 +82,13 @@ nav.top a:hover{color:var(--gold)}
 .course .body h3{font-size:1.15rem;color:var(--brown);line-height:1.3;margin-bottom:8px;flex:1}
 .course .body .tags{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
 
-.hero{position:relative;width:100%;aspect-ratio:16/9;min-height:clamp(540px,56.25vw,880px);display:flex;align-items:center;overflow:hidden;color:#fff;background:#3a1708 url("images/hero%20section.png") center bottom / cover no-repeat}
+.hero{
+  position:relative;width:100%;
+  aspect-ratio:1672/941;
+  min-height:480px;
+  display:flex;align-items:center;overflow:hidden;color:#fff;
+  background:#3a1708 url("images/hero%20section.png") center bottom / cover no-repeat;
+}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,10,3,.88) 0%,rgba(40,15,5,.55) 42%,rgba(0,0,0,.04) 75%)}
 .hero .in{position:relative;z-index:2;width:100%;max-width:none;margin:0;padding:56px clamp(18px,4vw,56px)}
 .hero h1{font-size:clamp(2.3rem,6vw,3.8rem);font-weight:600;max-width:520px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
@@ -726,16 +727,14 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="14" r="9" fill="#D99A27"/><path d="M24 4c3 4 3 8 0 12-3-4-3-8 0-12z" fill="#7A2E16"/><path d="M4 22c8-3 14-1 20 4 6-5 12-7 20-4v18c-8-3-14-1-20 4-6-5-12-7-20-4z" fill="#7A2E16"/><path d="M24 26v18" stroke="#F7E8C8" stroke-width="2"/></svg>
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
-    <nav class="top" aria-label="Main">
-      <a href="#paths">Learn</a><a href="courses.html">Courses</a><a href="live.html">Live Classes</a><a href="#community">Community</a>
-    </nav>
-    <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="homeSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
-    <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
-    <button id="homeNotifBtn" title="Notifications" aria-label="Notifications" style="background:none;border:0;color:var(--maroon);font-size:1.3rem;cursor:pointer;position:relative;padding:4px 8px;display:inline-flex;align-items:center;justify-content:center">
-      <span>🔔</span>
-      <span id="homeNotifBadge" style="display:none;position:absolute;top:0;right:2px;background:#e11d48;color:#fff;font-size:.65rem;font-weight:700;padding:1px 5px;border-radius:10px;line-height:1.1;border:1.5px solid #fff">0</span>
-    </button>
-    <a class="avatar" id="homeAvatar" href="login.html" aria-label="Account">👤</a>
+    <div class="header-right">
+      <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
+      <button id="homeNotifBtn" title="Notifications" aria-label="Notifications" style="background:none;border:0;color:var(--maroon);font-size:1.3rem;cursor:pointer;position:relative;padding:4px 6px;display:inline-flex;align-items:center;justify-content:center">
+        <span>🔔</span>
+        <span id="homeNotifBadge" style="display:none;position:absolute;top:0;right:0px;background:#e11d48;color:#fff;font-size:.65rem;font-weight:700;padding:1px 5px;border-radius:10px;line-height:1.1;border:1.5px solid #fff">0</span>
+      </button>
+      <a class="avatar" id="homeAvatar" href="dashboard.html" aria-label="Account">👤</a>
+    </div>
   </div>
 </header>
 

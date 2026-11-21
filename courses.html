@@ -28,10 +28,10 @@ header{
   background:rgba(252,244,226,.94);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
-  padding:max(8px, env(safe-area-inset-top, 8px)) max(18px, env(safe-area-inset-right, 18px)) 8px max(18px, env(safe-area-inset-left, 18px));
+  padding:max(10px, env(safe-area-inset-top, 10px)) clamp(20px, 3.5vw, 48px) 10px clamp(20px, 3.5vw, 48px);
 }
-.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:4px 8px;box-sizing:border-box}
-.logo{display:flex;align-items:center;gap:10px;margin-left:6px;flex-shrink:0}
+.bar{display:flex;align-items:center;gap:14px;min-height:68px;height:auto;padding:4px 6px;max-width:1320px;margin:0 auto;box-sizing:border-box}
+.logo{display:flex;align-items:center;gap:10px;margin-left:4px;flex-shrink:0}
 .logo svg{width:44px;height:44px;flex-shrink:0}
 .logo span{display:flex;flex-direction:column;justify-content:center;padding-top:2px}
 .logo b{font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--maroon);line-height:1.06;display:block}
@@ -251,7 +251,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
       <span><b>Sanathana<br>Gurukulam</b><small>LEARN • PRACTICE • LIVE</small></span>
     </a>
     <nav class="top" aria-label="Main">
-      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="community.html">Community</a>
+      <a href="index.html">Home</a><a href="courses.html" style="color:var(--gold)">Courses</a><a href="live.html">Live Classes</a><a href="index.html#community">Community</a>
     </nav>
     <label class="search"><span aria-hidden="true">🔍</span><input type="search" id="courseSearch" placeholder="Search courses, shlokas, teachers…" aria-label="Search"></label>
     <div class="lang" role="group" aria-label="Language"><button class="on te" data-l="te">తెలుగు</button><button data-l="en">English</button></div>
@@ -282,7 +282,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
     <a href="index.html" style="color:var(--sand);text-decoration:none">Home</a> · 
     <a href="courses.html" style="color:var(--sand);text-decoration:none">Courses</a> · 
     <a href="live.html" style="color:var(--sand);text-decoration:none">Live Classes</a> · 
-    <a href="community.html" style="color:var(--sand);text-decoration:none">Community</a> · 
+    <a href="index.html#community" style="color:var(--sand);text-decoration:none">Community</a> · 
     <a href="privacy.html" style="color:var(--sand);text-decoration:none;font-weight:600">Privacy Policy</a> · 
     <a href="delete-account.html" style="color:var(--sand);text-decoration:none;font-weight:600">Account Deletion</a>
   </p>
@@ -292,7 +292,7 @@ footer p{font-size:.82rem;opacity:.8;margin-top:6px}
   <a href="index.html"><span>🏠</span>Home</a>
   <a class="on" href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
-  <a href="community.html"><span>👥</span>Community</a>
+  <a href="index.html#community"><span>👥</span>Community</a>
   <a href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 <script type="module">

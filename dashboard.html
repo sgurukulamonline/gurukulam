@@ -292,7 +292,7 @@ footer .footer-links a:hover{color:var(--gold)}
     <a href="index.html">Home</a>
     <a href="courses.html">Courses</a>
     <a href="live.html">Live</a>
-    <a href="community.html">Community</a>
+    <a href="index.html#community">Community</a>
     <button class="notif-btn" id="btnNotif" title="Notifications" aria-label="Notifications">
       <span>🔔</span>
       <span class="notif-badge" id="notifBadge" style="display:none">0</span>
@@ -314,7 +314,7 @@ footer .footer-links a:hover{color:var(--gold)}
           <h1 id="pName">Sadhaka</h1>
           <span class="tag" id="userRole">Learner</span>
         </div>
-        <div class="sub-title" id="pSubTitle">Sadhaka · Sanathana Gurukulam Online</div>
+        <div class="sub-title" id="pSubTitle">Sadhaka · Sanathana Gurukulam</div>
         
         <div class="badges-row">
           <span class="badge-pill" id="pillPhone" style="display:none">
@@ -323,20 +323,10 @@ footer .footer-links a:hover{color:var(--gold)}
           <span class="badge-pill" id="pillEmail" style="display:none">
             <span>📧</span> <b id="pEmail"></b> <span class="check" id="pEmailBadge">✓</span>
           </span>
-          <span class="badge-pill" id="pillUid">
-            <span>🆔</span> <span id="pUid">SG-LEARNER</span>
-          </span>
-          <span class="badge-pill" id="pillTrack" style="display:none">
-            <span>🎯</span> <span id="pTrack"></span>
-          </span>
-          <span class="badge-pill" id="pillJoined" style="display:none">
-            <span>📅</span> <span id="pJoined"></span>
-          </span>
         </div>
 
         <div class="profile-actions">
           <button class="btn sm gold" id="btnOpenEdit">✏️ Edit Profile</button>
-          <a class="btn sm ghost" href="#certificatesPanel">🏅 My Certificates</a>
         </div>
       </div>
     </div>
@@ -351,99 +341,27 @@ footer .footer-links a:hover{color:var(--gold)}
     </div>
   </div>
 
-  <!-- Announcements & Notifications Banner -->
-  <div class="notif-announcement-panel" id="announcementsPanel" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:1.3rem">📢</span>
-        <h3 style="font-size:1.35rem;color:var(--maroon)">Gurukulam Announcements</h3>
-      </div>
-      <button class="btn sm ghost" id="btnViewAllNotifs" style="font-size:.76rem;padding:4px 10px">View All</button>
-    </div>
-    <div id="latestAnnouncement"></div>
-  </div>
-
-  
-  <!-- Learning Section Track Banner -->
-  <div class="track-select-card" style="background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-    <div style="display:flex;align-items:center;gap:12px">
-      <div style="width:44px;height:44px;border-radius:12px;background:var(--sand);display:grid;place-items:center;font-size:1.5rem">🎯</div>
-      <div>
-        <b style="font-size:1.05rem;color:var(--maroon)">My Learning Track</b>
-        <p class="muted" id="trackBannerSub" style="font-size:.82rem">Select your focus: Kids, Adults, or Both</p>
-      </div>
-    </div>
-    <div class="dash-track-toggle" id="dashTrackToggle" style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" class="btn sm gold" data-track="all" style="font-weight:600">🌟 Both (All)</button>
-      <button type="button" class="btn sm ghost" data-track="kids" style="font-weight:600">👶 Kids (5–15)</button>
-      <button type="button" class="btn sm ghost" data-track="adults" style="font-weight:600">🕉️ Adults (16+)</button>
-    </div>
-  </div>
-
-  <!-- Learning Metrics -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-icon">📚</div>
-      <div><b id="sE">0</b><span>Enrolled Courses</span></div>
-    </div>
-    <div class="stat highlight">
-      <div class="stat-icon">🏅</div>
-      <div><b id="sD">0</b><span>Certificates Earned</span></div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon">📈</div>
-      <div><b id="sA">0%</b><span>Average Progress</span></div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon">🎥</div>
-      <div><b id="sL">0</b><span>Live Sessions</span></div>
-    </div>
-  </div>
-
-  <!-- Dedicated Certificates Panel -->
-  <div class="panel" id="certificatesPanel">
-    <div class="panel-head">
-      <div>
-        <h2>🏅 My Earned Certificates</h2>
-        <p class="muted" style="font-size:.85rem">Official verified completion credentials with public authentication link</p>
-      </div>
-      <a href="courses.html" class="btn sm ghost">Browse Courses</a>
-    </div>
-    <div id="certsContainer"></div>
-  </div>
-
-  <!-- Enrolled Courses -->
-  <div class="panel">
-    <div class="panel-head">
-      <h2>My Enrolled Courses</h2>
-      <a href="courses.html" class="btn sm ghost">All Courses</a>
-    </div>
-    <div class="grid" id="mine"></div>
-  </div>
-
-  <!-- Live Classes -->
-  <div class="panel">
-    <div class="panel-head" style="flex-wrap:wrap;gap:8px">
-      <h2 style="margin:0">Upcoming Live Classes</h2>
-      <a href="live.html" class="btn sm ghost">Live Schedule</a>
-    </div>
-    <div id="live"></div>
-  </div>
-
-    <!-- Available Courses -->
-  <div class="panel">
+  <!-- Box 1: Continue Courses / Continue Watching -->
+  <div class="panel" id="continueCoursesPanel">
     <div class="panel-head" style="flex-wrap:wrap;gap:10px">
       <div>
-        <h2 id="catalogHeading">Courses Catalog</h2>
-        <p class="muted" id="catalogSub" style="font-size:.85rem">Showing all Gurukulam courses</p>
+        <h2 style="margin:0">▶ Continue Watching</h2>
+        <p class="muted" style="font-size:.85rem">Resume your ongoing studies where you left off</p>
       </div>
-      <div class="dash-sec-chips" id="dashSecChips" style="display:flex;gap:8px;align-items:center">
-        <button type="button" class="btn sm gold" data-sec="all" style="padding:4px 12px;font-size:.78rem">Both (All)</button>
-        <button type="button" class="btn sm ghost" data-sec="kids" style="padding:4px 12px;font-size:.78rem">👶 Kids (5–15)</button>
-        <button type="button" class="btn sm ghost" data-sec="adults" style="padding:4px 12px;font-size:.78rem">🕉️ Adults (16+)</button>
+      <a href="courses.html" class="btn sm ghost">All Courses ↗</a>
+    </div>
+    <div class="grid" id="continueCoursesGrid"></div>
+  </div>
+
+  <!-- Box 2: Completed Courses -->
+  <div class="panel" id="completedCoursesPanel">
+    <div class="panel-head" style="flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="margin:0">🏅 Completed Courses</h2>
+        <p class="muted" style="font-size:.85rem">Courses you have fully completed</p>
       </div>
     </div>
-    <div class="grid" id="all"></div>
+    <div class="grid" id="completedCoursesGrid"></div>
   </div>
 
   <!-- Dedicated Admin Community Management Panel (Visible to Admins) -->
@@ -609,7 +527,7 @@ footer .footer-links a:hover{color:var(--gold)}
       <span style="opacity:0.4">•</span>
       <a href="live.html">Live Classes</a>
       <span style="opacity:0.4">•</span>
-      <a href="community.html">Community</a>
+      <a href="index.html#community">Community</a>
       <span style="opacity:0.4">•</span>
       <a href="privacy.html" style="font-weight:600">Privacy Policy</a>
       <span style="opacity:0.4">•</span>
@@ -629,7 +547,7 @@ footer .footer-links a:hover{color:var(--gold)}
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="courses.html"><span>📖</span>Courses</a>
   <a href="live.html"><span>🎥</span>Live</a>
-  <a href="community.html"><span>👥</span>Community</a>
+  <a href="index.html#community"><span>👥</span>Community</a>
   <a class="on" href="dashboard.html"><span>👤</span>Profile</a>
 </nav>
 
@@ -747,18 +665,6 @@ function renderProfile() {
     if ($("pEmailBadge")) $("pEmailBadge").textContent = "✓ Verified";
   } else {
     $("pillEmail").style.display = "none";
-  }
-  
-  // Format clean ID
-  const cleanUid = (me.uid || "").replace(/^u_|^g_|^ph_/, "").slice(0, 8).toUpperCase();
-  $("pUid").textContent = "SG-" + (cleanUid || "SADHAKA");
-
-  // Joined Date
-  if (joinedDate) {
-    $("pJoined").textContent = "Joined " + joinedDate;
-    $("pillJoined").style.display = "inline-flex";
-  } else {
-    $("pillJoined").style.display = "none";
   }
   
   // Sankalpa
@@ -1041,96 +947,79 @@ function renderAvailableCourses() {
 
 async function load() {
   try {
-    const [cs, en, ls] = await Promise.all([
+    const [cs, en] = await Promise.all([
       list("courses"),
-      get(ref(db, "enrollments/" + me.uid)),
-      list("liveClasses")
+      get(ref(db, "enrollments/" + me.uid))
     ]);
 
     courses = cs && cs.length ? cs.filter(c => c.published !== false) : [...DEFAULT_COURSES];
     enr = en.val() || {};
 
-    const mine = courses.filter(c => enr[c.id]);
-    const rest = courses.filter(c => !enr[c.id]);
     const prog = c => (enr[c.id] && typeof enr[c.id].progress === "number") ? enr[c.id].progress : 0;
+    const mine = courses.filter(c => enr[c.id]);
+    const inProgress = mine.filter(c => prog(c) < 100);
     const completedList = mine.filter(c => prog(c) >= 100);
 
-    // Render Dedicated Certificates Panel
-    if (completedList.length > 0) {
-      $("certsContainer").innerHTML = completedList.map(c => `
-        <div class="cert-card">
-          <div class="cert-info">
-            <div class="cert-icon">🏅</div>
-            <div>
-              <div class="cert-title">${esc(c.title)}</div>
-              <div class="cert-meta">Official Certificate of Completion · Issued by Sanathana Gurukulam</div>
+    // 1. Render Continue Watching / Continue Courses
+    const continueGrid = $("continueCoursesGrid");
+    if (continueGrid) {
+      if (inProgress.length > 0) {
+        continueGrid.innerHTML = inProgress.map(c => {
+          const p = prog(c);
+          const totalLessons = getCourseLessonCount(c);
+          const doneObj = enr[c.id]?.done || {};
+          const doneCount = Object.keys(doneObj).filter(k => doneObj[k]).length;
+          return card(c, `
+            <div class="bar" style="margin-top:8px"><i style="width:${p}%"></i></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);margin:6px 0">
+              <span>Progress: <b style="color:var(--maroon)">${p}%</b></span>
+              <span>${doneCount} / ${totalLessons} Lessons</span>
             </div>
+            <div class="actions" style="margin-top:10px">
+              <a class="btn sm gold" href="course.html?id=${esc(c.id)}" style="flex:1;justify-content:center">▶ Continue Watching</a>
+              <button class="btn sm ghost" data-step="${esc(c.id)}" title="Mark next lesson complete">+ 1 Lesson</button>
+            </div>
+          `);
+        }).join("");
+      } else {
+        continueGrid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:36px 16px;background:rgba(217,154,39,0.04);border:1px dashed var(--line);border-radius:16px">
+            <span style="font-size:2.4rem;display:block;margin-bottom:8px">📖</span>
+            <h3 style="font-size:1.35rem;color:var(--maroon);margin-bottom:6px">No Courses in Progress</h3>
+            <p class="muted" style="margin-bottom:14px;font-size:.88rem">You don't have any ongoing courses right now. Explore the Gurukulam courses catalog to begin learning!</p>
+            <a href="courses.html" class="btn sm gold">Browse Courses →</a>
           </div>
-          <div class="cert-actions">
-            <a class="btn sm gold" href="certificate.html?id=${esc(c.id)}&uid=${esc(me.uid)}">🏅 View Certificate</a>
-            <button class="btn sm ghost" onclick="window.copyCertLink('${esc(c.id)}')">📋 Copy Link</button>
-          </div>
-        </div>
-      `).join("");
-    } else {
-      $("certsContainer").innerHTML = `
-        <div class="cert-empty">
-          <div class="big-seal">📜</div>
-          <h3 style="font-size:1.4rem;color:var(--maroon);margin-bottom:6px">Earn Your Official Gurukulam Certificate</h3>
-          <p>Complete 100% of any enrolled course (such as Bhagavad Gita) to unlock your verified Sanathana Gurukulam Certificate authenticated with your name and unique ID.</p>
-          <a href="#mine" class="btn sm gold">Continue Your Lessons →</a>
-        </div>
-      `;
+        `;
+      }
     }
 
-    // Render My Courses
-    $("mine").innerHTML = mine.map(c => {
-      const p = prog(c);
-      const isComplete = p >= 100;
-      return card(c, `
-        <div class="bar"><i style="width:${p}%"></i></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted)">
-          <span>Progress: <b>${p}%</b></span>
-          ${isComplete ? '<span style="color:#166534;font-weight:600">✓ Completed!</span>' : ''}
-        </div>
-        <div class="actions">
-          ${isComplete 
-            ? `<a class="btn sm gold" href="certificate.html?id=${esc(c.id)}&uid=${esc(me.uid)}">🏅 Certificate</a>
-               <button class="btn sm ghost" onclick="window.copyCertLink('${esc(c.id)}')">Share Link</button>`
-            : `<a class="btn sm" href="course.html?id=${esc(c.id)}">Continue</a>
-               <button class="btn sm ghost" data-step="${esc(c.id)}">+ 1 Lesson</button>`
-          }
-        </div>
-      `);
-    }).join("") || '<p class="muted">You have not enrolled in any course yet. Pick one from All Courses below to get started!</p>';
-
-    // Render Explore Courses with active track filter
-    renderAvailableCourses();
-
-    // Render Live Classes
-    const now = Date.now();
-    const live = (ls || []).sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0));
-    $("live").innerHTML = live.map(c => `
-      <div class="row">
-        <span>
-          <b>${esc(c.title)}</b> ${c.startsAt <= now + 3600000 && c.startsAt >= now - 3600000 ? '<span class="tag" style="background:#ef4444;color:#fff">● LIVE NOW</span>' : ''}
-          <br><span class="muted">${esc(c.teacher || "Instructor")} · ${when(c.startsAt)}</span>
-        </span>
-        ${c.link ? `<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">Join Class →</a>` : ''}
-      </div>
-    `).join("") || `
-      <div style="text-align:center;padding:26px 14px;background:rgba(217,154,39,0.04);border:1px dashed var(--line);border-radius:14px">
-        <span style="font-size:1.8rem;display:block;margin-bottom:6px">🎥</span>
-        <p style="margin:0;font-weight:600;font-size:0.95rem;color:var(--brown)">No upcoming live</p>
-        <small class="muted">New sessions scheduled by Acharyas will appear here</small>
-      </div>
-    `;
-
-    // Update Stats
-    $("sE").textContent = mine.length;
-    $("sD").textContent = completedList.length;
-    $("sA").textContent = (mine.length ? Math.round(mine.reduce((s, c) => s + prog(c), 0) / mine.length) : 0) + "%";
-    $("sL").textContent = live.length;
+    // 2. Render Completed Courses
+    const completedGrid = $("completedCoursesGrid");
+    if (completedGrid) {
+      if (completedList.length > 0) {
+        completedGrid.innerHTML = completedList.map(c => `
+          <div class="card">
+            ${c.imageUrl ? `<img src="${esc(c.imageUrl)}" alt="${esc(c.title)}" loading="lazy">` : `<div style="height:110px;background:#f3dfb2;display:grid;place-items:center;font-size:2.5rem;border-radius:10px">${getCourseIcon(c.id)}</div>`}
+            <h3 style="font-size:1.05rem;color:var(--maroon);margin:8px 0 4px">${esc(c.title)}</h3>
+            <div style="margin-bottom:10px">
+              <span class="tag" style="background:#dcfce7;color:#166534;font-weight:700">✓ 100% Completed</span>
+            </div>
+            <div class="actions" style="display:flex;gap:6px;flex-wrap:wrap">
+              <a class="btn sm gold" href="certificate.html?id=${esc(c.id)}&uid=${esc(me.uid)}" style="flex:1;justify-content:center">🏅 View Certificate</a>
+              <a class="btn sm ghost" href="course.html?id=${esc(c.id)}" style="justify-content:center">Review Lessons</a>
+            </div>
+          </div>
+        `).join("");
+      } else {
+        completedGrid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:36px 16px;background:rgba(217,154,39,0.04);border:1px dashed var(--line);border-radius:16px">
+            <span style="font-size:2.4rem;display:block;margin-bottom:8px">🏅</span>
+            <h3 style="font-size:1.35rem;color:var(--maroon);margin-bottom:6px">No Completed Courses Yet</h3>
+            <p class="muted" style="font-size:.88rem">Finish all lessons in any course to see your completed achievement and certificate here!</p>
+          </div>
+        `;
+      }
+    }
 
   } catch (err) {
     console.error("Dashboard load error:", err);
